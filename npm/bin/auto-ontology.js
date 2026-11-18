@@ -12,6 +12,10 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const argv = process.argv.slice(2);
 const [cmd, ...rest] = argv;
 
+let script_file = "build_ontology.py";
+if (cmd === "eval") {
+  script_file = "eval_evidence.py";   // auto-ontology eval --from x.json [--n 20] [--seed 42]
+}
 let pass;
 if (cmd === "build") {
   pass = rest;
@@ -25,7 +29,7 @@ const env = {
   ONTOLOGY_HOME: path.join(process.cwd(), "ontologies"),
 };
 
-const r = spawnSync("python3", [path.join(root, "scripts", "build_ontology.py"), ...pass], {
+const r = spawnSync("python3", [path.join(root, "scripts", script_file), ...pass], {
   stdio: "inherit",
   env,
 });

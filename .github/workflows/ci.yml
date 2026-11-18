@@ -91,7 +91,19 @@ jobs:
           db2 = M.certify(copy.deepcopy(db), "A", "reject", note="x")
           dd2 = M.diff_ontologies(db, db2)
           assert dd2["entities_removed"] == ["A"] and "certified-reject" in dd2["removal_causes"]["A"]
-          print("diff: PASS")
+          spec4 = importlib.util.spec_from_file_location("ev", "scripts/eval_evidence.py")
+          EV = importlib.util.module_from_spec(spec4); spec4.loader.exec_module(EV)
+          E = lambda n, q: {"name": n, "type": "t", "docs": ["d"], "evidences": [{"quote": q, "doc": "d"}]}
+          eo = {"abox": {"entities": [E(f"e{i}", f"q{i}") for i in range(10)],
+                         "relations": [{"subject": "e0", "predicate": "p", "object": "e1", "docs": ["d"],
+                                        "evidences": [{"quote": "rq", "doc": "d"}]}]}}
+          s1, pool1 = EV.sample_assertions(eo, 5, 42)
+          s2, _ = EV.sample_assertions(eo, 5, 42)
+          assert [x["assertion"] for x in s1] == [x["assertion"] for x in s2] and pool1 == 11
+          assert len(EV.sample_assertions(eo, 99, 7)[0]) == 11
+          v1e = {"abox": {"entities": [{"name": "A", "type": "t", "evidence": "legacy", "doc": "d0"}], "relations": []}}
+          assert EV.sample_assertions(v1e, 5, 1)[0][0]["quote"] == "legacy"
+          print("eval sampling: PASS")
           EOF
       - name: bin entry syntax (node --check)
         run: node --check npm/bin/auto-ontology.js
