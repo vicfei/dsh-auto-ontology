@@ -4,13 +4,15 @@ description: Auto ontology construction for DeepSeek Harness — two-pass LLM pi
 ---
 
 Use this skill when asked to turn a document corpus into a knowledge graph /
-ontology ("把这批文档抽成知识图谱", "构建本体"). Evidence is the contract.
+ontology ("extract a knowledge graph from these docs", "build an ontology").
+Evidence is the contract. Output defaults to English; `--lang zh` switches prompts
+and artifacts to Chinese (env `ONTOLOGY_LANG`).
 
 ## Run
 
 ```bash
 KIT=<this-directory>
-python3 $KIT/scripts/build_ontology.py --docs <dir-or-glob> --domain "<描述>" --save
+python3 $KIT/scripts/build_ontology.py --docs <dir-or-glob> --domain "<description>" --save
 ```
 
 Outputs land in `ontologies/` (typed JSON + SVG + md digest).
