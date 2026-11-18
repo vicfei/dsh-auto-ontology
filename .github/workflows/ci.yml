@@ -79,16 +79,16 @@ jobs:
           M.fold_entity(st9, "Bad", "tool", "q9", "d9")
           M.fold_entity(st9, "Bad", "company", "q8", "d8")
           assert st9["suppressed"] == 1 and st9["entities"][M._key("Bad")]["type"] == "company"
-          da = {"abox": {"entities": [dict(E := {"name": "A", "type": "t", "docs": ["d"], "evidences": [{"quote": "q1", "doc": "d"}]}),
-                                     {"name": "B", "type": "t", "docs": ["d"], "evidences": [{"quote": "q2", "doc": "d"}]}],
-                          "relations": []}, "conflicts": [], "certifications": {}, "stats": {"entities": 2, "relations": 0}}
           import copy
-          db = copy.deepcopy(da)
-          db["abox"]["entities"].append({"name": "C", "type": "t", "docs": ["d"], "evidences": [{"quote": "q3", "doc": "d"}]})
+          E = lambda n, q: {"name": n, "type": "t", "docs": ["d"], "evidences": [{"quote": q, "doc": "d"}]}
+          da = {"abox": {"entities": [E("A", "q1"), E("B", "q2")], "relations": []},
+                "conflicts": [], "certifications": {}, "stats": {"entities": 2, "relations": 0}}
+          db = copy.deepcopy(da)  # certify mutates in place — diff needs two distinct artifacts
+          db["abox"]["entities"].append(E("C", "q3"))
           db["stats"]["entities"] = 3
           dd = M.diff_ontologies(da, db)
           assert dd["entities_added"] == ["C"]
-          db2 = M.certify(db, "A", "reject", note="x")
+          db2 = M.certify(copy.deepcopy(db), "A", "reject", note="x")
           dd2 = M.diff_ontologies(db, db2)
           assert dd2["entities_removed"] == ["A"] and "certified-reject" in dd2["removal_causes"]["A"]
           print("diff: PASS")
