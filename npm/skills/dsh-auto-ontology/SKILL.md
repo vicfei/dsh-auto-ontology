@@ -1,0 +1,31 @@
+---
+name: dsh-auto-ontology
+description: Auto ontology construction for DeepSeek Harness — two-pass LLM pipeline (TBox schema from corpus, ABox assertions per document) with an evidence quote on every entity/relation and a type guard against silent drops. English-first, --lang zh for Chinese.
+---
+
+Use this skill when asked to turn a document corpus into a knowledge graph /
+ontology ("extract a knowledge graph from these docs", "build an ontology").
+**Evidence is the contract** — no assertion lands without its source quote, and
+unknown types are flagged, never silently dropped.
+
+## Run
+
+`auto-ontology` must be on PATH (`npm i -g dsh-auto-ontology`).
+
+```bash
+auto-ontology build --docs <dir-or-glob> --domain "<description>" --save   # typed JSON + SVG cluster graph + md digest
+auto-ontology build --docs '*.md' --domain "..." --lang zh                # Chinese prompts/artifacts
+```
+
+Requires `python3` (stdlib only) and a `DEEPSEEK_API_KEY` in `~/.bashrc`.
+Artifacts land in `./ontologies/` (relative to where you invoke); the SVG is
+the shareable overview, the JSON carries every assertion with its evidence span.
+
+## Discipline
+
+- Every entity/relation must carry `evidence` = a verbatim quote (≤40 chars);
+  the engine rejects no-evidence assertions.
+- Instance types must come from the extracted TBox; unknown types are recorded
+  in `flagged_unknown_types`, never silently dropped.
+- Artifacts are append-only in spirit: a new run writes new files; it never
+  edits a prior ontology.

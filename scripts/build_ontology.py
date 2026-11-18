@@ -20,6 +20,8 @@ KIT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Output language: English by default (international-first), --lang zh / ONTOLOGY_LANG for Chinese
 LANG = os.environ.get("ONTOLOGY_LANG") or "en"
+# npm CLI form lands artifacts in the caller's cwd via ONTOLOGY_HOME (repo default unchanged)
+OUTDIR = os.environ.get("ONTOLOGY_HOME") or os.path.join(KIT, "ontologies")
 def tt(en, zh):
     return en if LANG == "en" else zh
 
@@ -112,8 +114,8 @@ def main():
                  f"  ⚠ 未入库的未知类型实例 {len(flagged)} 条（类型守卫，不静默丢弃）"))
 
     if args.save:
-        os.makedirs(os.path.join(KIT, "ontologies"), exist_ok=True)
-        base = os.path.join(KIT, "ontologies", dt.datetime.now().strftime("%Y%m%d-%H%M"))
+        os.makedirs(OUTDIR, exist_ok=True)
+        base = os.path.join(OUTDIR, dt.datetime.now().strftime("%Y%m%d-%H%M"))
         json.dump(ontology, open(base + ".json", "w"), ensure_ascii=False, indent=1)
         # 环形布局 SVG（类型分簇）
         ents = ontology["abox"]["entities"]
