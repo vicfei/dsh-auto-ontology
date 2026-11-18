@@ -84,16 +84,28 @@ issue → branch → PR (milestones O1–O4).
 
 ## O4 · Learning loop & ecosystem (month 2)
 
-- [ ] Certification fold-back (#13): human marks assertions accepted/rejected; the
-      verdict lives in the ledger and every later run respects it (upstream's "Learn"
-      pillar, evidence-first version).
-- [ ] Ontology history (#14): run-per-layer versioning with a diff view (what the
-      corpus added between runs).
-- [ ] Honest precision metric (#15): a reproducible evidence-spot-check eval on a
-      public corpus — we don't chase BEAVER (enterprise stack), we publish a metric
-      anyone can rerun.
-- [ ] Format positioning (#16): versioned "evidence-linked ontology" JSON schema —
-      the IC-MEMO play (if others adopt the format, the name travels with us).
+- [x] Certification fold-back (2026-11-18, PR #31): --certify NAME --verdict
+      accept|reject [--note]; the verdict travels WITH the artifact (timestamp, note,
+      original evidence for audit); rejected (name,type) suppressed in every later
+      fold (counted, never re-asserted; a different type re-enters as a new
+      assertion). Upstream's Learn pillar, evidence-first version.
+- [x] Ontology history (2026-11-18, PR #32/#33): --diff OLD NEW at evidence
+      granularity — additions, removals WITH causes (a certification rejection names
+      its note), evidence growth, aliases, new conflicts. (One CI lesson on the way:
+      certify mutates in place — diff needs two distinct artifacts.)
+- [x] Honest precision metric (2026-11-18, PR #34): 'auto-ontology eval' — seeded
+      strict judge, rerunnable by anyone, v1/v2 shapes. First honest numbers:
+      **10% (2/20) on both artifacts** — most quotes mention the entity but do not
+      support its TYPE claim (relations with exact quotes pass). Diagnosis: type
+      assertions are the weak evidence axis; tightening is tracked as #35. The
+      metric ships as-is — it exists to make this visible, not to be gamed.
+- [x] Format positioning (2026-11-18, PR #36/#37): evidence-linked ontology v0.1
+      (docs/FORMAT.md) + stdlib validator ('auto-ontology validate') + CI enforcement
+      on committed artifacts. Enforcement had teeth on day one: the legacy v1
+      artifacts failed, replaced by the first conforming v2 family build
+      (88 entities / 121 relations / 4 organic conflicts, 21 calls 55s). The
+      showcase set is now tracked in-git (the awesome submission's icon URL had
+      been a 404 — found and fixed).
 
 ## Explicit non-goals
 
