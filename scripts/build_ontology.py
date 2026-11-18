@@ -199,6 +199,33 @@ def query_ontology(o, term):
     return hits
 
 
+def to_jsonld(o):
+    """Ontology v2 JSON -> JSON-LD 1.1 (issue #9): entities as typed nodes with
+    evidence, relations as reified statement nodes with subject/object refs.
+    @vocab is a stable placeholder namespace — evidence stays first-class."""
+    import hashlib
+    def eid(name):
+        return "urn:dshao:entity:" + re.sub(r"[^a-z0-9]+", "-", str(name).lower()).strip("-")
+    def rid(r):
+        h = hashlib.sha1(f"{r['subject']}|{r['predicate']}|{r['object']}".encode()).hexdigest()[:10]
+        return f"urn:dshao:rel:{h}"
+    ctx = {"@vocab": "https://dsh-auto-ontology.dev/vocab/",
+           "name": "https://schema.org/name",
+           "aliases": {"@id": "https://dsh-auto-ontology.dev/vocab/alias", "@container": "@set"},
+           "evidence": {"@id": "https://dsh-auto-ontology.dev/vocab/evidence", "@container": "@list"}}
+    graph = []
+    for e in o.get("abox", {}).get("entities", []):
+        graph.append({"@id": eid(e["name"]), "@type": e["type"], "name": e["name"],
+                      "aliases": e.get("aliases", []), "evidence": e.get("evidences", [])})
+    for r in o.get("abox", {}).get("relations", []):
+        graph.append({"@id": rid(r), "@type": r["predicate"],
+                      "subject": {"@id": eid(r["subject"]), "name": r["subject"]},
+                      "object": {"@id": eid(r["object"]), "name": r["object"]},
+                      "evidence": r.get("evidences", [])})
+    return {"@context": ctx, "@graph": graph,
+            "dshao:domain": o.get("domain"), "dshao:built_at": o.get("built_at")}
+
+
 def store_to_ontology(st, new_type_descs, provenance):
     ents = sorted(st["entities"].values(), key=lambda e: e["name"].lower())
     rels = sorted(st["relations"].values(), key=lambda r: (r["subject"].lower(), r["predicate"]))
@@ -327,6 +354,7 @@ def main():
     ap.add_argument("--domain", default=None, help="corpus domain description (schema pass)")
     ap.add_argument("--merge", default=None, help="existing ontology JSON to fold into (append-only)")
     ap.add_argument("--query", default=None, help="query mode: every assertion about X, with evidence")
+    ap.add_argument("--jsonld", action="store_true", help="export the ontology as JSON-LD 1.1 (with --from, or the newest artifact)")
     ap.add_argument("--from", dest="frm", default=None, help="ontology file for --query (default: newest in outdir)")
     ap.add_argument("--sample", type=int, default=4, help="docs sampled for the TBox schema pass")
     ap.add_argument("--max-calls", type=int, default=None, help="cost guard: abort beyond this many LLM calls")
@@ -336,6 +364,13 @@ def main():
     LANG = args.lang
     MAX_CALLS = args.max_calls
     t0 = time.time()
+
+    if args.jsonld:
+        path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+        out = os.path.splitext(path)[0] + ".jsonld"
+        json.dump(to_jsonld(json.load(open(path))), open(out, "w"), ensure_ascii=False, indent=1)
+        print(f"jsonld -> {out}")
+        return
 
     if args.query:
         path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
