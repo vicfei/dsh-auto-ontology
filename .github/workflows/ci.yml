@@ -105,6 +105,8 @@ jobs:
           assert EV.sample_assertions(v1e, 5, 1)[0][0]["quote"] == "legacy"
           print("eval sampling: PASS")
           EOF
+      - name: committed artifacts conform to the format
+        run: python3 scripts/validate_format.py ontologies/*.json
       - name: bin entry syntax (node --check)
         run: node --check npm/bin/auto-ontology.js
       - name: npm bundle packs clean
