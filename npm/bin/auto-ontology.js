@@ -15,6 +15,8 @@ const [cmd, ...rest] = argv;
 let script_file = "build_ontology.py";
 if (cmd === "eval") {
   script_file = "eval_evidence.py";   // auto-ontology eval --from x.json [--n 20] [--seed 42]
+} else if (cmd === "validate") {
+  script_file = "validate_format.py"; // auto-ontology validate ontologies/*.json
 }
 let pass;
 if (cmd === "build") {
