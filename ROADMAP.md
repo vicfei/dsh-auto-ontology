@@ -28,18 +28,22 @@ issue → branch → PR (milestones O1–O4).
 
 > Same lesson as dsh-tradingagents R1: engineering without distribution earns nothing.
 
-- [ ] English-first conversion (#1): engine prompts/output + SVG labels default EN
-      (`--lang zh`), README EN primary + README.zh-CN.md, SKILL EN — then regenerate
-      the family-corpus ontology artifact in English for the first screen.
+- [x] English-first conversion (2026-11-18, PR #17): engine prompts/output + SVG labels default EN
+      (`--lang zh`), README/SKILL EN-primary. Family corpus regenerated in English:
+      **19 READMEs → 243 entities / 139 relations / 0 unknown-type leaks**
+      (ontologies/20261118-1030.*).
 - [ ] Demo asset: the ontology SVG is already the product's best visual — first-screen
       embed + a reproducible one-command quickstart on a public corpus.
-- [ ] npm 0.1.0 real bundle (#2): distribution-vehicle pattern proven at
+- [x] npm 0.1.0 real bundle (2026-11-18, PR #18): distribution-vehicle pattern proven at
       dsh-tradingagents (empty-patch cordis identity + skills/ + bin spawning the
-      Python engine; prepack staging; `node --check bin` in CI from day one).
-- [ ] CI (#3): py_compile + pure-function unit tests + npm pack + bin syntax — every
+      Python engine; prepack staging; ONTOLOGY_HOME outlet so CLI artifacts land in the
+      caller's cwd; live-smoked on a 2-doc corpus — awaiting owner OTP publish).
+- [x] CI (2026-11-18, PR #19): py_compile + pure-function unit tests + npm pack + bin syntax — every
       gate tradingagents paid for, installed before the first tag.
-- [ ] awesome-dsh-plugin submission (#4) (one-file yml recipe; 24.9k★ gate) + launch
-      post EN/CN (hook: "49 entities, 45 relations — every one with its evidence").
+- [ ] awesome-dsh-plugin submission (#4): yml + PR body staged (PR #20);
+      **sequence gate — fires only after npm 0.1.0 publish** (reviewers install-test;
+      0.0.1 is the placeholder). Launch post EN/CN ready (hook upgraded to the real
+      numbers: 19 docs → 243 entities / 139 relations, every one with its evidence).
 - [ ] Star/download tracking: gap-radar dashboard auto-discovers the package.
 
 ## O2 · Incremental merge & coreference (weeks 2-3) — the moat
