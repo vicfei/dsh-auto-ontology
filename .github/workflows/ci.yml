@@ -16,26 +16,43 @@ jobs:
         with: { node-version: "22" }
       - name: engine syntax
         run: python3 -m py_compile scripts/build_ontology.py
-      - name: i18n + outlets (pure, no network)
+      - name: engine contract + fold semantics (pure, no network)
         run: |
           python3 - <<'EOF'
-          import importlib.util, json, os
+          import importlib.util, json, os, sys, glob
           os.environ["ONTOLOGY_LANG"] = "en"
+          sys.path.insert(0, "scripts")
           spec = importlib.util.spec_from_file_location("bo", "scripts/build_ontology.py")
-          M = importlib.util.module_from_spec(spec); spec.loader.exec_module(M)
-          assert M.tt("en-text", "zh-text") == "en-text"
-          os.environ["ONTOLOGY_LANG"] = "zh"
-          import importlib; importlib.reload(M) if False else None
-          assert M.LANG in ("en", "zh")
-          # every committed ontology artifact keeps the contract
-          import glob
+          M = importlib.util.module_from_spec(spec); sys.modules["bo"] = M; spec.loader.exec_module(M)
+          assert M.tt("en-text", "zh-text") == "en-text" and M.LANG == "en"
+          # every committed ontology artifact keeps the evidence contract (v1 + v2 shapes)
           for p in glob.glob("ontologies/*.json"):
               o = json.load(open(p))
               for k in ("domain", "built_at", "tbox", "abox", "stats"):
                   assert k in o, (p, k)
               for r in o["abox"]["relations"]:
-                  assert r.get("evidence"), (p, r)
-          print("engine contract: PASS")
+                  assert r.get("evidence") or r.get("evidences"), (p, r)
+          # fold semantics: append-only evidence, conflict keeps BOTH sides
+          st = M.new_store("t")
+          M.fold_entity(st, "W", "tool", "q1", "dA")
+          M.fold_entity(st, "w", "tool", "q2", "dB")
+          M.fold_entity(st, "W", "company", "q3", "dC")
+          assert len(st["entities"]) == 1 and len(st["entities"][M._key("W")]["evidences"]) == 2
+          assert len(st["conflicts"]) == 1 and set(st["conflicts"][0]["types"]) == {"tool", "company"}
+          # coref: alias merges, relations re-pointed
+          M.fold_entity(st, "dsh-W", "tool", "q4", "dD")
+          M.fold_relation(st, "dsh-W", "hosted_in", "npm", "q5", "dD")
+          merged, amap = M.apply_aliases(st, [("W", "dsh-W")])
+          assert merged and M._key("dsh-W") not in st["entities"]
+          assert any(r["predicate"] == "hosted_in" and r["subject"] == "W" for r in st["relations"].values())
+          # append-only across a v1 -> v2 merge + query
+          v1 = {"domain": "x", "tbox": {"entity_types": [{"name": "tool", "desc": ""}], "relation_types": []},
+                "abox": {"entities": [{"name": "Old", "type": "tool", "evidence": "ev1", "doc": "d0"}], "relations": []}}
+          base = M.load_store(v1)
+          M.fold_entity(base, "Old", "tool", "ev2", "d1")
+          o = M.store_to_ontology(base, {}, {"model": "m"})
+          assert len(M.query_ontology(o, "old")["entities"][0]["evidences"]) == 2
+          print("engine contract + fold semantics: PASS")
           EOF
       - name: bin entry syntax (node --check)
         run: node --check npm/bin/auto-ontology.js
