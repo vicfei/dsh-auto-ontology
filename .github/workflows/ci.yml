@@ -52,7 +52,11 @@ jobs:
           M.fold_entity(base, "Old", "tool", "ev2", "d1")
           o = M.store_to_ontology(base, {}, {"model": "m"})
           assert len(M.query_ontology(o, "old")["entities"][0]["evidences"]) == 2
-          print("engine contract + fold semantics: PASS")
+          ld = M.to_jsonld(o)
+          ids = [n["@id"] for n in ld["@graph"]]
+          assert len(ids) == len(set(ids)) and all(i.startswith("urn:dshao:") for i in ids)
+          assert ld["@graph"][0]["evidence"], "evidence must stay first-class in JSON-LD"
+          print("jsonld export: PASS")
           EOF
       - name: bin entry syntax (node --check)
         run: node --check npm/bin/auto-ontology.js
