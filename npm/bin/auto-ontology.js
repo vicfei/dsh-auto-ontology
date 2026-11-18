@@ -12,17 +12,17 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const argv = process.argv.slice(2);
 const [cmd, ...rest] = argv;
 
-let script_file = "build_ontology.py";
-if (cmd === "eval") {
-  script_file = "eval_evidence.py";   // auto-ontology eval --from x.json [--n 20] [--seed 42]
-} else if (cmd === "validate") {
-  script_file = "validate_format.py"; // auto-ontology validate ontologies/*.json
-}
+const SUBCOMMANDS = {                // named subcommands: strip the name, route the script
+  build: "build_ontology.py",
+  eval: "eval_evidence.py",          // auto-ontology eval --from x.json [--n 20] [--seed 42]
+  validate: "validate_format.py",    // auto-ontology validate ontologies/*.json
+};
+let script_file = SUBCOMMANDS[cmd] || "build_ontology.py";
 let pass;
-if (cmd === "build") {
+if (SUBCOMMANDS[cmd]) {
   pass = rest;
 } else {
-  pass = argv; // engine args pass through verbatim (build is the default)
+  pass = argv; // bare engine args pass through verbatim (build is the default)
 }
 
 // Artifacts land in the caller's cwd (the engine reads ONTOLOGY_HOME).
