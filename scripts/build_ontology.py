@@ -276,6 +276,64 @@ def to_markdown(o):
     return "\n".join(L)
 
 
+def diff_ontologies(a, b):
+    """Run-layer diff (issue #14): what changed between two ontology artifacts,
+    at evidence granularity. Removed entities are reported with their cause when
+    knowable (certification rejection recorded in b)."""
+    ea = {e["name"]: e for e in a.get("abox", {}).get("entities", [])}
+    eb = {e["name"]: e for e in b.get("abox", {}).get("entities", [])}
+    ra = {(r["subject"], r["predicate"], r["object"]): r for r in a.get("abox", {}).get("relations", [])}
+    rb = {(r["subject"], r["predicate"], r["object"]): r for r in b.get("abox", {}).get("relations", [])}
+    certs_b = {c.get("name"): c for c in b.get("certifications", {}).values()}
+    d = {"entities_added": sorted(set(eb) - set(ea)),
+         "entities_removed": sorted(set(ea) - set(eb)),
+         "removal_causes": {n: ("certified-reject: " + certs_b[n]["note"]) if n in certs_b and certs_b[n]["verdict"] == "reject"
+                            else "not re-asserted" for n in sorted(set(ea) - set(eb))},
+         "evidence_grown": {n: len(eb[n].get("evidences", [])) - len(ea[n].get("evidences", []))
+                            for n in set(ea) & set(eb)
+                            if len(eb[n].get("evidences", [])) != len(ea[n].get("evidences", []))},
+         "aliases_added": {n: [x for x in eb[n].get("aliases", []) if x not in ea[n].get("aliases", [])]
+                           for n in set(ea) & set(eb) if set(eb[n].get("aliases", [])) - set(ea[n].get("aliases", []))},
+         "relations_added": sorted(set(rb) - set(ra)),
+         "relations_removed": sorted(set(ra) - set(rb)),
+         "conflicts_added": [c for c in b.get("conflicts", []) if c not in a.get("conflicts", [])],
+         "certifications_added": [c for c in b.get("certifications", {}).values()
+                                  if c["name"] not in {x.get("name") for x in a.get("certifications", {}).values()}],
+         "stats": {"a": a.get("stats", {}), "b": b.get("stats", {})}}
+    return d
+
+
+def render_diff(d):
+    L = ["# Ontology diff"]
+    L.append(f"\n{d['stats']['a'].get('entities', '?')} → {d['stats']['b'].get('entities', '?')} entities · "
+             f"{d['stats']['a'].get('relations', '?')} → {d['stats']['b'].get('relations', '?')} relations\n")
+    if d["entities_added"]:
+        L.append("**Entities added**: " + ", ".join(d["entities_added"]))
+    if d["entities_removed"]:
+        L.append("**Entities removed**:")
+        L += [f"- {n} — {cause}" for n, cause in d["removal_causes"].items()]
+    if d["evidence_grown"]:
+        L.append("**Evidence grown**: " + ", ".join(f"{n} ({v:+d})" for n, v in d["evidence_grown"].items()))
+    if d["aliases_added"]:
+        L.append("**Aliases added**: " + ", ".join(f"{n} += {a}" for n, a in d["aliases_added"].items() if a))
+    if d["relations_added"]:
+        L.append(f"**Relations added** ({len(d['relations_added'])}):")
+        L += [f"- ({s}) -[{p}]-> ({o})" for s, p, o in d["relations_added"][:30]]
+    if d["relations_removed"]:
+        L.append(f"**Relations removed**: {len(d['relations_removed'])}")
+    if d["conflicts_added"]:
+        L.append("**New conflicts**:")
+        L += [f"- {c['entity']}: {' vs '.join(c['types'])}" for c in d["conflicts_added"]]
+    if d["certifications_added"]:
+        L.append("**Certifications**:")
+        L += [f"- {c['name']} → {c['verdict']}" + (f" ({c['note']})" if c.get("note") else "")
+              for c in d["certifications_added"]]
+    if not any([d["entities_added"], d["entities_removed"], d["relations_added"], d["relations_removed"],
+                d["evidence_grown"], d["conflicts_added"], d["certifications_added"], d["aliases_added"]]):
+        L.append("(no material changes)")
+    return "\n".join(L)
+
+
 def to_jsonld(o):
     """Ontology v2 JSON -> JSON-LD 1.1 (issue #9): entities as typed nodes with
     evidence, relations as reified statement nodes with subject/object refs.
@@ -433,6 +491,8 @@ def main():
     ap.add_argument("--domain", default=None, help="corpus domain description (schema pass)")
     ap.add_argument("--merge", default=None, help="existing ontology JSON to fold into (append-only)")
     ap.add_argument("--query", default=None, help="query mode: every assertion about X, with evidence")
+    ap.add_argument("--diff", nargs=2, metavar=("OLD", "NEW"),
+                    help="diff two ontology artifacts at evidence granularity")
     ap.add_argument("--certify", default=None, metavar="NAME",
                     help="certification mode: --certify NAME --verdict accept|reject [--note ...] [--from x.json]")
     ap.add_argument("--verdict", choices=("accept", "reject"), default=None, help="verdict for --certify")
@@ -448,6 +508,11 @@ def main():
     LANG = args.lang
     MAX_CALLS = args.max_calls
     t0 = time.time()
+
+    if args.diff:
+        a, b = (json.load(open(p)) for p in args.diff)
+        print(render_diff(diff_ontologies(a, b)))
+        return
 
     if args.certify:
         if not args.verdict:
