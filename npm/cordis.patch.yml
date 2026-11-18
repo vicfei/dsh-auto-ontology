@@ -1,0 +1,12 @@
+# dsh-auto-ontology bundle layer.
+#
+# Deliberately inserts no plugin entry: this bundle is a distribution vehicle —
+# a skill (skills/dsh-auto-ontology/SKILL.md, discovered by @deepseek-ai/dsh-skill-filesystem
+# from ~/.dsh/skills/ or <project>/.dsh/skills/) and a CLI (`auto-ontology`, npm bin)
+# that spawns the bundled Python engine. A cordis plugin import would fail: the
+# package ships no plugin module (typed-tools lands in the 0.2.0 track, issue #11).
+#
+# Install:
+#   npm i -g dsh-auto-ontology
+#   ln -s "$(npm root -g)/dsh-auto-ontology/skills/dsh-auto-ontology" ~/.dsh/skills/dsh-auto-ontology
+[]

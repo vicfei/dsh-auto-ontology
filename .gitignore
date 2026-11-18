@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 ontologies/
+npm/scripts/
+npm/LICENSE
+npm/*.tgz
