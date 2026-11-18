@@ -1,28 +1,102 @@
-# ROADMAP — dsh-auto-ontology
+# ROADMAP — dsh-auto-ontology (replanned 2026-11-18)
 
-北极星：家族的本体位，吃 NVIDIA auto-ontology 13.3k★ 流量。命名全表面：
-GitHub=npm=dsh-auto-ontology（镜像上游小写连字符仓名）。定位（调研实证）：
-catalog 有查看器/桥接占位，**LLM 自动构建+证据溯源无人做**。
+North star: the family's ontology slot, eating NVIDIA auto-ontology's 13.3k★ search
+traffic ("auto ontology LLM", "knowledge graph from documents"). Metric: top-20 DSH
+plugin within 30 days (≈150–300★).
 
-## 里程碑
-### M0 ✅（2026-11-17）
-双 pass 引擎（TBox schema 抽取→逐文档 ABox 断言带 evidence 原文引用）
-+ 类型守卫（未知类型标注不静默丢）+ 环形分簇 SVG + JSON/markdown 产物。
-真实冒烟：5 篇家族 README → 6 类型/49 实体/45 关系（含证据的家族生态本体，
-人格表自动抽成 has_role 边）。
+**Positioning (the fork, verified against the upstream README):** NVIDIA Auto Ontology
+builds a governed semantic layer **from enterprise metadata** — Docker + Postgres +
+pgAdmin + an NVIDIA API key, served via MCP/API, benchmarked on BEAVER. We build
+**auditable ontologies from document corpora** — a zero-infra stdlib CLI where every
+entity and relation carries its evidence span ("no evidence, no assertion"). One
+sentence: *auto-ontology from your documents — every assertion carries its evidence.*
 
-### M0.5 · 发布包
-- [ ] README 打磨 + SVG 本体图截图 + npm 0.0.1 占位（owner 手动）
-- [ ] 公开仓 topics + 家族互链 + marketplace + 渠道
+Owner policies baked in: English-first on every user-facing surface (README/SKILL/
+engine output/SVG labels/demo assets; `--lang zh` fallback), and all development via
+issue → branch → PR (milestones O1–O4).
 
-### M1 · 规模与合并（第 2-3 周）
-- [ ] 增量合并（新文档进现有本体，实体消歧/跨文档共指）
-- [ ] 大语料分批（TBox 抽样策略）+ 冲突检测（同实体不同类型的断言对撞）
+## Shipped baseline
 
-### M2 · 互操作（第 4-6 周）
-- [ ] OWL/JSON-LD 导出（标准本体格式）+ WeKnora graph-KB 桥
-  （dsh-codebase-memory 桥 MCP 的同款模式）
-- [ ] cordis 插件 typed tools（ontology.build/ontology.query）
+- **M0 engine** (2026-11-17): dual-pass pipeline (TBox schema from corpus samples →
+  per-document ABox assertions with evidence spans), type guard (unknown types
+  intercepted, never silently dropped), ring-layout SVG + JSON + markdown artifacts.
+  Real smoke: 5 family READMEs → 6 types / 49 entities / 45 relations, persona tables
+  auto-becoming has_role edges, all with evidence.
+- npm `dsh-auto-ontology@0.1.0` placeholder published (name locked).
 
-## 纪律
-- 证据随断言不可剥离；未知类型拦截不静默；本体产物 append-only。
+## O1 · Launch battle (this week) — distribution first
+
+> Same lesson as dsh-tradingagents R1: engineering without distribution earns nothing.
+
+- [ ] English-first conversion (#1): engine prompts/output + SVG labels default EN
+      (`--lang zh`), README EN primary + README.zh-CN.md, SKILL EN — then regenerate
+      the family-corpus ontology artifact in English for the first screen.
+- [ ] Demo asset: the ontology SVG is already the product's best visual — first-screen
+      embed + a reproducible one-command quickstart on a public corpus.
+- [ ] npm 0.1.0 real bundle (#2): distribution-vehicle pattern proven at
+      dsh-tradingagents (empty-patch cordis identity + skills/ + bin spawning the
+      Python engine; prepack staging; `node --check bin` in CI from day one).
+- [ ] CI (#3): py_compile + pure-function unit tests + npm pack + bin syntax — every
+      gate tradingagents paid for, installed before the first tag.
+- [ ] awesome-dsh-plugin submission (#4) (one-file yml recipe; 24.9k★ gate) + launch
+      post EN/CN (hook: "49 entities, 45 relations — every one with its evidence").
+- [ ] Star/download tracking: gap-radar dashboard auto-discovers the package.
+
+## O2 · Incremental merge & coreference (weeks 2-3) — the moat
+
+> Where evidence-first compounds: an ontology that grows must stay auditable.
+
+- [ ] Incremental merge (#5): new documents fold into an existing ontology; assertions
+      are append-only — a re-run never edits or deletes prior evidence.
+- [ ] Cross-document coreference (#5): the same entity under different mentions merges,
+      with the merge itself carrying provenance (which mentions, which evidence).
+- [ ] Conflict detection (#6): same entity, conflicting type/assertions → recorded as a
+      conflict entry holding BOTH evidences — flagged for review, never silently
+      resolved (the REVIEW-not-Hold philosophy applied to triples).
+- [ ] Corpus scale (#7): TBox sampling strategy (schema pass over a sample, not the
+      whole corpus), document batching, cost guard (per-call usage accounting +
+      `--max-calls`, proven at tradingagents #7).
+- [ ] Assertion query (#8): `--query X` — every assertion about X with its evidence
+      span; the audit surface that makes the ontology trustworthy.
+
+## O3 · Interop & DSH-native (weeks 4-5)
+
+- [ ] JSON-LD export first (#9) (web-native, lighter than OWL; OWL later if asked).
+- [ ] WeKnora graph bridge (#10): ingest the ontology into a WeKnora KB — family
+      synergy (the local WeKnora is the family's evidence store; tenant ops known).
+- [ ] typed-tools plugin 0.2.0 (#11): `ontology_build` / `ontology_query` via
+      defineTool — the full recipe including the DSL pitfalls is documented at
+      dsh-tradingagents docs/plugin-spec.md; verify with a live dsh headless session
+      before tagging.
+- [ ] Single-file HTML report (#12) (render_html pattern reuse: sidebar TOC, shareable).
+
+## O4 · Learning loop & ecosystem (month 2)
+
+- [ ] Certification fold-back (#13): human marks assertions accepted/rejected; the
+      verdict lives in the ledger and every later run respects it (upstream's "Learn"
+      pillar, evidence-first version).
+- [ ] Ontology history (#14): run-per-layer versioning with a diff view (what the
+      corpus added between runs).
+- [ ] Honest precision metric (#15): a reproducible evidence-spot-check eval on a
+      public corpus — we don't chase BEAVER (enterprise stack), we publish a metric
+      anyone can rerun.
+- [ ] Format positioning (#16): versioned "evidence-linked ontology" JSON schema —
+      the IC-MEMO play (if others adopt the format, the name travels with us).
+
+## Explicit non-goals
+
+- No enterprise-DB semantic layer — that is the upstream's land and the family's own
+  dsh-WrenAI slot (semantic-layer Q&A); the two repos must not compete.
+- No Docker/Postgres heavy stack — zero-infra is the selling point.
+- No web UI — static HTML reports suffice.
+- No multi-model routing — one deepseek-chat line, family convention.
+- No benchmark chasing (BEAVER/BIRD-Interact need the enterprise stack).
+
+## Discipline (non-negotiables)
+
+- Evidence is inseparable from an assertion; no evidence, no assertion;
+- The type guard intercepts unknown types — never a silent drop;
+- Artifacts are append-only: assertions grow, conflicts are recorded, nothing is
+  silently rewritten;
+- Every run carries provenance (model / temperature / elapsed / calls / tokens — the
+  tradingagents footer convention).
