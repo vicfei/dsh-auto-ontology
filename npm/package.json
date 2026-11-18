@@ -1,6 +1,6 @@
 {
   "name": "dsh-auto-ontology",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Auto ontology construction for DeepSeek Harness — two-pass LLM pipeline (TBox schema from corpus, ABox assertions per document) with an evidence quote on every entity/relation, a type guard against silent drops, append-only incremental merge, conservative coreference, JSON-LD export and evidence-span queries. Zero-infra stdlib CLI + typed agent tools.",
   "type": "module",
   "bin": {
