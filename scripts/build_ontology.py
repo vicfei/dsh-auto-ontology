@@ -199,6 +199,46 @@ def query_ontology(o, term):
     return hits
 
 
+def to_markdown(o):
+    """Ontology v2 -> shareable markdown digest (issue #12): stats + provenance,
+    conflicts table, entities by type, relations with evidence quotes."""
+    from collections import defaultdict
+    st = o.get("stats", {})
+    prov = o.get("provenance", {})
+    L = [f"# Ontology · {o.get('domain', '?')}", "",
+         f"- **{st.get('entities', 0)} entities · {st.get('relations', 0)} relations · "
+         f"{st.get('conflicts', 0)} conflicts · {st.get('flagged', 0)} unknown types flagged**",
+         f"- provenance: {prov.get('model', '?')} · {prov.get('calls', '?')} calls · "
+         f"{prov.get('tokens_in', 0):,} in / {prov.get('tokens_out', 0):,} out tokens · "
+         f"{prov.get('elapsed_s', '?')}s · built {o.get('built_at', '?')}", ""]
+    if o.get("conflicts"):
+        L += ["## Conflicts (both evidences kept, awaiting review)", "",
+              "| Entity | Types | Evidence A | Evidence B |", "|---|---|---|---|"]
+        for c in o["conflicts"][:20]:
+            t1, t2 = list(c["types"].items())[:2]
+            L.append(f"| {c['entity']} | {t1[0]} / {t2[0]} | "
+                     f"\"{t1[1].get('quote', '')[:50]}\" ({t1[1].get('doc', '?')}) | "
+                     f"\"{t2[1].get('quote', '')[:50]}\" ({t2[1].get('doc', '?')}) |")
+        L.append("")
+    by_type = defaultdict(list)
+    for e in o.get("abox", {}).get("entities", []):
+        by_type[e["type"]].append(e)
+    L.append("## Entities")
+    for t, es in sorted(by_type.items()):
+        L.append(f"\n### {t} ({len(es)})")
+        for e in es[:40]:
+            al = f" · aka {', '.join(e['aliases'])}" if e.get("aliases") else ""
+            ev = e["evidences"][0]["quote"] if e.get("evidences") else ""
+            L.append(f"- **{e['name']}**{al} — \"{ev[:70]}\" ({', '.join(e.get('docs', [])[:3])})")
+    L += ["", "## Relations", "", "| Subject | Predicate | Object | Evidence |", "|---|---|---|---|"]
+    for r in o.get("abox", {}).get("relations", [])[:200]:
+        ev = r["evidences"][0]["quote"] if r.get("evidences") else ""
+        L.append(f"| {r['subject']} | {r['predicate']} | {r['object']} | \"{ev[:50]}\" |")
+    L += ["", "> Every assertion carries its evidence span in the JSON; this page is the digest. "
+          "Not investment/enterprise advice."]
+    return "\n".join(L)
+
+
 def to_jsonld(o):
     """Ontology v2 JSON -> JSON-LD 1.1 (issue #9): entities as typed nodes with
     evidence, relations as reified statement nodes with subject/object refs.
@@ -355,6 +395,7 @@ def main():
     ap.add_argument("--merge", default=None, help="existing ontology JSON to fold into (append-only)")
     ap.add_argument("--query", default=None, help="query mode: every assertion about X, with evidence")
     ap.add_argument("--jsonld", action="store_true", help="export the ontology as JSON-LD 1.1 (with --from, or the newest artifact)")
+    ap.add_argument("--html", action="store_true", help="render the ontology as a single-file HTML digest (with --save, or --from standalone)")
     ap.add_argument("--from", dest="frm", default=None, help="ontology file for --query (default: newest in outdir)")
     ap.add_argument("--sample", type=int, default=4, help="docs sampled for the TBox schema pass")
     ap.add_argument("--max-calls", type=int, default=None, help="cost guard: abort beyond this many LLM calls")
@@ -364,6 +405,14 @@ def main():
     LANG = args.lang
     MAX_CALLS = args.max_calls
     t0 = time.time()
+
+    if args.html and not args.docs:
+        import render_html
+        path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+        out = os.path.splitext(path)[0] + ".html"
+        open(out, "w", encoding="utf-8").write(render_html.render(to_markdown(json.load(open(path)))))
+        print(f"html -> {out}")
+        return
 
     if args.jsonld:
         path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
@@ -447,6 +496,12 @@ def main():
         base_path = os.path.join(OUTDIR, dt.datetime.now().strftime("%Y%m%d-%H%M"))
         json.dump(o, open(base_path + ".json", "w"), ensure_ascii=False, indent=1)
         _write_svg(base_path + ".svg", o, args.domain)
+        if args.html:
+            try:
+                import render_html
+                open(base_path + ".html", "w", encoding="utf-8").write(render_html.render(to_markdown(o)))
+            except Exception as exc:
+                print(f"⚠ html render skipped ({type(exc).__name__})", file=sys.stderr)
         open(base_path + ".md", "w").write(tt(
             f"# Ontology · {args.domain}\n\nEntities {o['stats']['entities']} · relations {o['stats']['relations']} · "
             f"conflicts {o['stats']['conflicts']} · unknown types flagged {o['stats']['flagged']}.\n"
