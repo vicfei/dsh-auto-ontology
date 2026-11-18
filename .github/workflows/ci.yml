@@ -66,7 +66,20 @@ jobs:
           WB = importlib.util.module_from_spec(spec3); spec3.loader.exec_module(WB)
           docs = WB.entity_docs(o)
           assert docs and "Evidence:" in docs[0][1] and len(WB.entity_docs(o, limit=1)) == 1
-          print("weknora bridge docs: PASS")
+          cert_o = {"domain": "t", "built_at": "x",
+                    "tbox": {"entity_types": [{"name": "tool", "desc": ""}], "relation_types": []},
+                    "abox": {"entities": [
+                        {"name": "Bad", "type": "tool", "docs": ["d"], "evidences": [{"quote": "q", "doc": "d"}]},
+                        {"name": "Good", "type": "tool", "docs": ["d"], "evidences": [{"quote": "g", "doc": "d"}]}],
+                     "relations": []}, "conflicts": [], "flagged_unknown_types": [],
+                    "stats": {"entities": 2, "relations": 0}}
+          o2 = M.certify(cert_o, "Bad", "reject", note="x")
+          assert o2["stats"]["entities"] == 1 and o2["certifications"][M._key("bad")]["evidence"]["quote"] == "q"
+          st9 = M.load_store(o2)
+          M.fold_entity(st9, "Bad", "tool", "q9", "d9")
+          M.fold_entity(st9, "Bad", "company", "q8", "d8")
+          assert st9["suppressed"] == 1 and st9["entities"][M._key("Bad")]["type"] == "company"
+          print("certify fold-back: PASS")
           EOF
       - name: bin entry syntax (node --check)
         run: node --check npm/bin/auto-ontology.js
