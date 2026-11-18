@@ -50,18 +50,18 @@ issue → branch → PR (milestones O1–O4).
 
 > Where evidence-first compounds: an ontology that grows must stay auditable.
 
-- [ ] Incremental merge (#5): new documents fold into an existing ontology; assertions
-      are append-only — a re-run never edits or deletes prior evidence.
-- [ ] Cross-document coreference (#5): the same entity under different mentions merges,
-      with the merge itself carrying provenance (which mentions, which evidence).
-- [ ] Conflict detection (#6): same entity, conflicting type/assertions → recorded as a
-      conflict entry holding BOTH evidences — flagged for review, never silently
-      resolved (the REVIEW-not-Hold philosophy applied to triples).
-- [ ] Corpus scale (#7): TBox sampling strategy (schema pass over a sample, not the
-      whole corpus), document batching, cost guard (per-call usage accounting +
-      `--max-calls`, proven at tradingagents #7).
-- [ ] Assertion query (#8): `--query X` — every assertion about X with its evidence
-      span; the audit surface that makes the ontology trustworthy.
+- [x] Incremental merge + coreference (#5, 2026-11-18 PR #22): one fold store shared by
+      fresh builds and `--merge`; append-only verified live (20 evidences → 30, zero lost);
+      conservative coref clusters certain mentions (same type only), records aliases and
+      unions evidence, re-points relation endpoints to canonical names.
+- [x] Conflict detection (#6, PR #22): same name under a different TYPE → conflict entry
+      holding BOTH evidences, flagged for review, never silently resolved; a real one
+      surfaced in the live merge test.
+- [x] Corpus scale (#7, PR #22): `--sample N` bounds the TBox schema pass; per-call usage
+      accounting + `--max-calls`; every artifact carries provenance (model/temp/elapsed/
+      calls/tokens).
+- [x] Assertion query (#8, PR #22): `--query X` (name/alias/endpoint) with every evidence
+      span; pure semantics unit-tested in CI (v1+v2 artifact shapes accepted).
 
 ## O3 · Interop & DSH-native (weeks 4-5)
 
