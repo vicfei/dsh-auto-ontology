@@ -62,7 +62,11 @@ jobs:
           R = importlib.util.module_from_spec(spec2); spec2.loader.exec_module(R)
           html = R.render(md)
           assert "<nav>" in html and "<table>" in html
-          print("html digest: PASS")
+          spec3 = importlib.util.spec_from_file_location("wb", "scripts/weknora_bridge.py")
+          WB = importlib.util.module_from_spec(spec3); spec3.loader.exec_module(WB)
+          docs = WB.entity_docs(o)
+          assert docs and "Evidence:" in docs[0][1] and len(WB.entity_docs(o, limit=1)) == 1
+          print("weknora bridge docs: PASS")
           EOF
       - name: bin entry syntax (node --check)
         run: node --check npm/bin/auto-ontology.js
