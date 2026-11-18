@@ -1,0 +1,3483 @@
+{
+ "domain": "the vicfei dsh plugin family: multi-agent investment committees, quant research plugins, semantic layers, ontology construction for DeepSeek Harness",
+ "built_at": "2026-11-18T14:41:15",
+ "provenance": {
+  "model": "deepseek-chat",
+  "temperature": 0,
+  "elapsed_s": 55,
+  "calls": 21,
+  "tokens_in": 50429,
+  "tokens_out": 12954,
+  "docs_this_run": 19,
+  "merged_from": false
+ },
+ "tbox": {
+  "entity_types": [
+   {
+    "name": "dsh_plugin",
+    "desc": "A DeepSeek Harness plugin repository in the vicfei family, e.g. dsh-ai-hedge-fund, dsh-auto-ontology, dsh-CCXT, dsh-factor-auth."
+   },
+   {
+    "name": "evidence_quote",
+    "desc": "A source quote attached to an entity or relation assertion; assertions without evidence are not persisted."
+   },
+   {
+    "name": "evidence_store",
+    "desc": "The WeKnora evidence database queried with anchors to supply evidence for tickets."
+   },
+   {
+    "name": "factor",
+    "desc": "A research factor hypothesis that may be enrolled into the strong-factor library only after passing all gates."
+   },
+   {
+    "name": "falsification_counterexample",
+    "desc": "A recorded failed hypothesis archived in the counterexample library, making failure an organizational asset."
+   },
+   {
+    "name": "gate",
+    "desc": "A code-enforced validation gate (G1 completeness, G2 data causality, G3 statistical significance, final review) that a ticket must pass."
+   },
+   {
+    "name": "ic_memo",
+    "desc": "The auditable investment-committee memo output format carrying evidence-tagged claims and recorded dissent."
+   },
+   {
+    "name": "investor_persona",
+    "desc": "A named investor archetype (Buffett, Munger, Lynch, Wood) that independently values a ticker within the hedge-fund committee."
+   },
+   {
+    "name": "market_data_payload",
+    "desc": "A read-only market data record carrying its exchange and timestamp."
+   },
+   {
+    "name": "ontology_assertion",
+    "desc": "An ABox entity or relation instance asserted per document, required to conform to the TBox."
+   },
+   {
+    "name": "ontology_schema",
+    "desc": "The TBox type schema extracted from a corpus, constraining which instance types are admissible."
+   },
+   {
+    "name": "portfolio_manager",
+    "desc": "The aggregating role that combines persona verdicts, names the deciding driver, and records dissent."
+   },
+   {
+    "name": "research_ticket",
+    "desc": "A YAML research work order that is the admission unit for factor research."
+   },
+   {
+    "name": "trading_guard",
+    "desc": "A code-level safety mechanism (triple-armed unlock, notional caps, symbol whitelist) that the LLM cannot bypass."
+   },
+   {
+    "name": "upstream_project",
+    "desc": "An external open-source project that a plugin is built on or inspired by, such as ccxt, NVIDIA/auto-ontology, or virattt/ai-hedge-fund."
+   }
+  ],
+  "relation_types": [
+   {
+    "name": "built_on",
+    "domains": "dsh_plugin",
+    "ranges": "upstream_project",
+    "desc": "A plugin is built on or implements the concept of an upstream project."
+   },
+   {
+    "name": "sister_of",
+    "domains": "dsh_plugin",
+    "ranges": "dsh_plugin",
+    "desc": "Two plugins belong to the same family and are cross-referenced as sister projects."
+   },
+   {
+    "name": "aggregates_verdict_of",
+    "domains": "portfolio_manager",
+    "ranges": "investor_persona",
+    "desc": "The PM combines the independent valuations of personas into a final verdict."
+   },
+   {
+    "name": "produces",
+    "domains": "dsh_plugin",
+    "ranges": "ic_memo",
+    "desc": "The hedge-fund plugin emits an IC-MEMO as its output."
+   },
+   {
+    "name": "carries_evidence",
+    "domains": "ontology_assertion",
+    "ranges": "evidence_quote",
+    "desc": "An assertion is backed by a source quote; without one it does not land."
+   },
+   {
+    "name": "conforms_to",
+    "domains": "ontology_assertion",
+    "ranges": "ontology_schema",
+    "desc": "An instance assertion must belong to a type declared in the TBox schema."
+   },
+   {
+    "name": "extracted_from",
+    "domains": "ontology_schema",
+    "ranges": "dsh_plugin",
+    "desc": "The TBox schema is produced by the auto-ontology plugin's first pass over a corpus."
+   },
+   {
+    "name": "submitted_as",
+    "domains": "factor",
+    "ranges": "research_ticket",
+    "desc": "A factor hypothesis enters the pipeline as a research ticket."
+   },
+   {
+    "name": "gated_by",
+    "domains": "research_ticket",
+    "ranges": "gate",
+    "desc": "A ticket must pass each gate in sequence before enrollment."
+   },
+   {
+    "name": "archived_in",
+    "domains": "factor",
+    "ranges": "falsification_counterexample",
+    "desc": "A factor that fails a gate is archived as a falsification counterexample."
+   },
+   {
+    "name": "enrolled_into",
+    "domains": "factor",
+    "ranges": "dsh_plugin",
+    "desc": "A factor passing all gates is enrolled into the strong-factor library."
+   },
+   {
+    "name": "sourced_from",
+    "domains": "research_ticket",
+    "ranges": "evidence_store",
+    "desc": "A ticket draws its evidence from the WeKnora evidence store."
+   },
+   {
+    "name": "guards",
+    "domains": "trading_guard",
+    "ranges": "market_data_payload",
+    "desc": "The trading guard constrains order writes while read-only market data flows freely."
+   }
+  ]
+ },
+ "abox": {
+  "entities": [
+   {
+    "name": "@vicfei/dsh-super-agent",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`@vicfei/dsh-super-agent` | npm | 1.6.0",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "@wxg-prc-cpg/dsh-weknora",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "WeKnora ships its own read-only DSH plugin",
+      "doc": "dsh-weknora-ops"
+     }
+    ]
+   },
+   {
+    "name": "ABox assertions per doc",
+    "type": "ontology_assertion",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "then ABox assertions per doc",
+      "doc": "dsh-auto-ontology"
+     }
+    ]
+   },
+   {
+    "name": "ai-hedge-fund",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "Inspired by virattt/ai-hedge-fund",
+      "doc": "dsh-auto-ontology"
+     }
+    ]
+   },
+   {
+    "name": "auditable trail JSON",
+    "type": "ic_memo",
+    "aliases": [],
+    "docs": [
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "Auditable trail JSON + the family evidence discipline",
+      "doc": "dsh-vibe-trading"
+     }
+    ]
+   },
+   {
+    "name": "binance BTC/USDT 1m klines",
+    "type": "market_data_payload",
+    "aliases": [],
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "binance BTC/USDT 500×1m via relay",
+      "doc": "dsh-hummingbot"
+     }
+    ]
+   },
+   {
+    "name": "Buffett",
+    "type": "investor_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "沃伦·巴菲特 | PASS | 70",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "Buffett/Munger PASS@72, Lynch HOLD@55",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "name": "calculation_id",
+    "type": "evidence_quote",
+    "aliases": [],
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "every call returns a `calculation_id`",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "name": "ccxt",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "Built on [ccxt](https://github.com/ccxt/ccxt)",
+      "doc": "dsh-ccxt"
+     }
+    ]
+   },
+   {
+    "name": "circuit breaker",
+    "type": "trading_guard",
+    "aliases": [],
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "circuit breaker** (5× order-amount)",
+      "doc": "dsh-hummingbot"
+     }
+    ]
+   },
+   {
+    "name": "data/inventory/dsh_plugins.jsonl",
+    "type": "evidence_store",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`data/inventory/dsh_plugins.jsonl`",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "data/leading/claude_code_ecosystem.jsonl",
+    "type": "evidence_store",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`data/leading/claude_code_ecosystem.jsonl`",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "data/leading/mcp_servers.jsonl",
+    "type": "evidence_store",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`data/leading/mcp_servers.jsonl`",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "DeepSeek Harness",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-rs-audit"
+    ],
+    "evidences": [
+     {
+      "quote": "以固定版本的 DeepSeek Harness 为行为参考",
+      "doc": "dsh-rs-audit"
+     }
+    ]
+   },
+   {
+    "name": "deepseek-harness-native",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "deepseek-harness-native（`dshn`）",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "name": "dsh-agentdiary-plugin",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-agentdiary-plugin` | npm | 0.1.1",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "dsh-ai-hedge-fund",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-auto-ontology",
+     "dsh-ccxt",
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-hummingbot",
+     "dsh-kronos",
+     "dsh-nautilus",
+     "dsh-openbb",
+     "dsh-quantlib",
+     "dsh-quantstats",
+     "dsh-tradingagents",
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-ai-hedge-fund — an AI hedge fund",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "(dsh-ai-hedge-fund) -[inspired_by]->",
+      "doc": "dsh-auto-ontology"
+     },
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)",
+      "doc": "dsh-ccxt"
+     },
+     {
+      "quote": "`dsh-ai-hedge-fund` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei",
+      "doc": "dsh-hummingbot"
+     },
+     {
+      "quote": "from sister repo dsh-ai-hedge-fund",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "name": "dsh-auto-ontology",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology",
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-auto-ontology — auto ontology construction",
+      "doc": "dsh-auto-ontology"
+     },
+     {
+      "quote": "`dsh-auto-ontology` | npm | 0.2.0",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "dsh-CCXT",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt",
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-hummingbot",
+     "dsh-jesse",
+     "dsh-kronos",
+     "dsh-nautilus",
+     "dsh-quantlib",
+     "dsh-quantstats",
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-CCXT — 100+ crypto exchanges",
+      "doc": "dsh-ccxt"
+     },
+     {
+      "quote": "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)",
+      "doc": "dsh-freqtrade"
+     },
+     {
+      "quote": "`dsh-ccxt` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "dsh-CCXT",
+      "doc": "dsh-jesse"
+     }
+    ]
+   },
+   {
+    "name": "dsh-evidence-plugin",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-evidence-plugin` | npm | 0.1.1",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "dsh-factor-auth",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-factor-auth — 因子鉴真研究工单协议",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "name": "dsh-freqtrade",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-freqtrade — a GPL-free strategy-bot",
+      "doc": "dsh-freqtrade"
+     },
+     {
+      "quote": "`dsh-freqtrade` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "[dsh-freqtrade](https://github.com/vicfei/dsh-freqtrade)",
+      "doc": "dsh-wrenai"
+     }
+    ]
+   },
+   {
+    "name": "dsh-hummingbot",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-hummingbot",
+     "dsh-jesse",
+     "dsh-kronos",
+     "dsh-quantlib",
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-hummingbot]",
+      "doc": "dsh-freqtrade"
+     },
+     {
+      "quote": "`dsh-hummingbot` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "dsh-hummingbot — market making, natively",
+      "doc": "dsh-hummingbot"
+     },
+     {
+      "quote": "dsh-hummingbot (MM)",
+      "doc": "dsh-jesse"
+     },
+     {
+      "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot)",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "name": "dsh-jesse",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-jesse",
+     "dsh-kronos",
+     "dsh-quantlib",
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-jesse](https://github.com/vicfei/dsh-jesse)",
+      "doc": "dsh-freqtrade"
+     },
+     {
+      "quote": "`dsh-jesse` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "dsh-jesse — strategy optimization for DeepSeek",
+      "doc": "dsh-jesse"
+     }
+    ]
+   },
+   {
+    "name": "dsh-Kronos",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-kronos"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-Kronos](https://github.com/vicfei/dsh-Kronos)",
+      "doc": "dsh-freqtrade"
+     },
+     {
+      "quote": "`dsh-kronos` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "# dsh-Kronos — K-line scenario forecasting",
+      "doc": "dsh-kronos"
+     }
+    ]
+   },
+   {
+    "name": "dsh-Nautilus",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-Nautilus — a professional backtesting engine",
+      "doc": "dsh-nautilus"
+     }
+    ]
+   },
+   {
+    "name": "dsh-nautilus_trader",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-hummingbot",
+     "dsh-jesse",
+     "dsh-kronos",
+     "dsh-quantlib",
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-nautilus_trader]",
+      "doc": "dsh-freqtrade"
+     },
+     {
+      "quote": "`dsh-nautilus_trader` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "[dsh-nautilus_trader](https://github.com/vicfei",
+      "doc": "dsh-hummingbot"
+     },
+     {
+      "quote": "dsh-nautilus_trader (engine)",
+      "doc": "dsh-jesse"
+     },
+     {
+      "quote": "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader)",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "name": "dsh-OpenBB",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt",
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-hummingbot",
+     "dsh-jesse",
+     "dsh-kronos",
+     "dsh-nautilus",
+     "dsh-openbb",
+     "dsh-quantlib",
+     "dsh-quantstats",
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)",
+      "doc": "dsh-ccxt"
+     },
+     {
+      "quote": "`dsh-openbb` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "dsh-OpenBB",
+      "doc": "dsh-jesse"
+     },
+     {
+      "quote": "dsh-OpenBB — the OpenBB data platform",
+      "doc": "dsh-openbb"
+     }
+    ]
+   },
+   {
+    "name": "dsh-plugin-shop-catalog@2026.1116.0",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-plugin-shop-catalog@2026.1116.0`",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "dsh-QuantLib",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-kronos",
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-QuantLib](https://github.com/vicfei/dsh-QuantLib)",
+      "doc": "dsh-freqtrade"
+     },
+     {
+      "quote": "`dsh-quantlib` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "dsh-QuantLib — derivatives pricing as DeepSeek",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "name": "dsh-quantstats",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-kronos",
+     "dsh-quantlib",
+     "dsh-quantstats",
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-quantstats]",
+      "doc": "dsh-freqtrade"
+     },
+     {
+      "quote": "`dsh-quantstats` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "[dsh-quantstats](https://github.com/vicfei/dsh-quantstats)",
+      "doc": "dsh-quantlib"
+     },
+     {
+      "quote": "# dsh-quantstats — performance tearsheets",
+      "doc": "dsh-quantstats"
+     }
+    ]
+   },
+   {
+    "name": "dsh-rs",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-rs-audit"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-rs` 是项目名，安装后的命令是 `dsh`",
+      "doc": "dsh-rs-audit"
+     }
+    ]
+   },
+   {
+    "name": "dsh-super-agent",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "admission-control philosophy of [dsh-super-agent]",
+      "doc": "dsh-weknora-ops"
+     }
+    ]
+   },
+   {
+    "name": "dsh-superagent-prototype",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-trustquant",
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "MIT-licensed [dsh-superagent-prototype]",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "name": "dsh-TradingAgents",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-ccxt",
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-hummingbot",
+     "dsh-jesse",
+     "dsh-kronos",
+     "dsh-nautilus",
+     "dsh-openbb",
+     "dsh-quantlib",
+     "dsh-quantstats",
+     "dsh-tradingagents",
+     "dsh-vibe-trading",
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "Sister project of [dsh-TradingAgents]",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "Family: [dsh-TradingAgents]",
+      "doc": "dsh-ccxt"
+     },
+     {
+      "quote": "`dsh-tradingagents` | npm | 0.2.2",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "dsh-TradingAgents",
+      "doc": "dsh-jesse"
+     },
+     {
+      "quote": "dsh-tradingagents — TradingAgents, natively",
+      "doc": "dsh-tradingagents"
+     },
+     {
+      "quote": "[dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)",
+      "doc": "dsh-wrenai"
+     }
+    ]
+   },
+   {
+    "name": "dsh-trustquant",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar",
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-trustquant` | npm | 0.1.0",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "# dsh-trustquant",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "name": "dsh-Vibe-Trading",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt",
+     "dsh-freqtrade",
+     "dsh-gap-radar",
+     "dsh-hummingbot",
+     "dsh-jesse",
+     "dsh-kronos",
+     "dsh-nautilus",
+     "dsh-openbb",
+     "dsh-quantlib",
+     "dsh-quantstats",
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)",
+      "doc": "dsh-ccxt"
+     },
+     {
+      "quote": "[dsh-Vibe-Trading]",
+      "doc": "dsh-freqtrade"
+     },
+     {
+      "quote": "`dsh-vibe-trading` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei",
+      "doc": "dsh-hummingbot"
+     },
+     {
+      "quote": "dsh-Vibe-Trading",
+      "doc": "dsh-jesse"
+     },
+     {
+      "quote": "dsh-vibe-trading — interactive trading research",
+      "doc": "dsh-vibe-trading"
+     }
+    ]
+   },
+   {
+    "name": "dsh-weknora-ops",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar",
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-weknora-ops` | npm | 0.2.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "A DeepSeek Harness plugin (skill + `weknora-ops` CLI)",
+      "doc": "dsh-weknora-ops"
+     }
+    ]
+   },
+   {
+    "name": "dsh-WrenAI",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology",
+     "dsh-gap-radar",
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "the 12-repo quant stack + [dsh-WrenAI]",
+      "doc": "dsh-auto-ontology"
+     },
+     {
+      "quote": "`dsh-wrenai` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     },
+     {
+      "quote": "dsh-WrenAI — a self-hosted semantic layer",
+      "doc": "dsh-wrenai"
+     }
+    ]
+   },
+   {
+    "name": "family fail-closed guard",
+    "type": "trading_guard",
+    "aliases": [],
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "family fail-closed DNA",
+      "doc": "dsh-hummingbot"
+     }
+    ]
+   },
+   {
+    "name": "freqtrade",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "Concept slot of [freqtrade]",
+      "doc": "dsh-freqtrade"
+     }
+    ]
+   },
+   {
+    "name": "freqtrade-strategies",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "[freqtrade-strategies] (5.7k★)",
+      "doc": "dsh-freqtrade"
+     }
+    ]
+   },
+   {
+    "name": "G1 完整性门控",
+    "type": "gate",
+    "aliases": [],
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "G1 完整性门控",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "name": "G2 数据因果门控",
+    "type": "gate",
+    "aliases": [],
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "G2 数据因果门控",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "name": "G3 统计显著性门控",
+    "type": "gate",
+    "aliases": [],
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "G3 统计显著性门控",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "name": "H-2026-001",
+    "type": "research_ticket",
+    "aliases": [],
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-001 复合质量（含一致预期）",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "name": "H-2026-002",
+    "type": "research_ticket",
+    "aliases": [],
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-002 低波动×质量",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "name": "H-2026-003",
+    "type": "research_ticket",
+    "aliases": [],
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-003 纯财务质量复合",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "name": "H-2026-005",
+    "type": "research_ticket",
+    "aliases": [],
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-005 一致预期增速",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "name": "H-2026-101",
+    "type": "research_ticket",
+    "aliases": [],
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "首例工单 **H-2026-101**",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "name": "hesreallyhim/awesome-claude-code",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "hesreallyhim/awesome-claude-code",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "HKUDS/Vibe-Trading",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "Inspired by [HKUDS/Vibe-Trading]",
+      "doc": "dsh-vibe-trading"
+     }
+    ]
+   },
+   {
+    "name": "Hummingbot",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the core concept of [Hummingbot]",
+      "doc": "dsh-hummingbot"
+     }
+    ]
+   },
+   {
+    "name": "IC-MEMO",
+    "type": "ic_memo",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "[IC-MEMO](templates/IC-MEMO.md)",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "Every session emits an [IC-MEMO]",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "name": "Inspired by virattt/ai-hedge-fund",
+    "type": "evidence_quote",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "evidence `Inspired by virattt/ai-hedge-fund`",
+      "doc": "dsh-auto-ontology"
+     }
+    ]
+   },
+   {
+    "name": "Jesse",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-jesse"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the core concept of [Jesse]",
+      "doc": "dsh-jesse"
+     }
+    ]
+   },
+   {
+    "name": "Kronos",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-kronos"
+    ],
+    "evidences": [
+     {
+      "quote": "The concept slot of [Kronos]",
+      "doc": "dsh-kronos"
+     }
+    ]
+   },
+   {
+    "name": "L3 模糊匹配 + gap 判定",
+    "type": "gate",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "L3 模糊匹配 + gap 判定",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "L4 生态需求门",
+    "type": "gate",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "L4 生态需求门（人审+显式标准）",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "Lynch",
+    "type": "investor_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "彼得·林奇 | HOLD | 55",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "Lynch HOLD@55, Wood BUY@62",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "name": "market data payload",
+    "type": "market_data_payload",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "Every payload carries its exchange and timestamp",
+      "doc": "dsh-ccxt"
+     }
+    ]
+   },
+   {
+    "name": "modelcontextprotocol/servers",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "modelcontextprotocol/servers | 11 servers",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "Munger",
+    "type": "investor_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "查理·芒格 | PASS | 72",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "Buffett/Munger PASS@72, Lynch HOLD@55",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "name": "NautilusTrader",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "Built on [NautilusTrader](https://github.com/nautechsystems/nautilus_trader)",
+      "doc": "dsh-nautilus"
+     }
+    ]
+   },
+   {
+    "name": "NVIDIA/auto-ontology",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the concept of [NVIDIA/auto-ontology]",
+      "doc": "dsh-auto-ontology"
+     }
+    ]
+   },
+   {
+    "name": "OpenBB",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-openbb"
+    ],
+    "evidences": [
+     {
+      "quote": "Built on [OpenBB](https://github.com/openbq-org/OpenBB)",
+      "doc": "dsh-openbb"
+     }
+    ]
+   },
+   {
+    "name": "opencode-weknora",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`opencode-weknora` | npm | 0.1.0",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "portfolio manager",
+    "type": "portfolio_manager",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "portfolio manager ──► IC-MEMO",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "the PM rules PASS@72 naming it",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "name": "provider + fetched_at on every payload",
+    "type": "market_data_payload",
+    "aliases": [],
+    "docs": [
+     "dsh-openbb"
+    ],
+    "evidences": [
+     {
+      "quote": "provider + fetched_at on every payload",
+      "doc": "dsh-openbb"
+     }
+    ]
+   },
+   {
+    "name": "punkpeye/awesome-mcp-servers",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "punkpeye/awesome-mcp-servers（97,753★）",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "name": "QuantLib",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the core of [QuantLib]",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "name": "QuantLib 1.33 golden fixtures",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "pinned against QuantLib 1.33 golden fixtures",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "name": "QuantStats",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the core concept of [QuantStats]",
+      "doc": "dsh-quantstats"
+     }
+    ]
+   },
+   {
+    "name": "risk officer guardrails",
+    "type": "trading_guard",
+    "aliases": [],
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "risk officer logs the split as guardrail [G8]",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "name": "structured error taxonomy",
+    "type": "gate",
+    "aliases": [],
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "**CLI/tool gates**: structured error taxonomy",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "name": "Tauric Research's TradingAgents",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "Inspired by [Tauric Research's TradingAgents]",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "name": "TBox schema from corpus",
+    "type": "ontology_schema",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "TBox schema from corpus, then ABox",
+      "doc": "dsh-auto-ontology"
+     }
+    ]
+   },
+   {
+    "name": "Tencent/WeKnora",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "[WeKnora](https://github.com/Tencent/WeKnora), the open-source",
+      "doc": "dsh-weknora-ops"
+     }
+    ]
+   },
+   {
+    "name": "triple-armed guard",
+    "type": "trading_guard",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "a triple-armed guard with",
+      "doc": "dsh-ccxt"
+     }
+    ]
+   },
+   {
+    "name": "TrustQuant",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "for [TrustQuant](https://github.com/vicfei/trustquant)",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "name": "trustquant manifest",
+    "type": "evidence_store",
+    "aliases": [],
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "`trustquant manifest` shows who computed what",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "name": "trustquant replay",
+    "type": "gate",
+    "aliases": [],
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "`trustquant replay` re-executes and verifies digests",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "name": "trustquant-dsh doctor",
+    "type": "gate",
+    "aliases": [],
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "trustquant-dsh doctor                    # verify the chain",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "name": "virattt/ai-hedge-fund",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "Inspired by [virattt/ai-hedge-fund]",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "[virattt/ai-hedge-fund](https://github.com/virattt",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "name": "WeKnora",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "WeKnora fork（`vicfei/WeKnora` v090-plus）",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "name": "weknora-ops CLI gate",
+    "type": "trading_guard",
+    "aliases": [],
+    "docs": [
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "`doc delete` refuses without `--yes`",
+      "doc": "dsh-weknora-ops"
+     }
+    ]
+   },
+   {
+    "name": "Wood",
+    "type": "investor_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "凯瑟琳·伍德 | HOLD | 58",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "Lynch HOLD@55, Wood BUY@62",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "name": "WrenAI",
+    "type": "upstream_project",
+    "aliases": [],
+    "docs": [
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the differentiated core of [WrenAI]",
+      "doc": "dsh-wrenai"
+     }
+    ]
+   }
+  ],
+  "relations": [
+   {
+    "subject": "ABox assertions per doc",
+    "predicate": "carries_evidence",
+    "object": "Inspired by virattt/ai-hedge-fund",
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "every entity/relation carries an evidence quote",
+      "doc": "dsh-auto-ontology"
+     }
+    ]
+   },
+   {
+    "subject": "ABox assertions per doc",
+    "predicate": "conforms_to",
+    "object": "TBox schema from corpus",
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "instances must ∈ TBox",
+      "doc": "dsh-auto-ontology"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-agentdiary-plugin",
+    "predicate": "sister_of",
+    "object": "@vicfei/dsh-super-agent",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-agentdiary-plugin` | npm | 0.1.1",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-ai-hedge-fund",
+    "predicate": "built_on",
+    "object": "virattt/ai-hedge-fund",
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "Inspired by [virattt/ai-hedge-fund]",
+      "doc": "dsh-ai-hedge-fund"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-ai-hedge-fund",
+    "predicate": "produces",
+    "object": "IC-MEMO",
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "portfolio manager ──► IC-MEMO",
+      "doc": "dsh-ai-hedge-fund"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-ai-hedge-fund",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "Sister project of [dsh-TradingAgents]",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "`dsh-ai-hedge-fund` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-auto-ontology",
+    "predicate": "built_on",
+    "object": "NVIDIA/auto-ontology",
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the concept of [NVIDIA/auto-ontology]",
+      "doc": "dsh-auto-ontology"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-auto-ontology",
+    "predicate": "built_on",
+    "object": "dsh-plugin-shop-catalog@2026.1116.0",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-plugin-shop-catalog@2026.1116.0`",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-auto-ontology",
+    "predicate": "sister_of",
+    "object": "dsh-WrenAI",
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "the 12-repo quant stack + [dsh-WrenAI]",
+      "doc": "dsh-auto-ontology"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-CCXT",
+    "predicate": "built_on",
+    "object": "ccxt",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "Built on [ccxt](https://github.com/ccxt/ccxt)",
+      "doc": "dsh-ccxt"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-CCXT",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents]",
+      "doc": "dsh-ccxt"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-CCXT",
+    "predicate": "sister_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)",
+      "doc": "dsh-ccxt"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-CCXT",
+    "predicate": "sister_of",
+    "object": "dsh-Vibe-Trading",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)",
+      "doc": "dsh-ccxt"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-CCXT",
+    "predicate": "sister_of",
+    "object": "dsh-OpenBB",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)",
+      "doc": "dsh-ccxt"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-ccxt",
+    "predicate": "sister_of",
+    "object": "dsh-quantlib",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-ccxt` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-evidence-plugin",
+    "predicate": "built_on",
+    "object": "hesreallyhim/awesome-claude-code",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "hesreallyhim/awesome-claude-code",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-factor-auth",
+    "predicate": "built_on",
+    "object": "WeKnora",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "WeKnora fork（`vicfei/WeKnora` v090-plus）",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-factor-auth",
+    "predicate": "sister_of",
+    "object": "deepseek-harness-native",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "deepseek-harness-native（`dshn`）",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-freqtrade",
+    "predicate": "built_on",
+    "object": "freqtrade",
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "Concept slot of [freqtrade]",
+      "doc": "dsh-freqtrade"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-freqtrade",
+    "predicate": "built_on",
+    "object": "freqtrade-strategies",
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "[freqtrade-strategies] (5.7k★)",
+      "doc": "dsh-freqtrade"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-freqtrade",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents]",
+      "doc": "dsh-freqtrade"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-freqtrade",
+    "predicate": "sister_of",
+    "object": "dsh-CCXT",
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)",
+      "doc": "dsh-freqtrade"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-freqtrade",
+    "predicate": "sister_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund]",
+      "doc": "dsh-freqtrade"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-freqtrade",
+    "predicate": "sister_of",
+    "object": "dsh-hummingbot",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-freqtrade` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-hummingbot",
+    "predicate": "built_on",
+    "object": "Hummingbot",
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the core concept of [Hummingbot]",
+      "doc": "dsh-hummingbot"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-hummingbot",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents]",
+      "doc": "dsh-hummingbot"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-hummingbot",
+    "predicate": "sister_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei",
+      "doc": "dsh-hummingbot"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-hummingbot",
+    "predicate": "sister_of",
+    "object": "dsh-CCXT",
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "shared with dsh-CCXT",
+      "doc": "dsh-hummingbot"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-hummingbot",
+    "predicate": "sister_of",
+    "object": "dsh-nautilus_trader",
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-nautilus_trader](https://github.com/vicfei",
+      "doc": "dsh-hummingbot"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-jesse",
+    "predicate": "built_on",
+    "object": "Jesse",
+    "docs": [
+     "dsh-jesse"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the core concept of [Jesse]",
+      "doc": "dsh-jesse"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-jesse",
+    "predicate": "sister_of",
+    "object": "dsh-kronos",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-jesse` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-jesse",
+    "predicate": "sister_of",
+    "object": "dsh-nautilus_trader",
+    "docs": [
+     "dsh-jesse"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-nautilus_trader (sibling)",
+      "doc": "dsh-jesse"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-jesse",
+    "predicate": "sister_of",
+    "object": "dsh-hummingbot",
+    "docs": [
+     "dsh-jesse"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-hummingbot (MM)",
+      "doc": "dsh-jesse"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-jesse",
+    "predicate": "sister_of",
+    "object": "dsh-CCXT",
+    "docs": [
+     "dsh-jesse"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-CCXT",
+      "doc": "dsh-jesse"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-jesse",
+    "predicate": "sister_of",
+    "object": "dsh-OpenBB",
+    "docs": [
+     "dsh-jesse"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-OpenBB",
+      "doc": "dsh-jesse"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-jesse",
+    "predicate": "sister_of",
+    "object": "dsh-Vibe-Trading",
+    "docs": [
+     "dsh-jesse"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-Vibe-Trading",
+      "doc": "dsh-jesse"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-jesse",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-jesse"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-TradingAgents",
+      "doc": "dsh-jesse"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-Kronos",
+    "predicate": "built_on",
+    "object": "Kronos",
+    "docs": [
+     "dsh-kronos"
+    ],
+    "evidences": [
+     {
+      "quote": "The concept slot of [Kronos]",
+      "doc": "dsh-kronos"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-Kronos",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-kronos"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents]",
+      "doc": "dsh-kronos"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-Kronos",
+    "predicate": "sister_of",
+    "object": "dsh-CCXT",
+    "docs": [
+     "dsh-kronos"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)",
+      "doc": "dsh-kronos"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-Kronos",
+    "predicate": "sister_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-kronos"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)",
+      "doc": "dsh-kronos"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-Nautilus",
+    "predicate": "built_on",
+    "object": "NautilusTrader",
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "Built on [NautilusTrader]",
+      "doc": "dsh-nautilus"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-Nautilus",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents]",
+      "doc": "dsh-nautilus"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-Nautilus",
+    "predicate": "sister_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)",
+      "doc": "dsh-nautilus"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-Nautilus",
+    "predicate": "sister_of",
+    "object": "dsh-Vibe-Trading",
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)",
+      "doc": "dsh-nautilus"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-Nautilus",
+    "predicate": "sister_of",
+    "object": "dsh-OpenBB",
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)",
+      "doc": "dsh-nautilus"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-Nautilus",
+    "predicate": "sister_of",
+    "object": "dsh-CCXT",
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)",
+      "doc": "dsh-nautilus"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-nautilus_trader",
+    "predicate": "sister_of",
+    "object": "dsh-openbb",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-nautilus_trader` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-OpenBB",
+    "predicate": "built_on",
+    "object": "OpenBB",
+    "docs": [
+     "dsh-openbb"
+    ],
+    "evidences": [
+     {
+      "quote": "Built on [OpenBB]",
+      "doc": "dsh-openbb"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-OpenBB",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-openbb"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents]",
+      "doc": "dsh-openbb"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-OpenBB",
+    "predicate": "sister_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-openbb"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)",
+      "doc": "dsh-openbb"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-OpenBB",
+    "predicate": "sister_of",
+    "object": "dsh-Vibe-Trading",
+    "docs": [
+     "dsh-openbb"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)",
+      "doc": "dsh-openbb"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-plugin-shop-catalog@2026.1116.0",
+    "predicate": "sourced_from",
+    "object": "data/inventory/dsh_plugins.jsonl",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`data/inventory/dsh_plugins.jsonl`",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-QuantLib",
+    "predicate": "built_on",
+    "object": "QuantLib",
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the core of [QuantLib]",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-QuantLib",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents]",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-QuantLib",
+    "predicate": "sister_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-QuantLib",
+    "predicate": "sister_of",
+    "object": "dsh-Vibe-Trading",
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-QuantLib",
+    "predicate": "sister_of",
+    "object": "dsh-OpenBB",
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-QuantLib",
+    "predicate": "sister_of",
+    "object": "dsh-CCXT",
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-QuantLib",
+    "predicate": "sister_of",
+    "object": "dsh-nautilus_trader",
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader)",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-QuantLib",
+    "predicate": "sister_of",
+    "object": "dsh-hummingbot",
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot)",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-QuantLib",
+    "predicate": "sister_of",
+    "object": "dsh-jesse",
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-jesse](https://github.com/vicfei/dsh-jesse)",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-QuantLib",
+    "predicate": "sister_of",
+    "object": "dsh-quantstats",
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-quantstats](https://github.com/vicfei/dsh-quantstats)",
+      "doc": "dsh-quantlib"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-quantstats",
+    "predicate": "built_on",
+    "object": "QuantStats",
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the core concept of [QuantStats]",
+      "doc": "dsh-quantstats"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-quantstats",
+    "predicate": "sister_of",
+    "object": "dsh-trustquant",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-quantstats` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-quantstats",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents]",
+      "doc": "dsh-quantstats"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-quantstats",
+    "predicate": "sister_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)",
+      "doc": "dsh-quantstats"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-quantstats",
+    "predicate": "sister_of",
+    "object": "dsh-CCXT",
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)",
+      "doc": "dsh-quantstats"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-rs",
+    "predicate": "built_on",
+    "object": "DeepSeek Harness",
+    "docs": [
+     "dsh-rs-audit"
+    ],
+    "evidences": [
+     {
+      "quote": "以固定版本的 DeepSeek Harness 为行为参考",
+      "doc": "dsh-rs-audit"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-tradingagents",
+    "predicate": "built_on",
+    "object": "modelcontextprotocol/servers",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "modelcontextprotocol/servers | 11 servers",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-tradingagents",
+    "predicate": "built_on",
+    "object": "Tauric Research's TradingAgents",
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "Inspired by [Tauric Research's TradingAgents]",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-tradingagents",
+    "predicate": "built_on",
+    "object": "virattt/ai-hedge-fund",
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "[virattt/ai-hedge-fund](https://github.com/virattt",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-tradingagents",
+    "predicate": "produces",
+    "object": "IC-MEMO",
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "Every session emits an [IC-MEMO]",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-tradingagents",
+    "predicate": "sister_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "from sister repo dsh-ai-hedge-fund",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-trustquant",
+    "predicate": "built_on",
+    "object": "TrustQuant",
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "plugin ... for [TrustQuant]",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-trustquant",
+    "predicate": "built_on",
+    "object": "dsh-superagent-prototype",
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "Bundle format follows the MIT-licensed",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-vibe-trading",
+    "predicate": "built_on",
+    "object": "HKUDS/Vibe-Trading",
+    "docs": [
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "Inspired by [HKUDS/Vibe-Trading]",
+      "doc": "dsh-vibe-trading"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-vibe-trading",
+    "predicate": "produces",
+    "object": "auditable trail JSON",
+    "docs": [
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "Auditable trail JSON + the family evidence discipline",
+      "doc": "dsh-vibe-trading"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-vibe-trading",
+    "predicate": "sister_of",
+    "object": "dsh-wrenai",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-vibe-trading` | npm | 0.0.1",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-vibe-trading",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents]",
+      "doc": "dsh-vibe-trading"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-vibe-trading",
+    "predicate": "sister_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)",
+      "doc": "dsh-vibe-trading"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-weknora-ops",
+    "predicate": "built_on",
+    "object": "punkpeye/awesome-mcp-servers",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "punkpeye/awesome-mcp-servers（97,753★）",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-weknora-ops",
+    "predicate": "built_on",
+    "object": "Tencent/WeKnora",
+    "docs": [
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "the platform this plugin talks to",
+      "doc": "dsh-weknora-ops"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-weknora-ops",
+    "predicate": "built_on",
+    "object": "dsh-superagent-prototype",
+    "docs": [
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "the observed bundle format this repo follows",
+      "doc": "dsh-weknora-ops"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-weknora-ops",
+    "predicate": "sister_of",
+    "object": "dsh-evidence-plugin",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`dsh-weknora-ops` | npm | 0.2.1",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-weknora-ops",
+    "predicate": "sister_of",
+    "object": "@wxg-prc-cpg/dsh-weknora",
+    "docs": [
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "Both can be installed side by side.",
+      "doc": "dsh-weknora-ops"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-WrenAI",
+    "predicate": "built_on",
+    "object": "WrenAI",
+    "docs": [
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the differentiated core of [WrenAI]",
+      "doc": "dsh-wrenai"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-WrenAI",
+    "predicate": "sister_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: the 12-repo quant stack",
+      "doc": "dsh-wrenai"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-WrenAI",
+    "predicate": "sister_of",
+    "object": "dsh-OpenBB",
+    "docs": [
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: the 12-repo quant stack",
+      "doc": "dsh-wrenai"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-WrenAI",
+    "predicate": "sister_of",
+    "object": "dsh-CCXT",
+    "docs": [
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: the 12-repo quant stack",
+      "doc": "dsh-wrenai"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-WrenAI",
+    "predicate": "sister_of",
+    "object": "dsh-quantstats",
+    "docs": [
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: the 12-repo quant stack",
+      "doc": "dsh-wrenai"
+     }
+    ]
+   },
+   {
+    "subject": "dsh-WrenAI",
+    "predicate": "sister_of",
+    "object": "dsh-freqtrade",
+    "docs": [
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: the 12-repo quant stack",
+      "doc": "dsh-wrenai"
+     }
+    ]
+   },
+   {
+    "subject": "family fail-closed guard",
+    "predicate": "guards",
+    "object": "binance BTC/USDT 1m klines",
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "live routing guarded off",
+      "doc": "dsh-hummingbot"
+     }
+    ]
+   },
+   {
+    "subject": "H-2026-001",
+    "predicate": "gated_by",
+    "object": "G2 数据因果门控",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "G2：前视偏差（一致预期滞后 30 天发布）",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "H-2026-001",
+    "predicate": "sourced_from",
+    "object": "WeKnora 证据库",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "WeKnora 证据库   G1 完整性门控",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "H-2026-002",
+    "predicate": "gated_by",
+    "object": "G3 统计显著性门控",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "G3：未校正 p=0.007 的\"表面显著\"",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "H-2026-003",
+    "predicate": "gated_by",
+    "object": "G1 完整性门控",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-003 纯财务质量复合 | ✅ | 三门全过",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "H-2026-003",
+    "predicate": "gated_by",
+    "object": "G2 数据因果门控",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-003 纯财务质量复合 | ✅ | 三门全过",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "H-2026-003",
+    "predicate": "gated_by",
+    "object": "G3 统计显著性门控",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-003 纯财务质量复合 | ✅ | 三门全过",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "H-2026-003",
+    "predicate": "gated_by",
+    "object": "终审",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-003 纯财务质量复合 | ✅ | 三门全过",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "H-2026-003",
+    "predicate": "sourced_from",
+    "object": "WeKnora 证据库",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "WeKnora 证据库   G1 完整性门控",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "H-2026-101",
+    "predicate": "gated_by",
+    "object": "G3 统计显著性门控",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "G3 FAIL（方向反转：RankIC −0.042",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "hesreallyhim/awesome-claude-code",
+    "predicate": "sourced_from",
+    "object": "data/leading/claude_code_ecosystem.jsonl",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`data/leading/claude_code_ecosystem.jsonl`",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "opencode-weknora",
+    "predicate": "sister_of",
+    "object": "dsh-weknora-ops",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`opencode-weknora` | npm | 0.1.0",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "portfolio manager",
+    "predicate": "aggregates_verdict_of",
+    "object": "Buffett",
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "PM: **PASS @ 68**",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "the PM rules PASS@72 naming it",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "subject": "portfolio manager",
+    "predicate": "aggregates_verdict_of",
+    "object": "Munger",
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "巴菲特与芒格关于转换成本",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "the PM rules PASS@72 naming it",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "subject": "portfolio manager",
+    "predicate": "aggregates_verdict_of",
+    "object": "Lynch",
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "两位 HOLD 均为等待验证",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "the PM rules PASS@72 naming it",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "subject": "portfolio manager",
+    "predicate": "aggregates_verdict_of",
+    "object": "Wood",
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "压制了木头姐的",
+      "doc": "dsh-ai-hedge-fund"
+     },
+     {
+      "quote": "the PM rules PASS@72 naming it",
+      "doc": "dsh-tradingagents"
+     }
+    ]
+   },
+   {
+    "subject": "punkpeye/awesome-mcp-servers",
+    "predicate": "sourced_from",
+    "object": "data/leading/mcp_servers.jsonl",
+    "docs": [
+     "dsh-gap-radar"
+    ],
+    "evidences": [
+     {
+      "quote": "`data/leading/mcp_servers.jsonl`",
+      "doc": "dsh-gap-radar"
+     }
+    ]
+   },
+   {
+    "subject": "TBox schema from corpus",
+    "predicate": "extracted_from",
+    "object": "dsh-auto-ontology",
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "two-pass LLM pipeline: TBox schema",
+      "doc": "dsh-auto-ontology"
+     }
+    ]
+   },
+   {
+    "subject": "triple-armed guard",
+    "predicate": "guards",
+    "object": "market data payload",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "Read-only market data flows freely; orders don't",
+      "doc": "dsh-ccxt"
+     }
+    ]
+   },
+   {
+    "subject": "trustquant replay",
+    "predicate": "guards",
+    "object": "calculation_id",
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "re-executes and verifies digests",
+      "doc": "dsh-trustquant"
+     }
+    ]
+   },
+   {
+    "subject": "一致预期增速因子",
+    "predicate": "submitted_as",
+    "object": "H-2026-005",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-005 一致预期增速",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "低波动×质量因子",
+    "predicate": "archived_in",
+    "object": "H-2026-002 证伪归档",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "G3：未校正 p=0.007 的\"表面显著\"",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "低波动×质量因子",
+    "predicate": "submitted_as",
+    "object": "H-2026-002",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-002 低波动×质量",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "复合质量因子",
+    "predicate": "archived_in",
+    "object": "H-2026-001 证伪归档",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "G2：前视偏差（一致预期滞后 30 天发布）",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "复合质量因子",
+    "predicate": "submitted_as",
+    "object": "H-2026-001",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-001 复合质量（含一致预期）",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "纯财务质量复合因子",
+    "predicate": "enrolled_into",
+    "object": "dsh-factor-auth",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "入强因子库",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "纯财务质量复合因子",
+    "predicate": "submitted_as",
+    "object": "H-2026-003",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "H-2026-003 纯财务质量复合",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "质量复合因子",
+    "predicate": "archived_in",
+    "object": "H-2026-101 证伪归档",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "已按协议证伪归档",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   },
+   {
+    "subject": "质量复合因子",
+    "predicate": "submitted_as",
+    "object": "H-2026-101",
+    "docs": [
+     "dsh-factor-auth"
+    ],
+    "evidences": [
+     {
+      "quote": "首例工单 **H-2026-101**",
+      "doc": "dsh-factor-auth"
+     }
+    ]
+   }
+  ]
+ },
+ "conflicts": [
+  {
+   "entity": "H-2026-001",
+   "types": {
+    "research_ticket": {
+     "quote": "H-2026-001 复合质量（含一致预期）",
+     "doc": "dsh-factor-auth"
+    },
+    "falsification_counterexample": {
+     "quote": "G2：前视偏差（一致预期滞后 30 天发布）",
+     "doc": "dsh-factor-auth"
+    }
+   }
+  },
+  {
+   "entity": "H-2026-002",
+   "types": {
+    "research_ticket": {
+     "quote": "H-2026-002 低波动×质量",
+     "doc": "dsh-factor-auth"
+    },
+    "falsification_counterexample": {
+     "quote": "G3：未校正 p=0.007 的\"表面显著\"",
+     "doc": "dsh-factor-auth"
+    }
+   }
+  },
+  {
+   "entity": "H-2026-101",
+   "types": {
+    "research_ticket": {
+     "quote": "首例工单 **H-2026-101**",
+     "doc": "dsh-factor-auth"
+    },
+    "falsification_counterexample": {
+     "quote": "已按协议证伪归档",
+     "doc": "dsh-factor-auth"
+    }
+   }
+  },
+  {
+   "entity": "WeKnora",
+   "types": {
+    "upstream_project": {
+     "quote": "WeKnora fork（`vicfei/WeKnora` v090-plus）",
+     "doc": "dsh-factor-auth"
+    },
+    "evidence_store": {
+     "quote": "WeKnora 证据库（本机 `因子鉴真-证据库`",
+     "doc": "dsh-factor-auth"
+    }
+   }
+  }
+ ],
+ "flagged_unknown_types": [],
+ "merge_log": [],
+ "certifications": {},
+ "stats": {
+  "entities": 88,
+  "relations": 121,
+  "conflicts": 4,
+  "flagged": 0,
+  "suppressed_by_certification": 0
+ }
+}
