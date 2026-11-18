@@ -12,11 +12,16 @@
   合并：类型守卫 + 去重 → ontology JSON + 环形布局 SVG 图 + markdown 摘要
 
 用法：
-  python3 scripts/build_ontology.py --docs <dir_or_glob> --domain "描述" --save
+  python3 scripts/build_ontology.py --docs <dir_or_glob> --domain "description" --save [--lang zh]
 """
 import argparse, datetime as dt, glob, json, math, os, re, subprocess, sys
 
 KIT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Output language: English by default (international-first), --lang zh / ONTOLOGY_LANG for Chinese
+LANG = os.environ.get("ONTOLOGY_LANG") or "en"
+def tt(en, zh):
+    return en if LANG == "en" else zh
 
 
 def llm(sysmsg, user, json_out=True):
@@ -34,11 +39,14 @@ def llm(sysmsg, user, json_out=True):
 
 
 def main():
+    global LANG
     ap = argparse.ArgumentParser()
     ap.add_argument("--docs", required=True, help="目录或 glob，如 '~/dsh-*/README.md'")
     ap.add_argument("--domain", required=True, help="语料领域描述（喂给 schema pass）")
     ap.add_argument("--save", action="store_true")
+    ap.add_argument("--lang", choices=("en", "zh"), default=LANG, help="output language (default en)")
     args = ap.parse_args()
+    LANG = args.lang
     paths = sorted(glob.glob(os.path.expanduser(args.docs))) if "*" in args.docs else \
         sorted(glob.glob(os.path.join(args.docs, "*")))
     docs = []
@@ -48,26 +56,35 @@ def main():
         except Exception:
             pass
     if not docs:
-        sys.exit("无文档")
-    print(f"语料：{len(docs)} 篇 · 领域：{args.domain}", file=sys.stderr)
+        sys.exit(tt("no documents matched", "无文档"))
+    print(tt(f"corpus: {len(docs)} doc(s) · domain: {args.domain}", f"语料：{len(docs)} 篇 · 领域：{args.domain}"), file=sys.stderr)
 
     sample = "\n\n".join(d["text"][:1500] for d in docs[:4])
     tbox = llm(
-        "你是本体工程师。从语料样本抽取本体模式（TBox）。输出 JSON："
-        '{"entity_types":[{"name":"...","desc":"..."}],"relation_types":[{"name":"...","domains":"类型A","ranges":"类型B","desc":"..."}]}'
-        "。类型名用英文 snake_case，desc 用中文。只抽取语料真实支撑的，宁缺毋滥。",
-        f"领域：{args.domain}\n语料样本：\n{sample}")
+        tt("You are an ontology engineer. Extract the ontology schema (TBox) from the corpus sample. Output JSON: "
+           '{"entity_types":[{"name":"...","desc":"..."}],"relation_types":[{"name":"...","domains":"TypeA","ranges":"TypeB","desc":"..."}]}. '
+           "Type names in English snake_case; write every desc in English. Extract only what the corpus genuinely supports — prefer fewer, truer types.",
+           "你是本体工程师。从语料样本抽取本体模式（TBox）。输出 JSON："
+           '{"entity_types":[{"name":"...","desc":"..."}],"relation_types":[{"name":"...","domains":"类型A","ranges":"类型B","desc":"..."}]}'
+           "。类型名用英文 snake_case，desc 用中文。只抽取语料真实支撑的，宁缺毋滥。"),
+        tt(f"Domain: {args.domain}\nCorpus sample:\n{sample}", f"领域：{args.domain}\n语料样本：\n{sample}"))
 
     etypes = {e["name"] for e in tbox.get("entity_types", [])}
     abox, flagged = [], []
     for d in docs:
         out = llm(
-            "你是本体实例抽取器。基于给定 TBox 从文档抽取实体与关系实例（ABox）。"
-            "**纪律**：每条实例必须附 evidence=文档原文引文（不超过40字）；类型必须取自 TBox；"
-            "不确定的不抽。输出 JSON："
-            '{"entities":[{"name":"...","type":"...","evidence":"..."}],'
-            '"relations":[{"subject":"...","predicate":"...","object":"...","evidence":"..."}]}',
-            f"TBox：{json.dumps(tbox, ensure_ascii=False)}\n\n文档（{d['path']}）：\n{d['text']}")
+            tt("You are an ontology instance extractor. From the document, extract entity and relation instances (ABox) based on the given TBox. "
+               "Discipline: every instance must carry evidence=a verbatim quote from the document (<=40 chars); types must come from the TBox; "
+               "when unsure, do not extract. Output JSON: "
+               '{"entities":[{"name":"...","type":"...","evidence":"..."}],'
+               '"relations":[{"subject":"...","predicate":"...","object":"...","evidence":"..."}]}',
+               "你是本体实例抽取器。基于给定 TBox 从文档抽取实体与关系实例（ABox）。"
+               "**纪律**：每条实例必须附 evidence=文档原文引文（不超过40字）；类型必须取自 TBox；"
+               "不确定的不抽。输出 JSON："
+               '{"entities":[{"name":"...","type":"...","evidence":"..."}],'
+               '"relations":[{"subject":"...","predicate":"...","object":"...","evidence":"..."}]}'),
+            tt(f"TBox:\n{json.dumps(tbox, ensure_ascii=False)}\n\nDocument ({d['path']}):\n{d['text']}",
+               f"TBox：{json.dumps(tbox, ensure_ascii=False)}\n\n文档（{d['path']}）：\n{d['text']}"))
         for e in out.get("entities", []):
             if e.get("name"):
                 (abox if e.get("type") in etypes else flagged).append({**e, "doc": d["path"]})
@@ -82,14 +99,17 @@ def main():
                 "stats": {"docs": len(docs), "entities": len(abox) - len(rels), "relations": len(rels),
                           "flagged": len(flagged)}}
     print(f"\n## 本体构建 · {args.domain}\n")
-    print(f"- 实体类型 {len(tbox.get('entity_types', []))} · 关系类型 {len(tbox.get('relation_types', []))} · "
-          f"实体 {ontology['stats']['entities']} · 关系 {len(rels)} · 未知类型被拦 {len(flagged)}")
+    print(tt(f"- Entity types {len(tbox.get('entity_types', []))} · relation types {len(tbox.get('relation_types', []))} · "
+             f"entities {ontology['stats']['entities']} · relations {len(rels)} · unknown types flagged {len(flagged)}",
+             f"- 实体类型 {len(tbox.get('entity_types', []))} · 关系类型 {len(tbox.get('relation_types', []))} · "
+             f"实体 {ontology['stats']['entities']} · 关系 {len(rels)} · 未知类型被拦 {len(flagged)}"))
     for e in tbox.get("entity_types", [])[:8]:
         print(f"  - T: {e['name']} — {e.get('desc', '')[:40]}")
     for r in rels[:12]:
-        print(f"  - R: ({r['subject']}) -[{r['predicate']}]-> ({r['object']}) ｜证据: {r.get('evidence', '')[:40]}")
+        print(f"  - R: ({r['subject']}) -[{r['predicate']}]-> ({r['object']}) | ev: {r.get('evidence', '')[:40]}")
     if flagged:
-        print(f"  ⚠ 未入库的未知类型实例 {len(flagged)} 条（类型守卫，不静默丢弃）")
+        print(tt(f"  ⚠ {len(flagged)} instance(s) with unknown types NOT stored (type guard — flagged, never silently dropped)",
+                 f"  ⚠ 未入库的未知类型实例 {len(flagged)} 条（类型守卫，不静默丢弃）"))
 
     if args.save:
         os.makedirs(os.path.join(KIT, "ontologies"), exist_ok=True)
@@ -121,8 +141,11 @@ def main():
                        f'<text x="{x + 6:.0f}" y="{y + 3:.0f}" font-size="9" fill="#345">{name}</text>')
         svg.append("</svg>")
         open(base + ".svg", "w").write("".join(svg))
-        open(base + ".md", "w").write(f"# 本体 · {args.domain}\n\n实体 {len(ents)} · 关系 {len(rels)} · "
-                                      f"证据随 JSON（ontologies/*.json）；未知类型拦截 {len(flagged)} 条。\n")
+        open(base + ".md", "w").write(tt(
+            f"# Ontology · {args.domain}\n\nEntities {len(ents)} · relations {len(rels)} · "
+            f"evidence lives in the JSON (ontologies/*.json); unknown types flagged: {len(flagged)}.\n",
+            f"# 本体 · {args.domain}\n\n实体 {len(ents)} · 关系 {len(rels)} · "
+            f"证据随 JSON（ontologies/*.json）；未知类型拦截 {len(flagged)} 条。\n"))
         print(f"\n→ {base}.json / .svg / .md", file=sys.stderr)
 
 
