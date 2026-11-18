@@ -56,7 +56,13 @@ jobs:
           ids = [n["@id"] for n in ld["@graph"]]
           assert len(ids) == len(set(ids)) and all(i.startswith("urn:dshao:") for i in ids)
           assert ld["@graph"][0]["evidence"], "evidence must stay first-class in JSON-LD"
-          print("jsonld export: PASS")
+          md = M.to_markdown(o)
+          assert "## Relations" in md and "## Entities" in md and "provenance" in md
+          spec2 = importlib.util.spec_from_file_location("rh", "scripts/render_html.py")
+          R = importlib.util.module_from_spec(spec2); spec2.loader.exec_module(R)
+          html = R.render(md)
+          assert "<nav>" in html and "<table>" in html
+          print("html digest: PASS")
           EOF
       - name: bin entry syntax (node --check)
         run: node --check npm/bin/auto-ontology.js
