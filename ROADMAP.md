@@ -65,14 +65,22 @@ issue → branch → PR (milestones O1–O4).
 
 ## O3 · Interop & DSH-native (weeks 4-5)
 
-- [ ] JSON-LD export first (#9) (web-native, lighter than OWL; OWL later if asked).
-- [ ] WeKnora graph bridge (#10): ingest the ontology into a WeKnora KB — family
-      synergy (the local WeKnora is the family's evidence store; tenant ops known).
-- [ ] typed-tools plugin 0.2.0 (#11): `ontology_build` / `ontology_query` via
-      defineTool — the full recipe including the DSL pitfalls is documented at
-      dsh-tradingagents docs/plugin-spec.md; verify with a live dsh headless session
-      before tagging.
-- [ ] Single-file HTML report (#12) (render_html pattern reuse: sidebar TOC, shareable).
+- [x] JSON-LD export (2026-11-18, PR #24): typed entity nodes + reified relation
+      statements, evidence first-class (@list), stable urn:dshao: namespace;
+      unit-tested in CI; live export verified.
+- [x] WeKnora graph bridge (2026-11-18, PR #28): each entity becomes an
+      evidence-first manual-knowledge doc (quotes + source docs + its relations);
+      deliberately never creates a KB (the ingest-scoped key is correctly refused
+      by the server — verified live; a KB is a person's choice); requires --kb;
+      pure builder CI-tested; live ingest awaits the first owner-designated KB.
+- [x] typed-tools plugin 0.2.0 (2026-11-18, PR #27): ontology_build / ontology_query
+      via defineTool (family recipe, DSL pitfalls honored); contract-tested,
+      installed into a live headless profile, and **live-session verified** — the
+      dsh agent called ontology_build on a 2-doc corpus and quoted evidence spans
+      (12 entities / 11 relations / 4 calls artifact). Publish via owner OTP.
+- [x] Single-file HTML digest (2026-11-18, PR #25): stats+provenance header,
+      conflicts table (both evidences), entities by type, relations with quotes;
+      family render_html (sidebar TOC); digest + render CI-tested.
 
 ## O4 · Learning loop & ecosystem (month 2)
 
