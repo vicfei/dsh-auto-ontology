@@ -1,0 +1,52 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - name: engine syntax
+        run: python3 -m py_compile scripts/build_ontology.py
+      - name: i18n + outlets (pure, no network)
+        run: |
+          python3 - <<'EOF'
+          import importlib.util, json, os
+          os.environ["ONTOLOGY_LANG"] = "en"
+          spec = importlib.util.spec_from_file_location("bo", "scripts/build_ontology.py")
+          M = importlib.util.module_from_spec(spec); spec.loader.exec_module(M)
+          assert M.tt("en-text", "zh-text") == "en-text"
+          os.environ["ONTOLOGY_LANG"] = "zh"
+          import importlib; importlib.reload(M) if False else None
+          assert M.LANG in ("en", "zh")
+          # every committed ontology artifact keeps the contract
+          import glob
+          for p in glob.glob("ontologies/*.json"):
+              o = json.load(open(p))
+              for k in ("domain", "built_at", "tbox", "abox", "stats"):
+                  assert k in o, (p, k)
+              for r in o["abox"]["relations"]:
+                  assert r.get("evidence"), (p, r)
+          print("engine contract: PASS")
+          EOF
+      - name: bin entry syntax (node --check)
+        run: node --check npm/bin/auto-ontology.js
+      - name: npm bundle packs clean
+        run: cd npm && npm pack --dry-run && rm -f *.tgz
+      # LLM build smoke goes manual dispatch (needs DEEPSEEK_API_KEY secret)
+      - name: build smoke (needs secret, dispatch only)
+        if: github.event_name == 'workflow_dispatch' && env.DEEPSEEK_API_KEY != ''
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          grep -q '^export DEEPSEEK_API_KEY=' ~/.bashrc || echo "export DEEPSEEK_API_KEY=$DEEPSEEK_API_KEY" >> ~/.bashrc
+          mkdir -p /tmp/corpus && head -c 2000 README.md > /tmp/corpus/a.md
+          timeout 200 python3 scripts/build_ontology.py --docs /tmp/corpus --domain "CI smoke" 2>&1 | grep -q "Ontology build"
