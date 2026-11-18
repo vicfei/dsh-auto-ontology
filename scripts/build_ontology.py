@@ -71,7 +71,8 @@ def llm(sysmsg, user, json_out=True):
 
 def new_store(domain):
     return {"domain": domain, "entities": {}, "relations": {}, "conflicts": [],
-            "flagged": [], "tbox_types": set(), "tbox_relations": {}, "merge_log": []}
+            "flagged": [], "tbox_types": set(), "tbox_relations": {}, "merge_log": [],
+            "certifications": {}, "suppressed": 0}
 
 
 def load_store(o):
@@ -100,7 +101,38 @@ def load_store(o):
     st["conflicts"] = list(o.get("conflicts", []))
     st["flagged"] = list(o.get("flagged_unknown_types", []))
     st["merge_log"] = list(o.get("merge_log", []))
+    st["certifications"] = dict(o.get("certifications", {}))
+    st["suppressed"] = 0
     return st
+
+def certify(o, name, verdict, note=""):
+    """Human verdict on an entity (issue #13, the upstream Learn pillar,
+    evidence-first version): record travels WITH the ontology (portable artifact).
+    rejected — the (name, type) pair is suppressed in every later fold; the
+    original evidence stays in the certification record for audit. A different
+    type re-asserting the same name is a NEW assertion and re-enters (the
+    rejection was about that typing, not the string).
+    accepted  — the entity is marked trusted; conflicts against it still get
+    recorded (they are never silently resolved), the mark is the human word."""
+    st = load_store(o)
+    k = _key(name)
+    e = st["entities"].get(k)
+    if e is None:
+        raise SystemExit(tt(f"no such entity: {name}", f"无此实体：{name}"))
+    o.setdefault("certifications", {})[k] = {
+        "name": e["name"], "type": e["type"], "verdict": verdict, "at":
+        dt.datetime.now().isoformat(timespec="seconds"), "note": note,
+        "evidence": e["evidences"][0] if e["evidences"] else {}}
+    if verdict == "reject":
+        del st["entities"][k]
+        st["relations"] = {rk: r for rk, r in st["relations"].items()
+                           if _key(r["subject"]) != k and _key(r["object"]) != k}
+        o["abox"] = {"entities": sorted(st["entities"].values(), key=lambda x: x["name"].lower()),
+                     "relations": sorted(st["relations"].values(),
+                                         key=lambda r: (r["subject"].lower(), r["predicate"]))}
+        o["stats"]["entities"] = len(st["entities"])
+        o["stats"]["relations"] = len(st["relations"])
+    return o
 
 
 def _fold_ev(evs, ev):
@@ -113,9 +145,14 @@ def _fold_ev(evs, ev):
 
 def fold_entity(st, name, etype, quote, doc):
     """Append-only entity fold; the same name under a different type => conflict
-    holding BOTH evidences — recorded, never silently resolved."""
+    holding BOTH evidences — recorded, never silently resolved. A rejected
+    certification suppresses the (name, type) pair — counted, never re-asserted."""
     k = _key(name)
     if not k:
+        return
+    cert = st.get("certifications", {}).get(k)
+    if cert and cert.get("verdict") == "reject" and cert.get("type") == etype:
+        st["suppressed"] = st.get("suppressed", 0) + 1
         return
     cur = st["entities"].get(k)
     if cur is None:
@@ -279,8 +316,10 @@ def store_to_ontology(st, new_type_descs, provenance):
         "conflicts": st["conflicts"],
         "flagged_unknown_types": st["flagged"],
         "merge_log": st["merge_log"],
+        "certifications": st.get("certifications", {}),
         "stats": {"entities": len(ents), "relations": len(rels),
-                  "conflicts": len(st["conflicts"]), "flagged": len(st["flagged"])},
+                  "conflicts": len(st["conflicts"]), "flagged": len(st["flagged"]),
+                  "suppressed_by_certification": st.get("suppressed", 0)},
     }
 
 
@@ -394,6 +433,10 @@ def main():
     ap.add_argument("--domain", default=None, help="corpus domain description (schema pass)")
     ap.add_argument("--merge", default=None, help="existing ontology JSON to fold into (append-only)")
     ap.add_argument("--query", default=None, help="query mode: every assertion about X, with evidence")
+    ap.add_argument("--certify", default=None, metavar="NAME",
+                    help="certification mode: --certify NAME --verdict accept|reject [--note ...] [--from x.json]")
+    ap.add_argument("--verdict", choices=("accept", "reject"), default=None, help="verdict for --certify")
+    ap.add_argument("--note", default="", help="optional note recorded with a certification")
     ap.add_argument("--jsonld", action="store_true", help="export the ontology as JSON-LD 1.1 (with --from, or the newest artifact)")
     ap.add_argument("--html", action="store_true", help="render the ontology as a single-file HTML digest (with --save, or --from standalone)")
     ap.add_argument("--from", dest="frm", default=None, help="ontology file for --query (default: newest in outdir)")
@@ -405,6 +448,16 @@ def main():
     LANG = args.lang
     MAX_CALLS = args.max_calls
     t0 = time.time()
+
+    if args.certify:
+        if not args.verdict:
+            sys.exit("--certify needs --verdict accept|reject")
+        path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+        o = certify(json.load(open(path)), args.certify, args.verdict, note=args.note)
+        out = os.path.join(OUTDIR, dt.datetime.now().strftime("%Y%m%d-%H%M%S") + "-certified.json")
+        json.dump(o, open(out, "w"), ensure_ascii=False, indent=1)
+        print(f"{args.certify} {args.verdict} -> {out}")
+        return
 
     if args.html and not args.docs:
         import render_html
