@@ -42,8 +42,9 @@ MAX_CALLS = None
 
 
 def _key(s):
-    """Name-matching key: case/punctuation-insensitive."""
-    return re.sub(r"[^a-z0-9]+", "", str(s).lower())
+    """Name-matching key: case/punctuation/whitespace-insensitive, script-agnostic
+    (ASCII-only stripping used to drop CJK-named entities and collapse CJK relations)."""
+    return re.sub(r"[\W_]+", "", str(s).lower())
 
 
 def llm(sysmsg, user, json_out=True):
@@ -101,7 +102,8 @@ def load_store(o):
     st["conflicts"] = list(o.get("conflicts", []))
     st["flagged"] = list(o.get("flagged_unknown_types", []))
     st["merge_log"] = list(o.get("merge_log", []))
-    st["certifications"] = dict(o.get("certifications", {}))
+    # re-key by the certified name so a key-scheme change never orphans a verdict
+    st["certifications"] = {_key(c.get("name", k)): c for k, c in o.get("certifications", {}).items()}
     st["suppressed"] = 0
     return st
 
