@@ -1,0 +1,13 @@
+# adversarial set · scripts/adversarial_cases.json · 28 cases (18 must-reject, 10 must-accept)
+judge deepseek-chat · temp 0
+
+accuracy = 27/28 = 96%   traps rejected 18/18 · true grounding accepted 9/10
+
+MISSES
+✗ [relation-implicit-object] expected grounded, judged ungrounded
+   relation: nightly backup enforced_by acme-backup.  quote: "The nightly backup runs at 02:00 and cannot be switched off."
+   reason: Quote describes backup schedule but never names acme-backup or states it implements/runs it.
+
+The judge prompt is the one the build's grounding pass uses (scripts/grounding.py). The gold labels were written by hand before any judge ran (one case keeps the shape of a real failure with its names replaced); misses ship as-is.
+
+rows -> eval/before-after/adversarial-v0.3.deepseek-chat.json

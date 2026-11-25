@@ -1,0 +1,6 @@
+old deepseek-chat: 23/23 (traps 15/15, true 8/8) 3s
+old deepseek-reasoner: 22/23 (traps 15/15, true 7/8) 9s
+  MISS predication-entails-type expected True got {'grounded': False, 'reason': 'Quote says Kafka streams events, not that it moves messages or is a message queue.'}
+new deepseek-chat: 23/23 (traps 15/15, true 8/8) 3s
+new deepseek-reasoner: 22/23 (traps 15/15, true 7/8) 34s
+  MISS predication-entails-type expected True got {'grounded': False, 'reason': 'Quote says Kafka streams events, not messages; event-to-message link is not stated.'}

@@ -133,10 +133,15 @@ adoption outran quality (999 dl/wk family #3 vs 10% type-assertion precision
 trajectory source; the family channel works (uigen merged); spec-as-product
 stays gated on adoption.
 
-- [ ] O5.0 type-grounding quality — judge pass on every (name, type), flag
-      never drop, honest before/after on the same corpus (closes #35)
+- [x] O5.0 type-grounding quality (2026-11-25) — one judge call per quote,
+      verbatim as the only mechanical reject, flag never drop; honest
+      before/after on the same frozen corpus (19 public READMEs):
+      25% → 67% (deepseek-chat), 9% → 50% (deepseek-reasoner), tables and
+      rows in `eval/` (closes #35)
 - [ ] O5.1 `export --trajectory` (FORMAT.md contract) + one live two-repo
       evolution round with dsh-evoontology E2
 - [ ] O5.2 chunk-level evidence on WeKnora KBs (queryable provenance)
-- [ ] O5.3 stretch: second-corpus eval + adversarial set
+- [x] O5.3 adversarial set (2026-11-25) — `eval --adversarial`, 28 labelled
+      cases (18 must-reject, 10 must-accept), gold checked in CI
+- [ ] O5.3 stretch: second-corpus eval (non-family)
 - [ ] O5.4 release train 0.3.0 (owner terminal publish)

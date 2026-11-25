@@ -172,21 +172,19 @@ def case_mechanical(c):
 
 
 def run_adversarial(model, jobs, path=CASES):
-    """One judge call per case. Also flags a GOLD inconsistency: a case whose quote lacks
-    the name as written yet expects grounded=true contradicts the contract itself."""
+    """One judge call per case. `mechanical` carries the no-LLM checks as information:
+    a case may well be grounded without spelling the name (an extractor-coined label
+    under the document's own wording), so the checks never decide a case."""
     cases = load_cases(path)
     with cf.ThreadPoolExecutor(max_workers=jobs) as ex:
         verdicts = list(ex.map(lambda c: G.judge([case_item(c)], model)[0], cases))
     rows = []
     for c, v in zip(cases, verdicts):
-        m = case_mechanical(c)
-        absent = (c["kind"] == "entity" and not m["name_in_quote"]) or \
-                 (c["kind"] == "relation" and not m["one_endpoint"])
         rows.append({"id": c["id"], "kind": c["kind"], "claim": case_item(c)["claim"], "quote": c["quote"],
                      "expected": "grounded" if c["grounded"] else "ungrounded",
                      "got": "grounded" if v["grounded"] else "ungrounded",
                      "ok": v["grounded"] == c["grounded"], "reason": v["reason"],
-                     "mechanical": m, "gold_inconsistent": absent and c["grounded"]})
+                     "mechanical": case_mechanical(c)})
     return rows
 
 
@@ -200,17 +198,14 @@ def render_adversarial(rows, model):
          f"accuracy = {ok}/{len(rows)} = {ok / len(rows):.0%}   "
          f"traps rejected {sum(r['ok'] for r in traps)}/{len(traps)} · "
          f"true grounding accepted {sum(r['ok'] for r in trues)}/{len(trues)}", ""]
-    bad_gold = [r for r in rows if r["gold_inconsistent"]]
-    if bad_gold:
-        L += ["GOLD INCONSISTENT (quote lacks the name as written, yet expects grounded): "
-              + ", ".join(r["id"] for r in bad_gold), ""]
     misses = [r for r in rows if not r["ok"]]
     L.append("MISSES" if misses else "no misses")
     for r in misses:
         L += [f"✗ [{r['id']}] expected {r['expected']}, judged {r['got']}",
               f'   {r["kind"]}: {r["claim"]}  quote: "{r["quote"]}"', f'   reason: {r["reason"]}']
     L += ["", "The judge prompt is the one the build's grounding pass uses (scripts/grounding.py). "
-          "The gold labels were written by hand before any judge ran; misses ship as-is."]
+          "The gold labels were written by hand before any judge ran (one case keeps the shape of a real "
+          "failure with its names replaced); misses ship as-is."]
     return "\n".join(L)
 
 

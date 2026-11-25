@@ -98,8 +98,8 @@ tag on green CI; npm publish = owner real terminal (browser auth flow).
 
 ## Definition of done for O5
 
-- [ ] #35 closed with an honest before/after on the same corpus; flagged
-      assertions preserved (nothing silently dropped)
+- [x] #35 closed with an honest before/after on the same corpus; flagged
+      assertions preserved (nothing silently dropped) — 2026-11-25, `eval/`
 - [ ] `export --trajectory` documented in FORMAT.md and consumed by
       dsh-evoontology E2 in one live two-repo round
 - [ ] chunk-id evidence verified on a real WeKnora KB
@@ -107,10 +107,34 @@ tag on green CI; npm publish = owner real terminal (browser auth flow).
 
 ## Deviations log (what shipped vs the plan above)
 
-- **O5.0 grounding pass** (PR #47): the judge is **batched per document** — one
-  call per 25 candidates, plus at most one re-ground and one re-judge call per
-  document — instead of "one extra call per assertion". Same verdict per
-  assertion, a fraction of the calls. Relations are judged alongside entity
-  types. An ungrounded challenger under a different type goes to
-  `flagged_ungrounded` instead of opening a conflict (a grounded one still
-  does).
+- **O5.0 grounding pass** (PR #47, revised 2026-11-25): the judge gets **one
+  call per quote**. PR #47 first shipped one call per 25 candidates; a hand
+  audit of a 273-assertion build found the batched verdicts agreed with it 74%
+  of the time against 84% for single-item verdicts, so the batch was dropped.
+  Relations are judged alongside entity types. An ungrounded challenger under a
+  different type goes to `flagged_ungrounded` instead of opening a conflict (a
+  grounded one still does).
+- **O5.0 name rule** (2026-11-25): PR #47 rejected a quote mechanically when
+  it did not spell the entity's name or a relation endpoint. It no longer
+  does — the verbatim check is the only mechanical reject and name-absent
+  quotes are judged. On the published before-artifact the rule would have
+  turned away 30 ungrounded assertions and 9 grounded ones (a plugin typed
+  from its own title line, a payload described without its type word); on an
+  unpublished intermediate build, 13 of 22 were grounded. The adversarial set
+  (now 28 cases) pins the cases the rule used to catch.
+- **O5.0 measurement** (all 2026-11-25, whole population): on the published
+  corpus — 19 public family READMEs, frozen — strict-judge precision went
+  **25% → 67%** under deepseek-chat and **9% → 50%** under deepseek-reasoner
+  (232 and 275 assertions). The ≥ 50% target is met under both judges. Every
+  table and row is in `eval/`. The judge is not constant — a re-judge minutes
+  later moves 2–4% of verdicts, an hour later about 9% — so a ✓ is a
+  build-time verdict, not a fact.
+- **O5.0 corpus** (2026-11-25): the first measurement used 23 READMEs and
+  read 24% → 57% and 11% → 44%. Four of them are not public (three private
+  repositories and a third-party clone), so the published before/after was
+  rebuilt on the 19 public ones; the 23-document artifacts and rows stay
+  unpublished and are quoted as numbers only. The four harder documents
+  explain the gap.
+- **O5.0 adversarial set** (2026-11-25): one of the 28 cases had been copied
+  from a private repository's document. Its names were replaced before
+  publication and the set re-run on both judges; all runs are in `eval/`.

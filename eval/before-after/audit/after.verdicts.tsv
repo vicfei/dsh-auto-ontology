@@ -1,0 +1,81 @@
+n	grounded	class	note
+1	true	family-line	a line labelled "Family:" lists the object; the subject is the document's own plugin
+2	false	no-relation	"meaning stays human" says nothing about the catalog containing anything
+3	true	predication-entails-type	"Inspired by X" is the type's own wording, with a GitHub link
+4	false	bare-links	two linked names, no label
+5	false	mention-only	a safety model is said to exist; nothing about fail-closed or code
+6	false	bare-links	two linked names, no label
+7	true	implicit-stated	the artifact is named by its file; every assertion carries its quote
+8	true	implicit-stated	listed under the CLI's own "gates"
+9	false	mention-only	a fragment names the records as a format; no output stated
+10	true	family-line	a line labelled "Family:" lists the object
+11	true	family-line	a line labelled "Family:" lists the object
+12	true	family-line	a line labelled "Family:" lists the object
+13	true	family-line	a line labelled "Family:" lists the object
+14	true	predication-entails-type	"Implements the core concept of X"
+15	true	family-line	a line labelled "Family:" lists the object
+16	true	output-stated	"In the box: scenario fans"
+17	true	predication-entails-type	"Implements the concept of X"
+18	false	wrong-type	a registered host tool, not an engine service slot
+19	false	object-absent	the object is not in the quote
+20	true	predication-entails-type	"Implements the concept of X"
+21	true	family-line	a line labelled "Family:" lists the object
+22	true	header-definition	the document's own title line says what the repository is
+23	false	roadmap-or-mention	"M2 live execution behind …" reads as a milestone row; nothing says fail-closed in code
+24	false	different-subject	the quote is about results, not the catalog
+25	true	header-definition	the document's own title line says what the repository is
+26	true	stated	"Sister project of …"
+27	true	output-stated	"every call returns a calculation_id"
+28	true	definition	"the standard open-source quant finance library"
+29	true	family-line	a line labelled "Family:" lists the object
+30	true	stated	the type's own wording: "implements the concept of"
+31	true	family-line	the type is defined as membership in the family; the labelled list carries it
+32	true	predication-entails-type	named investors value a ticker independently
+33	true	stated	"Concept slot of X + Y"
+34	true	implicit-stated	a pipeline line with the role in it
+35	true	stated	"Inspired by …"
+36	true	header-definition	the document's own title line says what the repository is
+37	false	wrong-type	registers a tool; says nothing about a service slot
+38	false	endpoints-absent	neither name appears
+39	false	wrong-type	an engine, not an agent role; a V2 plan
+40	false	ambiguous-attribution	a comparison row with two columns; the quote does not say which side is the plugin
+41	true	family-line	a line labelled "Family:" lists the object
+42	true	predication-entails-type	a verdict line per persona
+43	true	alias-label	the claim's own wording is the quote's; `[F#]` cites fields
+44	true	output-stated	"You get …"
+45	false	different-relation	describes another product; no family stated
+46	true	implicit-stated	"provider + fetched_at on every payload"
+47	false	wrong-type	typed tools, not service slots
+48	true	header-definition	the document's own title line says what the repository is
+49	true	predication-entails-type	a verdict line per persona
+50	true	family-line	a line labelled "Family:" lists the object
+51	false	bare-links	one linked name, no label
+52	true	implicit-stated	listed under the CLI's own "gates"
+53	true	stated	"Built on …"
+54	true	definition	"every assertion carrying its evidence quote"
+55	true	predication-entails-type	named investors value a ticker independently
+56	true	definition	"Versioned research artifacts: … trails"
+57	false	bare-links	two linked names, no label
+58	false	bare-links	one linked name, no label
+59	true	predication-entails-type	named investors value a ticker independently
+60	true	stated	"Implements the core concept of …"
+61	true	family-line	a line labelled "Family:" lists the object
+62	false	wrong-type	an agent logs a note in a memo; not code-enforced
+63	true	family-line	a line labelled "Family:" lists the object
+64	true	family-line	a line labelled "Family:" lists the object
+65	true	predication-entails-type	named investors value a ticker independently
+66	false	roadmap	"V2 — replace the summarizer with …" is a plan
+67	true	header-definition	the document's own title line says what the repository is
+68	true	definition	"CLI gate: doc delete refuses without --yes"
+69	false	different-relation	a market demand is cited, not inspiration
+70	true	predication-entails-type	"Implements the core concept of X"
+71	true	family-line	a line labelled "Family:" lists the object
+72	false	bare-links	one linked name, no label
+73	false	object-absent	the object is not in the quote
+74	true	definition	"Type guard: instance types must come from …"
+75	true	implicit-stated	the two passes emit TBox schema and ABox assertions
+76	false	mention-only	the store is named with two properties; no output stated
+77	true	predication-entails-type	named investors value a ticker independently
+78	true	implicit-stated	the plugin's own "Type guard" rule
+79	false	bare-links	two linked names, no label
+80	true	predication-entails-type	named investors value a ticker independently

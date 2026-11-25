@@ -4,25 +4,34 @@
 The honest eval found that most evidence quotes *mention* an entity without
 supporting its TYPE claim. This module is the ONE judge every side calls:
 
-  build (grounding pass)   every extracted (claim, quote) is judged, batched per document
+  build (grounding pass)   every extracted (claim, quote) is judged, one item per call
   eval                     the same prompt, one item per call
   eval --adversarial       the same prompt on labelled mention-only traps
 
-One prompt for all three, so an adversarial result speaks for the build too.
+One prompt AND one protocol for all three, so an adversarial result speaks
+for the build too. (The build first judged in batches of 25; on a 273-assertion
+hand audit the batched verdicts agreed with the audit 74% of the time and the
+single-item verdicts 84%, so the batch was dropped.)
 
 Strictness (the contract): a quote grounds a claim iff a careful reader who
 sees only the quote — plus the type definition and the name of the source
 document — would conclude the claim about the named thing.
 
-Two mechanical checks run before any LLM call. They are deterministic,
-rerunnable by anyone, and need no model:
+Two mechanical checks need no model — deterministic, rerunnable by anyone:
 
   name_in_quote  entity: the name as written appears in the quote
                  relation: at least one endpoint appears
   is_verbatim    the quote occurs in the source text (markdown marks ignored)
 
-Both are REJECT filters only — passing them never grounds anything; the judge
-still decides. Failing them means the quote cannot ground the claim as written.
+Neither ever grounds anything: the judge decides. In the build only
+is_verbatim is a hard reject — the judge sees the quote, not the document, so
+a span that is not in the document is not evidence whatever it says. A quote
+that does not spell the name or an endpoint is still judged: the build used to
+reject those before the judge saw them, and on the published before-artifact
+(eval/before-after) that rule would have turned away 30 ungrounded assertions
+and 9 grounded ones — a document's own project typed from its own title line,
+a payload described without its type word. The eval reports name_in_quote as
+a rate, never as a verdict.
 """
 import json, os, re, subprocess, time
 
@@ -38,12 +47,14 @@ JUDGE_SYSTEM = (
     "- does not contain the entity's name as written (a different name, a translation or an alias "
     "does not count);\n"
     "- is about a different thing, or uses the type word in another sense;\n"
-    "- states the claim only as a negation, a hypothetical, a plan or a question;\n"
-    "- for a relation: names no endpoint, or states a different relation or the reverse direction.\n"
+    "- states the claim only as a negation, a hypothetical, a plan, a roadmap or design-stage item, "
+    "or a question;\n"
+    "- for a relation: names no endpoint, only MENTIONS the endpoints without stating how they "
+    "relate, or states a different relation or the reverse direction.\n"
     "Answer grounded=true when the quote states or directly implies the claim: a definition, an "
     "apposition (\"X, a CLI tool,\"), or a predication that entails the type. For a relation, the "
-    "source document is given in brackets after QUOTE: a subject that the document itself is about "
-    "may be left implicit in the quote.\n"
+    "source document is given in brackets after QUOTE: an endpoint (subject or object) that the "
+    "document itself is about may be left implicit in the quote.\n"
     "Do not use outside knowledge: if the link needs a fact that is neither in the quote nor in the "
     "type definition, the claim is not grounded.\n"
     'Output JSON: {"verdicts":[{"i":1,"grounded":true,"reason":"<= 20 words"}]} - exactly one verdict '
@@ -58,8 +69,10 @@ def norm(s):
 
 
 def _plain(s):
-    """Verbatim-comparison form: markdown code/emphasis marks dropped, whitespace collapsed."""
-    return re.sub(r"\s+", " ", re.sub(r"[`*]", "", str(s))).strip()
+    """Verbatim-comparison form: markdown code/emphasis marks and blockquote line markers
+    dropped, whitespace collapsed. A quote may span several blockquote lines (a list that
+    starts at its label); the '>' markers are markup, not text."""
+    return re.sub(r"\s+", " ", re.sub(r"[`*]", "", re.sub(r"(?m)^\s*> ?", "", str(s)))).strip()
 
 
 def is_verbatim(quote, text):
@@ -117,7 +130,11 @@ def parse_verdicts(txt, n):
         for x in v.get("verdicts", []):
             i = int(x.get("i", 0)) - 1
             if 0 <= i < n:
-                out[i] = {"grounded": bool(x.get("grounded")), "reason": str(x.get("reason", ""))}
+                # strict: only a real boolean (or its spelled form) grounds — the string "false"
+                # must never pass as truthy
+                g = x.get("grounded")
+                out[i] = {"grounded": g if isinstance(g, bool) else str(g).strip().lower() == "true",
+                          "reason": str(x.get("reason", ""))}
     except (ValueError, TypeError, AttributeError):
         pass
     return out

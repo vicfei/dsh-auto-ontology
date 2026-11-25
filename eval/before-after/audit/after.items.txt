@@ -1,0 +1,456 @@
+# blind audit sheet · 20261125-1718.json · n=80 of 275 · seed 20261125 · order seed 777
+
+[1] kind=relation  source document: dsh-freqtrade
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-freqtrade --sister_of--> dsh-TradingAgents
+    QUOTE: "> Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·"
+
+[2] kind=relation  source document: dsh-wrenai
+    type definition — contains: A constructed ontology artifact contains entity types, relation types, TBox and ABox components.
+    CLAIM: semantic catalog --contains--> dimensions/measures/metrics
+    QUOTE: "meaning
+  (dimensions/measures/metrics) stays human."
+
+[3] kind=entity  source document: dsh-tradingagents
+    type definition — upstream_project: An external open-source project that a dsh plugin is inspired by, built on, or implements the concept of, e.g. virattt/ai-hedge-fund, NVIDIA/auto-ontology, ccxt.
+    CLAIM: Tauric Research's TradingAgents is of type 'upstream_project'
+    QUOTE: "Inspired by [Tauric Research's TradingAgents](https://github.com/TauricResearch/TradingAgents) and"
+
+[4] kind=relation  source document: dsh-kronos
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-Kronos --sister_of--> dsh-ai-hedge-fund
+    QUOTE: "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·
+> [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)."
+
+[5] kind=entity  source document: dsh-weknora-ops
+    type definition — guardrail: A fail-closed safety mechanism enforced in code, such as the triple-armed trading guard with notional caps and symbol whitelist.
+    CLAIM: three-layer safety model is of type 'guardrail'
+    QUOTE: "**The write path and governance for WeKnora in your DeepSeek Harness agent — document ingest, gated deletes, tag trees — under a three-layer safety model.**"
+
+[6] kind=relation  source document: dsh-nautilus
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-Nautilus --sister_of--> dsh-CCXT
+    QUOTE: "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT)."
+
+[7] kind=relation  source document: dsh-auto-ontology
+    type definition — carries_evidence: An output artifact attaches evidence tags to its claims, entities, or relations.
+    CLAIM: typed ontology (TBox + ABox) --carries_evidence--> evidence quote
+    QUOTE: "every assertion carrying its evidence quote (`ontologies/20261118-1441.*`)."
+
+[8] kind=relation  source document: dsh-trustquant
+    type definition — enforces: A plugin enforces a fail-closed guardrail in its bridge code.
+    CLAIM: dsh-trustquant --enforces--> structured error taxonomy
+    QUOTE: "**CLI/tool gates**: structured error taxonomy (`invalid_input` / `unsupported_feature` / `provider_unavailable` / …); the optimization provider is **never** auto-installed and never silently substituted."
+
+[9] kind=relation  source document: dsh-evoontology
+    type definition — produces: A plugin emits a formatted deliverable as its output.
+    CLAIM: dsh-EvoOntology --produces--> evidence-linked evolution records
+    QUOTE: "the evidence-linked evolution records as a versioned open format"
+
+[10] kind=relation  source document: dsh-freqtrade
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-freqtrade --sister_of--> dsh-Vibe-Trading
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·
+> [dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·
+> [dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) · [dsh-jesse](https://github.com/vicfei/dsh-jesse) ·
+> [dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-Kronos](https://github.com/vicfei/dsh-Kronos) ·
+> [dsh-quantstats](https://github.com/vicfei/dsh-quantstats) · [dsh-QuantLib](https://github.com/vicfei/dsh-QuantLib) ·
+> [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) · [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)."
+
+[11] kind=relation  source document: dsh-auto-ontology
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-auto-ontology --sister_of--> dsh-TradingAgents
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) · [dsh-WrenAI](https://github.com/vicfei/dsh-WrenAI)"
+
+[12] kind=relation  source document: dsh-quantlib
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-QuantLib --sister_of--> dsh-TradingAgents
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·"
+
+[13] kind=relation  source document: dsh-quantlib
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-QuantLib --sister_of--> dsh-Vibe-Trading
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·
+> [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·
+> [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·"
+
+[14] kind=entity  source document: dsh-jesse
+    type definition — upstream_project: An external open-source project that a dsh plugin is inspired by, built on, or implements the concept of, e.g. virattt/ai-hedge-fund, NVIDIA/auto-ontology, ccxt.
+    CLAIM: Jesse is of type 'upstream_project'
+    QUOTE: "Implements the core concept of [Jesse](https://github.com/jesse-ai/jesse)"
+
+[15] kind=relation  source document: dsh-hummingbot
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-hummingbot --sister_of--> dsh-TradingAgents
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·"
+
+[16] kind=relation  source document: dsh-kronos
+    type definition — produces: A plugin emits a formatted deliverable as its output.
+    CLAIM: dsh-Kronos --produces--> scenario fan
+    QUOTE: "**In the box**: scenario fans with a reproducibility envelope on every
+payload;"
+
+[17] kind=entity  source document: dsh-auto-ontology
+    type definition — upstream_project: An external open-source project that a dsh plugin is inspired by, built on, or implements the concept of, e.g. virattt/ai-hedge-fund, NVIDIA/auto-ontology, ccxt.
+    CLAIM: NVIDIA/auto-ontology is of type 'upstream_project'
+    QUOTE: "Implements the concept of [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology)"
+
+[18] kind=entity  source document: dsh-vibe-trading
+    type definition — harness_service: A named, optional service slot in the DeepSeek Harness engine, such as the tool-result pruner resolved by name.
+    CLAIM: vibe_scan is of type 'harness_service'
+    QUOTE: "The npm package
+also registers typed host tools (`vibe_research`, `vibe_scan`) and a skill."
+
+[19] kind=relation  source document: dsh-jesse
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-jesse --sister_of--> dsh-Vibe-Trading
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·"
+
+[20] kind=entity  source document: dsh-evoontology
+    type definition — upstream_project: An external open-source project that a dsh plugin is inspired by, built on, or implements the concept of, e.g. virattt/ai-hedge-fund, NVIDIA/auto-ontology, ccxt.
+    CLAIM: ruc-datalab/EvoOntology is of type 'upstream_project'
+    QUOTE: "Implements the concept of [ruc-datalab/EvoOntology](https://github.com/ruc-datalab/EvoOntology)"
+
+[21] kind=relation  source document: dsh-freqtrade
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-freqtrade --sister_of--> dsh-jesse
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·
+> [dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·
+> [dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) · [dsh-jesse](https://github.com/vicfei/dsh-jesse) ·"
+
+[22] kind=entity  source document: dsh-nautilus
+    type definition — dsh_plugin: A DeepSeek Harness plugin repository in the vicfei family, such as dsh-ai-hedge-fund, dsh-auto-ontology, dsh-CCXT, or dsh-compaction-semantic.
+    CLAIM: dsh-Nautilus is of type 'dsh_plugin'
+    QUOTE: "# dsh-Nautilus — a professional backtesting engine as DeepSeek Harness tools"
+
+[23] kind=entity  source document: dsh-freqtrade
+    type definition — guardrail: A fail-closed safety mechanism enforced in code, such as the triple-armed trading guard with notional caps and symbol whitelist.
+    CLAIM: family guard is of type 'guardrail'
+    QUOTE: "M2 live execution behind
+the family guard (ccxt bridge — never the GPL app)."
+
+[24] kind=relation  source document: dsh-wrenai
+    type definition — carries_evidence: An output artifact attaches evidence tags to its claims, entities, or relations.
+    CLAIM: semantic catalog --carries_evidence--> calibers
+    QUOTE: "**calibers ride with results**: every result cites the metric definitions it used"
+
+[25] kind=entity  source document: dsh-quantlib
+    type definition — dsh_plugin: A DeepSeek Harness plugin repository in the vicfei family, such as dsh-ai-hedge-fund, dsh-auto-ontology, dsh-CCXT, or dsh-compaction-semantic.
+    CLAIM: dsh-QuantLib is of type 'dsh_plugin'
+    QUOTE: "# dsh-QuantLib — derivatives pricing as DeepSeek Harness tools"
+
+[26] kind=relation  source document: dsh-ai-hedge-fund
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-ai-hedge-fund --sister_of--> dsh-TradingAgents
+    QUOTE: "Sister project of [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)
+> (the bull/bear debate committee)."
+
+[27] kind=relation  source document: dsh-trustquant
+    type definition — produces: A plugin emits a formatted deliverable as its output.
+    CLAIM: dsh-trustquant --produces--> calculation_id
+    QUOTE: "**The audit trail** — every call returns a `calculation_id`; `trustquant manifest` shows who computed what with which versions, `trustquant replay` re-executes and verifies digests."
+
+[28] kind=entity  source document: dsh-quantlib
+    type definition — upstream_project: An external open-source project that a dsh plugin is inspired by, built on, or implements the concept of, e.g. virattt/ai-hedge-fund, NVIDIA/auto-ontology, ccxt.
+    CLAIM: QuantLib is of type 'upstream_project'
+    QUOTE: "> Implements the core of [QuantLib](https://github.com/lballabio/QuantLib) —
+> the standard open-source quant finance library — natively for DSH."
+
+[29] kind=relation  source document: dsh-evoontology
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-EvoOntology --sister_of--> dsh-WrenAI
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·
+> [dsh-auto-ontology](https://github.com/vicfei/dsh-auto-ontology) ·
+> [dsh-WrenAI](https://github.com/vicfei/dsh-WrenAI)"
+
+[30] kind=relation  source document: dsh-jesse
+    type definition — inspired_by: A dsh plugin is inspired by or implements the concept of an upstream project.
+    CLAIM: dsh-jesse --inspired_by--> Jesse
+    QUOTE: "Implements the core concept of [Jesse](https://github.com/jesse-ai/jesse)"
+
+[31] kind=entity  source document: dsh-freqtrade
+    type definition — dsh_plugin: A DeepSeek Harness plugin repository in the vicfei family, such as dsh-ai-hedge-fund, dsh-auto-ontology, dsh-CCXT, or dsh-compaction-semantic.
+    CLAIM: dsh-Vibe-Trading is of type 'dsh_plugin'
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·
+> [dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·
+> [dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) · [dsh-jesse](https://github.com/vicfei/dsh-jesse) ·
+> [dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-Kronos](https://github.com/vicfei/dsh-Kronos) ·
+> [dsh-quantstats](https://github.com/vicfei/dsh-quantstats) · [dsh-QuantLib](https://github.com/vicfei/dsh-QuantLib) ·
+> [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) · [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)."
+
+[32] kind=entity  source document: dsh-ai-hedge-fund
+    type definition — investor_persona: A named investor archetype (Buffett, Munger, Lynch, Wood) that independently values a ticker within the hedge-fund committee.
+    CLAIM: Wood is of type 'investor_persona'
+    QUOTE: "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates,"
+
+[33] kind=relation  source document: dsh-freqtrade
+    type definition — inspired_by: A dsh plugin is inspired by or implements the concept of an upstream project.
+    CLAIM: dsh-freqtrade --inspired_by--> freqtrade-strategies
+    QUOTE: "> Concept slot of [freqtrade](https://github.com/freqtrade/freqtrade) (57k★) +
+> [freqtrade-strategies](https://github.com/freqtrade/freqtrade-strategies) (5.7k★),"
+
+[34] kind=relation  source document: dsh-tradingagents
+    type definition — has_role: A plugin defines agent roles that participate in its workflow.
+    CLAIM: dsh-tradingagents --has_role--> portfolio manager
+    QUOTE: "risk (guardrails only) ──► portfolio manager ──► IC-MEMO"
+
+[35] kind=relation  source document: dsh-vibe-trading
+    type definition — inspired_by: A dsh plugin is inspired by or implements the concept of an upstream project.
+    CLAIM: dsh-vibe-trading --inspired_by--> HKUDS/Vibe-Trading
+    QUOTE: "> Inspired by [HKUDS/Vibe-Trading](https://github.com/HKUDS/Vibe-Trading) —"
+
+[36] kind=entity  source document: dsh-ccxt
+    type definition — dsh_plugin: A DeepSeek Harness plugin repository in the vicfei family, such as dsh-ai-hedge-fund, dsh-auto-ontology, dsh-CCXT, or dsh-compaction-semantic.
+    CLAIM: dsh-CCXT is of type 'dsh_plugin'
+    QUOTE: "# dsh-CCXT — 100+ crypto exchanges as DeepSeek Harness tools, fail-closed by design"
+
+[37] kind=relation  source document: dsh-vibe-trading
+    type definition — resolves: A plugin fills an optional name-based service slot in the harness engine.
+    CLAIM: dsh-vibe-trading --resolves--> vibe_scan
+    QUOTE: "The npm package
+also registers typed host tools (`vibe_research`, `vibe_scan`) and a skill."
+
+[38] kind=relation  source document: dsh-weknora-ops
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-weknora-ops --sister_of--> @wxg-prc-cpg/dsh-weknora
+    QUOTE: "Both can be installed side by side."
+
+[39] kind=relation  source document: dsh-compaction-semantic
+    type definition — has_role: A plugin defines agent roles that participate in its workflow.
+    CLAIM: dsh-compaction-semantic --has_role--> keep/drop compaction engine
+    QUOTE: "**V2 — keep/drop compaction engine**: replace the summarizer with per-message keep/drop (the full thesis), riding the designed `summarize()` hook."
+
+[40] kind=relation  source document: dsh-hummingbot
+    type definition — enforces: A plugin enforces a fail-closed guardrail in its bridge code.
+    CLAIM: dsh-hummingbot --enforces--> circuit breaker
+    QUOTE: "| Inventory logic | controllers (v2, real book) | spread-skew + **circuit breaker** (5× order-amount), mean-reverting by design |"
+
+[41] kind=relation  source document: dsh-hummingbot
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-hummingbot --sister_of--> dsh-CCXT
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·
+> [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·
+> [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·
+> [dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·"
+
+[42] kind=relation  source document: dsh-tradingagents
+    type definition — has_persona: A hedge-fund plugin includes named investor personas that value tickers independently.
+    CLAIM: dsh-tradingagents --has_persona--> Wood
+    QUOTE: "Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62"
+
+[43] kind=entity  source document: dsh-openbb
+    type definition — evidence_tag: A source quote or citation attached to a claim, entity, or relation, enforcing the family's no-evidence-no-assertion discipline.
+    CLAIM: findings cite fields [F#] is of type 'evidence_tag'
+    QUOTE: "| Numbers | model-driven calls, raw dumps | **deterministic bridge** + findings cite fields `[F#]`, model never invents figures |"
+
+[44] kind=entity  source document: dsh-vibe-trading
+    type definition — output_artifact: A produced deliverable with a defined format, such as an IC-MEMO, a typed ontology (TBox+ABox), or a compaction result.
+    CLAIM: terminal brief is of type 'output_artifact'
+    QUOTE: "You get a terminal brief, a zero-dependency SVG chart card, and an auditable trail."
+
+[45] kind=relation  source document: dsh-uigen
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-uigen --sister_of--> dsh-genui
+    QUOTE: "The missing layer atop two proven demands: describe→component
+(Magic/21st, 14k/wk — cloud-locked) and components-in-replies on DSH
+(dsh-genui, 9.9k/wk — render surface only)."
+
+[46] kind=relation  source document: dsh-openbb
+    type definition — returns: A market-data plugin returns payloads annotated with exchange and timestamp.
+    CLAIM: dsh-OpenBB --returns--> provider + fetched_at payload
+    QUOTE: "| Provenance | varies | **provider + fetched_at on every payload**; failures reported honestly ("data missing, no speculation") |"
+
+[47] kind=relation  source document: dsh-auto-ontology
+    type definition — resolves: A plugin fills an optional name-based service slot in the harness engine.
+    CLAIM: dsh-auto-ontology --resolves--> ontology_build
+    QUOTE: "With the plugin installed, agents get `ontology_build` / `ontology_query` as typed tools (`dsh plugin add dsh-auto-ontology`)."
+
+[48] kind=entity  source document: dsh-quantstats
+    type definition — dsh_plugin: A DeepSeek Harness plugin repository in the vicfei family, such as dsh-ai-hedge-fund, dsh-auto-ontology, dsh-CCXT, or dsh-compaction-semantic.
+    CLAIM: dsh-quantstats is of type 'dsh_plugin'
+    QUOTE: "# dsh-quantstats — performance tearsheets for DeepSeek Harness, honesty included"
+
+[49] kind=relation  source document: dsh-tradingagents
+    type definition — has_persona: A hedge-fund plugin includes named investor personas that value tickers independently.
+    CLAIM: dsh-tradingagents --has_persona--> Munger
+    QUOTE: "Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62"
+
+[50] kind=relation  source document: dsh-freqtrade
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-freqtrade --sister_of--> dsh-hummingbot
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·
+> [dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·
+> [dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) · [dsh-jesse](https://github.com/vicfei/dsh-jesse) ·
+> [dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-Kronos](https://github.com/vicfei/dsh-Kronos) ·"
+
+[51] kind=relation  source document: dsh-openbb
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-OpenBB --sister_of--> dsh-ai-hedge-fund
+    QUOTE: "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·"
+
+[52] kind=entity  source document: dsh-trustquant
+    type definition — guardrail: A fail-closed safety mechanism enforced in code, such as the triple-armed trading guard with notional caps and symbol whitelist.
+    CLAIM: structured error taxonomy is of type 'guardrail'
+    QUOTE: "**CLI/tool gates**: structured error taxonomy (`invalid_input` / `unsupported_feature` / `provider_unavailable` / …); the optimization provider is **never** auto-installed and never silently substituted."
+
+[53] kind=relation  source document: dsh-nautilus
+    type definition — built_on: A dsh plugin is technically built on an upstream library or project.
+    CLAIM: dsh-Nautilus --built_on--> NautilusTrader
+    QUOTE: "> Built on [NautilusTrader](https://github.com/nautechsystems/nautilus_trader)"
+
+[54] kind=entity  source document: dsh-auto-ontology
+    type definition — evidence_tag: A source quote or citation attached to a claim, entity, or relation, enforcing the family's no-evidence-no-assertion discipline.
+    CLAIM: evidence quote is of type 'evidence_tag'
+    QUOTE: "every assertion carrying its evidence quote (`ontologies/20261118-1441.*`)."
+
+[55] kind=relation  source document: dsh-ai-hedge-fund
+    type definition — has_persona: A hedge-fund plugin includes named investor personas that value tickers independently.
+    CLAIM: dsh-ai-hedge-fund --has_persona--> Buffett
+    QUOTE: "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates,"
+
+[56] kind=entity  source document: dsh-vibe-trading
+    type definition — output_artifact: A produced deliverable with a defined format, such as an IC-MEMO, a typed ontology (TBox+ABox), or a compaction result.
+    CLAIM: research trail is of type 'output_artifact'
+    QUOTE: "**Versioned research artifacts**: append-only named trails with revision
+  diff (`artifacts list|show|diff|export`) — research that outlives the chat,
+  in open files you own"
+
+[57] kind=relation  source document: dsh-kronos
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-Kronos --sister_of--> dsh-nautilus_trader
+    QUOTE: "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·
+> [dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) ·"
+
+[58] kind=relation  source document: dsh-wrenai
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-WrenAI --sister_of--> dsh-OpenBB
+    QUOTE: "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) ·"
+
+[59] kind=entity  source document: dsh-ai-hedge-fund
+    type definition — investor_persona: A named investor archetype (Buffett, Munger, Lynch, Wood) that independently values a ticker within the hedge-fund committee.
+    CLAIM: Buffett is of type 'investor_persona'
+    QUOTE: "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates,"
+
+[60] kind=relation  source document: dsh-hummingbot
+    type definition — inspired_by: A dsh plugin is inspired by or implements the concept of an upstream project.
+    CLAIM: dsh-hummingbot --inspired_by--> Hummingbot
+    QUOTE: "> Implements the core concept of [Hummingbot](https://github.com/hummingbot/hummingbot)"
+
+[61] kind=relation  source document: dsh-quantstats
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-quantstats --sister_of--> dsh-OpenBB
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·
+> [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·
+> [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·
+> [dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·"
+
+[62] kind=relation  source document: dsh-tradingagents
+    type definition — enforces: A plugin enforces a fail-closed guardrail in its bridge code.
+    CLAIM: dsh-tradingagents --enforces--> guardrail [G8]
+    QUOTE: "the risk officer logs the split as guardrail [G8], and the PM rules PASS@72 naming it."
+
+[63] kind=relation  source document: dsh-quantstats
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-quantstats --sister_of--> dsh-CCXT
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·
+> [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·
+> [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·
+> [dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·"
+
+[64] kind=relation  source document: dsh-freqtrade
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-freqtrade --sister_of--> dsh-quantstats
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·
+> [dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·
+> [dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) · [dsh-jesse](https://github.com/vicfei/dsh-jesse) ·
+> [dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-Kronos](https://github.com/vicfei/dsh-Kronos) ·
+> [dsh-quantstats](https://github.com/vicfei/dsh-quantstats) · [dsh-QuantLib](https://github.com/vicfei/dsh-QuantLib) ·"
+
+[65] kind=relation  source document: dsh-ai-hedge-fund
+    type definition — has_persona: A hedge-fund plugin includes named investor personas that value tickers independently.
+    CLAIM: dsh-ai-hedge-fund --has_persona--> Munger
+    QUOTE: "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates,"
+
+[66] kind=entity  source document: dsh-compaction-semantic
+    type definition — compaction_decision: A keep-or-drop judgment over agent context content, made semantically rather than by character count.
+    CLAIM: keep/drop decision is of type 'compaction_decision'
+    QUOTE: "**V2 — keep/drop compaction engine**: replace the summarizer with per-message keep/drop (the full thesis), riding the designed `summarize()` hook."
+
+[67] kind=entity  source document: dsh-freqtrade
+    type definition — dsh_plugin: A DeepSeek Harness plugin repository in the vicfei family, such as dsh-ai-hedge-fund, dsh-auto-ontology, dsh-CCXT, or dsh-compaction-semantic.
+    CLAIM: dsh-freqtrade is of type 'dsh_plugin'
+    QUOTE: "# dsh-freqtrade — a GPL-free strategy-bot toolkit for DeepSeek Harness"
+
+[68] kind=entity  source document: dsh-weknora-ops
+    type definition — guardrail: A fail-closed safety mechanism enforced in code, such as the triple-armed trading guard with notional caps and symbol whitelist.
+    CLAIM: CLI gate is of type 'guardrail'
+    QUOTE: "2. **CLI gate**: `doc delete` refuses without `--yes`."
+
+[69] kind=relation  source document: dsh-uigen
+    type definition — inspired_by: A dsh plugin is inspired by or implements the concept of an upstream project.
+    CLAIM: dsh-uigen --inspired_by--> Magic/21st
+    QUOTE: "The missing layer atop two proven demands: describe→component
+(Magic/21st, 14k/wk — cloud-locked) and components-in-replies on DSH
+(dsh-genui, 9.9k/wk — render surface only)."
+
+[70] kind=entity  source document: dsh-hummingbot
+    type definition — upstream_project: An external open-source project that a dsh plugin is inspired by, built on, or implements the concept of, e.g. virattt/ai-hedge-fund, NVIDIA/auto-ontology, ccxt.
+    CLAIM: Hummingbot is of type 'upstream_project'
+    QUOTE: "> Implements the core concept of [Hummingbot](https://github.com/hummingbot/hummingbot)"
+
+[71] kind=relation  source document: dsh-quantlib
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-QuantLib --sister_of--> dsh-quantstats
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·
+> [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·
+> [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·
+> [dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·
+> [dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) ·
+> [dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-jesse](https://github.com/vicfei/dsh-jesse) ·
+> [dsh-quantstats](https://github.com/vicfei/dsh-quantstats)."
+
+[72] kind=relation  source document: dsh-wrenai
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-WrenAI --sister_of--> dsh-quantstats
+    QUOTE: "[dsh-quantstats](https://github.com/vicfei/dsh-quantstats) ·"
+
+[73] kind=relation  source document: dsh-jesse
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-jesse --sister_of--> dsh-OpenBB
+    QUOTE: "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·"
+
+[74] kind=entity  source document: dsh-auto-ontology
+    type definition — guardrail: A fail-closed safety mechanism enforced in code, such as the triple-armed trading guard with notional caps and symbol whitelist.
+    CLAIM: type guard is of type 'guardrail'
+    QUOTE: "**Type guard**: instance types must come from the extracted TBox; unknown types are flagged, never silently dropped;"
+
+[75] kind=relation  source document: dsh-auto-ontology
+    type definition — contains: A constructed ontology artifact contains entity types, relation types, TBox and ABox components.
+    CLAIM: typed ontology (TBox + ABox) --contains--> ABox
+    QUOTE: "two-pass LLM: TBox schema from a sample, then per-doc ABox assertions"
+
+[76] kind=relation  source document: dsh-evoontology
+    type definition — produces: A plugin emits a formatted deliverable as its output.
+    CLAIM: dsh-EvoOntology --produces--> trajectory store
+    QUOTE: "trajectory store (append-only, evidence-linked)"
+
+[77] kind=relation  source document: dsh-ai-hedge-fund
+    type definition — has_persona: A hedge-fund plugin includes named investor personas that value tickers independently.
+    CLAIM: dsh-ai-hedge-fund --has_persona--> Lynch
+    QUOTE: "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates,"
+
+[78] kind=relation  source document: dsh-auto-ontology
+    type definition — enforces: A plugin enforces a fail-closed guardrail in its bridge code.
+    CLAIM: dsh-auto-ontology --enforces--> type guard
+    QUOTE: "**Type guard**: instance types must come from the extracted TBox; unknown types are flagged, never silently dropped;"
+
+[79] kind=relation  source document: dsh-kronos
+    type definition — sister_of: Two dsh plugins belong to the same family and are cross-referenced as sister projects.
+    CLAIM: dsh-Kronos --sister_of--> dsh-quantstats
+    QUOTE: "[dsh-jesse](https://github.com/vicfei/dsh-jesse) ·
+> [dsh-quantstats](https://github.com/vicfei/dsh-quantstats) ·"
+
+[80] kind=entity  source document: dsh-ai-hedge-fund
+    type definition — investor_persona: A named investor archetype (Buffett, Munger, Lynch, Wood) that independently values a ticker within the hedge-fund committee.
+    CLAIM: Munger is of type 'investor_persona'
+    QUOTE: "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates,"
