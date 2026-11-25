@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "22" }
       - name: engine syntax
-        run: python3 -m py_compile scripts/build_ontology.py
+        run: python3 -m py_compile scripts/build_ontology.py scripts/grounding.py scripts/eval_evidence.py scripts/validate_format.py scripts/render_html.py scripts/weknora_bridge.py
       - name: engine contract + fold semantics (pure, no network)
         run: |
           python3 - <<'EOF'
@@ -124,6 +124,44 @@ jobs:
           v1e = {"abox": {"entities": [{"name": "A", "type": "t", "evidence": "legacy", "doc": "d0"}], "relations": []}}
           assert EV.sample_assertions(v1e, 5, 1)[0][0]["quote"] == "legacy"
           print("eval sampling: PASS")
+          # the shared grounding judge (O5.0, #35): mechanical checks are reject filters only
+          import grounding as G
+          assert G.name_in_quote("DeepSeek Harness", "runs on **deepseek-harness** today")
+          assert not G.name_in_quote("WrenAI", "the Wren layer") and G.name_in_quote("腾讯", "关于腾讯的说明")
+          assert G.is_verbatim("a `code` span\n\nwith *marks*", "x a code span with marks y")
+          assert not G.is_verbatim("", "x") and not G.is_verbatim("paraphrased", "verbatim only")
+          assert G.endpoints_in_quote("A", "B", "A -> C") == (True, False)
+          v = G.parse_verdicts('```json\n{"verdicts":[{"i":2,"grounded":true,"reason":"ok"}]}\n```', 3)
+          assert v == [{"grounded": False, "reason": "no verdict returned"},
+                       {"grounded": True, "reason": "ok"},
+                       {"grounded": False, "reason": "no verdict returned"}], v
+          assert not any(x["grounded"] for x in G.parse_verdicts("not json", 2))
+          assert not any(x["grounded"] for x in G.parse_verdicts('{"verdicts":[{"i":9,"grounded":true}]}', 2))
+          msg = G.judge_user_message([
+              {"kind": "entity", "type_name": "t", "type_desc": "a thing", "claim": "X is a t.", "quote": "q", "doc": "d"},
+              {"kind": "relation", "type_name": "p", "type_desc": "", "claim": "X p Y.", "quote": "r", "doc": "e"}])
+          assert "Type definitions:\n- t: a thing" in msg and "1. CLAIM: X is a t. (a thing)" in msg
+          assert '2. CLAIM: X p Y.\n   QUOTE [e]: "r"' in msg
+          # adversarial gold: both labels present, and nothing labelled grounded lacks the name it grounds
+          cases = EV.load_cases()
+          assert len(cases) >= 20 and any(c["grounded"] for c in cases) and any(not c["grounded"] for c in cases)
+          for c in cases:
+              assert {"id", "grounded", "kind", "quote", "why"} <= set(c), c
+              m = EV.case_mechanical(c)
+              absent = ((c["kind"] == "entity" and not m["name_in_quote"])
+                        or (c["kind"] == "relation" and not m["one_endpoint"]))
+              assert not (c["grounded"] and absent), c["id"]
+          # eval v2: whole population, build-time flags carried onto the sampled row, no-LLM rates
+          assert len(EV.sample_assertions(eo, 0, 1)[0]) == 11
+          flagged = {"abox": {"entities": [dict(E("F", "q"), type_grounding=False)], "relations": []}}
+          assert EV.sample_assertions(flagged, 0, 1)[0][0]["flag"] is False
+          mr = EV.mechanical_rates({"abox": {
+              "entities": [E("e0", "e0 is here")],
+              "relations": [{"subject": "s", "predicate": "p", "object": "o",
+                             "evidences": [{"quote": "o thing", "doc": "d"}]}]}})
+          assert mr == {"entities": {"n": 1, "name_in_quote": 1},
+                        "relations": {"n": 1, "one_endpoint": 1, "both_endpoints": 0}}, mr
+          print("grounding judge + adversarial gold + eval v2: PASS")
           EOF
       - name: committed artifacts conform to the format
         run: python3 scripts/validate_format.py ontologies/*.json

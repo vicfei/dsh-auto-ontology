@@ -25,9 +25,11 @@ Usage:
   python3 scripts/build_ontology.py --docs <new> --domain "..." --merge ontologies/old.json --save
   python3 scripts/build_ontology.py --query "WrenAI" [--from ontologies/x.json]
 """
-import argparse, datetime as dt, glob, json, math, os, re, subprocess, sys, time
+import argparse, datetime as dt, glob, json, math, os, re, sys, time
 
 KIT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import grounding
 
 # Output language: English by default (international-first), --lang zh / ONTOLOGY_LANG for Chinese
 LANG = os.environ.get("ONTOLOGY_LANG") or "en"
@@ -47,25 +49,24 @@ def _key(s):
     return re.sub(r"[\W_]+", "", str(s).lower())
 
 
-def llm(sysmsg, user, json_out=True):
-    if MAX_CALLS is not None and COST["calls"] >= MAX_CALLS:
-        raise SystemExit(f"cost guard: {MAX_CALLS} LLM calls reached (--max-calls)")
-    key = subprocess.run(["bash", "-c", 'grep -m1 "^export DEEPSEEK_API_KEY=" ~/.bashrc | cut -d= -f2'],
-                         capture_output=True, text=True).stdout.strip().strip('"')
-    body = {"model": "deepseek-chat", "temperature": 0,
-            "messages": [{"role": "system", "content": sysmsg}, {"role": "user", "content": user}]}
-    if json_out:
-        body["response_format"] = {"type": "json_object"}
-    r = subprocess.run(["curl", "-s", "-m", "180", "https://api.deepseek.com/chat/completions",
-                        "-H", f"Authorization: Bearer {key}", "-H", "Content-Type: application/json",
-                        "-d", json.dumps(body)], capture_output=True, text=True)
-    parsed = json.loads(r.stdout)
-    txt = parsed["choices"][0]["message"]["content"]
+MODEL = os.environ.get("ONTOLOGY_MODEL") or "deepseek-chat"
+
+
+def _usage(u):
     COST["calls"] += 1
-    u = parsed.get("usage") or {}
     COST["in"] += int(u.get("prompt_tokens") or 0)
     COST["out"] += int(u.get("completion_tokens") or 0)
-    return json.loads(re.sub(r"^```(json)?|```$", "", txt.strip(), flags=re.M).strip()) if json_out else txt
+
+
+def llm(sysmsg, user, json_out=True):
+    """Every LLM request of a run goes through here: cost guard first, then one
+    retried call; each answered attempt lands in the ledger."""
+    if MAX_CALLS is not None and COST["calls"] >= MAX_CALLS:
+        raise SystemExit(f"cost guard: {MAX_CALLS} LLM calls reached (--max-calls)")
+    out, _ = grounding.complete(MODEL, [{"role": "system", "content": sysmsg},
+                                        {"role": "user", "content": user}],
+                                json_out=json_out, account=_usage)
+    return out
 
 
 # ── the fold store (pure; unit-tested in CI) ────────────────────────────────
@@ -590,7 +591,7 @@ def main():
                                     "added_docs": len(docs),
                                     "entities_before": prior_stats["entities"],
                                     "entities_after": len(st["entities"])})
-    prov = {"model": "deepseek-chat", "temperature": 0, "elapsed_s": round(time.time() - t0),
+    prov = {"model": MODEL, "temperature": 0, "elapsed_s": round(time.time() - t0),
             "calls": COST["calls"], "tokens_in": COST["in"], "tokens_out": COST["out"],
             "docs_this_run": len(docs), "merged_from": bool(args.merge)}
     o = store_to_ontology(st, new_type_descs, prov)
