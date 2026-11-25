@@ -4,7 +4,7 @@
 relation carries its source quote. No evidence, no assertion; unknown types are
 flagged, never silently dropped.**
 
-[![DeepSeek Harness](https://img.shields.io/badge/DSH-plugin-4E6DD4)](https://github.com/deepseek-ai) [![License: MIT](https://img.shields.io/badge/license-MIT-3da639)](LICENSE) [![npm](https://img.shields.io/npm/v/dsh-auto-ontology)](https://www.npmjs.com/package/dsh-auto-ontology) [![ci](https://github.com/vicfei/dsh-auto-ontology/actions/workflows/ci.yml/badge.svg)](../../actions/workflows/ci.yml) [![format](https://img.shields.io/badge/format-evidence--linked%20ontology%20v0.1-ff6b35)](docs/FORMAT.md)
+[![DeepSeek Harness](https://img.shields.io/badge/DSH-plugin-4E6DD4)](https://github.com/deepseek-ai) [![License: MIT](https://img.shields.io/badge/license-MIT-3da639)](LICENSE) [![npm](https://img.shields.io/npm/v/dsh-auto-ontology)](https://www.npmjs.com/package/dsh-auto-ontology) [![ci](https://github.com/vicfei/dsh-auto-ontology/actions/workflows/ci.yml/badge.svg)](../../actions/workflows/ci.yml) [![format](https://img.shields.io/badge/format-evidence--linked%20ontology%20v0.2-ff6b35)](docs/FORMAT.md)
 
 > Implements the concept of [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology)
 > (13.3k★) natively for DSH, with the family's evidence discipline. Clean-room,
@@ -34,7 +34,7 @@ detected type conflicts, every assertion carrying its evidence quote
 npm i -g dsh-auto-ontology
 auto-ontology build --docs 'docs/*.md' --domain "internal design docs" --save
 auto-ontology --query "WrenAI"                 # every assertion + its evidence spans
-auto-ontology validate ontologies/*.json       # format v0.1 conformance
+auto-ontology validate ontologies/*.json       # format v0.2 conformance
 auto-ontology eval --from ontologies/x.json --n 20   # honest evidence-support precision
 ```
 
@@ -51,28 +51,43 @@ typed tools (`dsh plugin add dsh-auto-ontology`).
 - **Evidence is inseparable** from an assertion — a verbatim quote + source doc;
 - **Type guard**: instance types must come from the extracted TBox; unknown
   types are flagged, never silently dropped;
+- **Grounding is judged, flagged, never dropped**: after extraction, every
+  type and relation claim is checked against its own quote — verbatim in the
+  source, naming the claim, then a strict judge call (batched per document,
+  temperature 0, `--max-calls` respected). A failing quote gets one re-grounding
+  attempt; if it still fails, the assertion stays in the ABox with
+  `type_grounding: false` / `grounding: false` — queryable, certifiable, never
+  silently lost. `--query` marks each ✓ or ⚠;
 - **Append-only**: merges never edit or drop prior evidence; removals happen
-  only via `--certify reject` and are recorded with the original evidence;
+  only via `--certify reject` and are recorded with the original evidence and
+  the actor who issued the verdict (`--actor`);
 - **Conflicts keep both sides** — the same name under different types becomes a
   conflict entry holding BOTH evidences, awaiting review;
 - **Honest metrics**: `auto-ontology eval` measures whether quotes actually
-  support their assertions (seeded, rerunnable). Our first artifacts scored
-  **10%** — reported as-is; the weak axis (type-grounding quotes) is tracked
-  openly. A metric you can rerun beats a number you can't;
-- Every artifact carries **provenance** (model / temperature / calls / tokens / elapsed).
+  support their assertions (seeded, rerunnable; `--n 0` scores the whole
+  population, `--adversarial` runs 20 trap-and-true cases against the same
+  judge). Our
+  first artifacts scored **10%** — reported as-is; the build-time grounding
+  pass that answers it ships with its own before/after on the same corpus
+  (#35). A metric you can rerun beats a number you can't;
+- Every artifact carries **provenance** (model / judge model / temperature /
+  calls / tokens / elapsed).
 
-## Format: evidence-linked ontology v0.1
+## Format: evidence-linked ontology v0.2
 
 The artifact shape is a versioned open format — [docs/FORMAT.md](docs/FORMAT.md) —
 with a stdlib conformance validator, enforced by CI on the committed showcase.
-If other tools adopt it, assertions stay auditable across implementations.
+v0.2 adds optional grounding fields (`grounded` / `reason` on an evidence,
+`type_grounding` on an entity, `grounding` on a relation, `actor` on a
+certification); every v0.1 artifact still conforms. If other tools adopt it,
+assertions stay auditable across implementations.
 
 ## Status & roadmap
 
 O1–O4 complete (see [ROADMAP](ROADMAP.md)): English-first engine, npm
 distribution vehicle + typed tools, incremental merge & coreference & conflicts,
 JSON-LD / HTML / WeKnora bridge, certification fold-back, run-layer diff, the
-honest eval, format v0.1. In flight: type-grounding evidence tightening (#35).
+honest eval, format v0.2. In flight: the grounding before/after that closes #35.
 
 ## License
 

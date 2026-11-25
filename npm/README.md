@@ -14,6 +14,8 @@ auto-ontology build --docs ~/my-corpus/*.md --domain "internal design docs" --sa
   no database — the deliberate opposite of the enterprise-metadata stacks.
 - Two-pass pipeline: TBox schema from corpus samples → per-document ABox
   assertions, each with an evidence span.
+- Grounding pass: every type and relation claim is judged against its own
+  quote; an ungrounded one is flagged (`type_grounding: false`), never dropped.
 - Outputs: typed JSON (every assertion + evidence), zero-dep SVG cluster graph,
   markdown digest.
 - Register the DSH skill:

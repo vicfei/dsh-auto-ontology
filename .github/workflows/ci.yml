@@ -162,6 +162,106 @@ jobs:
           assert mr == {"entities": {"n": 1, "name_in_quote": 1},
                         "relations": {"n": 1, "one_endpoint": 1, "both_endpoints": 0}}, mr
           print("grounding judge + adversarial gold + eval v2: PASS")
+          # O5.0 grounding pass (#35): flag never drop, verdicts are append-only, strongest quote first
+          sg = M.new_store("g")
+          sg["tbox_types"] |= {"tool", "company"}
+          M.fold_entity(sg, "W", "tool", "see also W", "dA", grounded=False, reason="mention only")
+          M.fold_entity(sg, "W", "tool", "W is a tool.", "dB", grounded=True)
+          assert [e["grounded"] for e in M._strongest(sg["entities"]["w"]["evidences"])] == [True, False]
+          assert sg["entities"]["w"]["evidences"][0]["quote"] == "see also W"   # fold order untouched in the store
+          M.fold_entity(sg, "W", "tool", "W again", "dC")                       # never judged
+          assert M._flag(sg["entities"]["w"]["evidences"]) is True              # any grounded quote grounds the claim
+          M.fold_entity(sg, "U", "tool", "and U too", "dA", grounded=False)
+          M.fold_entity(sg, "U", "company", "U mentioned", "dB", grounded=False)  # an ungrounded challenger is no conflict
+          assert not sg["conflicts"] and len(sg["flagged_ungrounded"]) == 1
+          M.fold_entity(sg, "U", "company", "U mentioned", "dC", grounded=False)  # same challenge, same quote: once
+          assert len(sg["flagged_ungrounded"]) == 1
+          M.fold_entity(sg, "U", "company", "U is a company", "dC", grounded=True)
+          assert len(sg["conflicts"]) == 1 and sg["conflicts"][0]["types"]["company"]["grounded"] is True
+          M.fold_relation(sg, "W", "uses", "U", "W uses U", "dA", grounded=True)
+          M.fold_relation(sg, "W", "uses", "U", "W and U", "dB", grounded=False)
+          og = M.store_to_ontology(sg, {}, {"model": "m"})
+          W, U = M.query_ontology(og, "W")["entities"][0], M.query_ontology(og, "u")["entities"][0]
+          assert W["type_grounding"] is True and U["type_grounding"] is False     # flagged, never dropped
+          assert W["evidences"][0]["quote"] == "W is a tool." and W["evidences"][-1]["grounded"] is False
+          assert W["evidences"][-1].get("reason") == "mention only" and U["evidences"][0]["quote"] == "and U too"
+          R = M.query_ontology(og, "W")["relations"][0]
+          assert R["grounding"] is True and R["evidences"][0]["grounded"] is True
+          stt = og["stats"]
+          assert (stt["entities_grounded"], stt["entities_ungrounded"], stt["relations_grounded"],
+                  stt["relations_ungrounded"], stt["ungrounded_type_clashes"]) == (1, 1, 1, 0, 1)
+          mdg = M.to_markdown(og)
+          assert "**W** ✓" in mdg and "**U** ⚠" in mdg and "Ungrounded type clashes" in mdg
+          ldg = M.to_jsonld(og)
+          assert [n.get("type_grounding") for n in ldg["@graph"] if n["@id"].endswith(":w")] == [True]
+          bd = dict(WB.entity_docs(og))["Ontology: U (tool)"]
+          assert "Type claim: NOT grounded" in bd and "ungrounded" in bd
+          # a certification rebuild keeps every derived flag; the actor travels with the verdict
+          oc = M.certify(json.loads(json.dumps(og)), "W", "reject", note="x", actor="agent:x")
+          assert M.query_ontology(oc, "U")["entities"][0]["type_grounding"] is False
+          assert oc["certifications"]["w"]["actor"] == "agent:x"
+          assert oc["certifications"]["w"]["evidence"]["grounded"] is True      # the strongest quote is cited
+          # reload: verdicts and clashes survive a round trip; a flagged-only writer keeps its verdict
+          stg = M.load_store(og)
+          assert M._flag(stg["entities"]["w"]["evidences"]) is True and len(stg["flagged_ungrounded"]) == 1
+          ow = {"abox": {"entities": [dict(E("F", "q"), type_grounding=False)], "relations": []}}
+          assert M._flag(M.load_store(ow)["entities"]["f"]["evidences"]) is False
+          # the mechanical reject filter (no LLM)
+          doc = {"path": "d1", "text": "WrenAI is a semantic layer.\nIt mentions X in passing.\nWrenAI runs on WeKnora."}
+          out = {"entities": [{"name": "WrenAI", "type": "t", "evidence": "WrenAI is a semantic layer."},
+                              {"name": "X", "type": "t", "evidence": "It mentions X in passing."},
+                              {"name": "Y", "type": "t", "evidence": "It mentions X in passing."},
+                              {"name": "Ghost", "type": "t", "evidence": "Ghost is a hallucinated tool."}],
+                 "relations": [{"subject": "WrenAI", "predicate": "runs_on", "object": "WeKnora",
+                                "evidence": "WrenAI runs on WeKnora."}]}
+          assert M._reject_reason("entity", out["entities"][0], doc["text"]) is None
+          assert M._reject_reason("entity", out["entities"][1], doc["text"]) is None   # the name IS in the quote: judged, not pre-rejected
+          assert "name as written" in M._reject_reason("entity", out["entities"][2], doc["text"])
+          assert "not verbatim" in M._reject_reason("entity", out["entities"][3], doc["text"])
+          assert M._reject_reason("relation", out["relations"][0], doc["text"]) is None
+          # the pass itself, judge stubbed (no network): one batched judge, one re-ground, no re-judge without a repair
+          import re as _re
+          calls = []
+          def stub(sysmsg, user, json_out=True, model=None):
+              calls.append(sysmsg[:40])
+              if "repairs" in sysmsg:
+                  return {"repairs": [{"i": 1, "quote": None}]}
+              qs = _re.findall(r"QUOTE \[[^\]]*\]: (.*)", user)
+              return {"verdicts": [{"i": i + 1, "grounded": " is a " in q or " runs on " in q, "reason": "stub"}
+                                   for i, q in enumerate(qs)]}
+          M.llm, M.JUDGE_MODEL = stub, "stub"
+          g = M.ground_doc(doc, out, {"t"}, {"t": "a thing"})
+          assert [e["grounded"] for e in out["entities"]] == [True, False, False, False], out
+          assert out["entities"][1]["judge_reason"] == "stub"            # judged: mention-only is the judge's call
+          assert "name as written" in out["entities"][2]["judge_reason"]  # rejected before any judge call
+          assert "not verbatim" in out["entities"][3]["judge_reason"]
+          assert out["relations"][0]["grounded"] is True
+          assert g == {"entities": [1, 3], "relations": [1, 0], "regrounded": 0} and len(calls) == 2, (g, calls)
+          def stub2(sysmsg, user, json_out=True, model=None):
+              if "repairs" in sysmsg:
+                  return {"repairs": [{"i": 1, "quote": "Y is a tool for X."}]}
+              return {"verdicts": [{"i": 1, "grounded": " is a " in _re.search(r"QUOTE \[[^\]]*\]: (.*)", user).group(1),
+                                    "reason": "stub"}]}
+          M.llm = stub2
+          out2 = {"entities": [{"name": "Y", "type": "tool", "evidence": "Y is mentioned."}], "relations": []}
+          g2 = M.ground_doc({"path": "d2", "text": "Y is mentioned. Y is a tool for X."}, out2, {"tool"}, {"tool": "a thing"})
+          assert g2["regrounded"] == 1 and out2["entities"][0]["grounded"] is True
+          assert out2["entities"][0]["evidence"] == "Y is a tool for X."
+          out3 = {"entities": [{"name": "Y", "type": "tool", "evidence": "Y is mentioned."}], "relations": []}
+          M.ground_doc({"path": "d3", "text": "Y is mentioned."}, out3, {"tool"}, {"tool": "a thing"}, reground=False)
+          assert out3["entities"][0]["grounded"] is False
+          # the v0.2 validator: the artifact passes, and it bites on a flag its evidences contradict
+          spec5 = importlib.util.spec_from_file_location("vf", "scripts/validate_format.py")
+          VF = importlib.util.module_from_spec(spec5); spec5.loader.exec_module(VF)
+          assert not VF.validate(og), VF.validate(og)
+          for mutate in (lambda a: a["abox"]["entities"][0].__setitem__("type_grounding", "yes"),
+                         lambda a: a["abox"]["entities"][1].__setitem__("type_grounding", False),
+                         lambda a: a["abox"]["entities"][0]["evidences"][0].__setitem__("grounded", 1),
+                         lambda a: a["flagged_ungrounded"].append({"entity": "Z"})):
+              bad = json.loads(json.dumps(og))
+              mutate(bad)
+              assert VF.validate(bad), mutate
+          print("grounding pass (flag never drop) + format v0.2: PASS")
           EOF
       - name: committed artifacts conform to the format
         run: python3 scripts/validate_format.py ontologies/*.json

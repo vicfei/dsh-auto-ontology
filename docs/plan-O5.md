@@ -104,3 +104,13 @@ tag on green CI; npm publish = owner real terminal (browser auth flow).
       dsh-evoontology E2 in one live two-repo round
 - [ ] chunk-id evidence verified on a real WeKnora KB
 - [ ] 0.3.0 on npm
+
+## Deviations log (what shipped vs the plan above)
+
+- **O5.0 grounding pass** (PR #47): the judge is **batched per document** — one
+  call per 25 candidates, plus at most one re-ground and one re-judge call per
+  document — instead of "one extra call per assertion". Same verdict per
+  assertion, a fraction of the calls. Relations are judged alongside entity
+  types. An ungrounded challenger under a different type goes to
+  `flagged_ungrounded` instead of opening a conflict (a grounded one still
+  does).

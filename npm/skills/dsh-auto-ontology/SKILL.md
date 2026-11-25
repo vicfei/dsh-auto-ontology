@@ -23,8 +23,14 @@ the shareable overview, the JSON carries every assertion with its evidence span.
 
 ## Discipline
 
-- Every entity/relation must carry `evidence` = a verbatim quote (≤40 chars);
-  the engine rejects no-evidence assertions.
+- Every entity/relation must carry `evidence` = a verbatim quote (up to 200
+  chars — the sentence that STATES the claim, not one that merely mentions the
+  name); the engine rejects no-evidence assertions.
+- Grounding is judged at build time: a quote that does not support its claim
+  gets one re-grounding attempt and is then flagged (`type_grounding: false` on
+  entities, `grounding: false` on relations) — kept, queryable, certifiable,
+  never dropped. `--no-ground` skips the judge; `--judge-model` picks it.
+- Report ungrounded assertions as ungrounded — `--query X` marks each ✓ or ⚠.
 - Instance types must come from the extracted TBox; unknown types are recorded
   in `flagged_unknown_types`, never silently dropped.
 - Artifacts are append-only in spirit: a new run writes new files; it never
