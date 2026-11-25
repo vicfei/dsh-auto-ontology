@@ -182,7 +182,7 @@ not count", while the gold labels `alias-label` true — there the claim's own
 name (`market_data_payload`) carries the link to the quote's wording
 ("payload"), so no outside knowledge is needed. deepseek-chat follows the
 gold, deepseek-reasoner the clause. The prompt was not reworded after the
-measurements above; the decision is tracked in an issue.
+measurements above; the decision is tracked in #49.
 
 ### An earlier measurement on 23 documents
 

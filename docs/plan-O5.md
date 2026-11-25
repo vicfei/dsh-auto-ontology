@@ -99,7 +99,8 @@ tag on green CI; npm publish = owner real terminal (browser auth flow).
 ## Definition of done for O5
 
 - [x] #35 closed with an honest before/after on the same corpus; flagged
-      assertions preserved (nothing silently dropped) — 2026-11-25, `eval/`
+      assertions preserved (nothing silently dropped) — 2026-11-25, PR #48,
+      `eval/` (the alias tension the measurement left open is #49)
 - [ ] `export --trajectory` documented in FORMAT.md and consumed by
       dsh-evoontology E2 in one live two-repo round
 - [ ] chunk-id evidence verified on a real WeKnora KB
@@ -138,3 +139,8 @@ tag on green CI; npm publish = owner real terminal (browser auth flow).
 - **O5.0 adversarial set** (2026-11-25): one of the 28 cases had been copied
   from a private repository's document. Its names were replaced before
   publication and the set re-run on both judges; all runs are in `eval/`.
+- **O5.0 judge prompt vs gold** (#49, 2026-11-25): the judge prompt says an
+  alias "does not count"; the gold labels `alias-label` grounded. deepseek-chat
+  follows the gold (4 of 4 adversarial runs), deepseek-reasoner the clause (4
+  of 4). The prompt was not reworded after the measurements — that would be
+  tuning on the test set — so deepseek-reasoner's 25/28 carries that miss.
