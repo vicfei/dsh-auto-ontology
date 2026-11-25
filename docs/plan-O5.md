@@ -117,7 +117,8 @@ tag on green CI; npm publish = owner real terminal (browser auth flow).
       `eval/kb-round/`: 248 of 248 evidence records, by the API and by SQL;
       the chunk build's ontology is smaller and less grounded than the file
       build's, on a different TBox (deviations below)
-- [ ] 0.3.0 on npm
+- [ ] 0.3.0 on npm — tag `v0.3.0` cut 2026-11-25; the publish is the owner's
+      terminal act
 
 ## Deviations log (what shipped vs the plan above)
 
