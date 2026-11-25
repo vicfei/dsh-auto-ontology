@@ -91,7 +91,7 @@ def llm(sysmsg, user, json_out=True, model=None):
 
 def new_store(domain):
     return {"domain": domain, "entities": {}, "relations": {}, "conflicts": [],
-            "flagged": [], "tbox_types": set(), "tbox_relations": {}, "merge_log": [],
+            "flagged": [], "tbox_types": set(), "type_descs": {}, "tbox_relations": {}, "merge_log": [],
             "certifications": {}, "suppressed": 0, "flagged_ungrounded": []}
 
 
@@ -100,6 +100,7 @@ def load_store(o):
     st = new_store(o.get("domain", "?"))
     for t in o.get("tbox", {}).get("entity_types", []):
         st["tbox_types"].add(t["name"])
+        st["type_descs"][t["name"]] = t.get("desc", "")
     for r in o.get("tbox", {}).get("relation_types", []):
         st["tbox_relations"][(r.get("name"), r.get("domains"), r.get("ranges"))] = r
     for e in o.get("abox", {}).get("entities", []):
@@ -571,6 +572,7 @@ def _refresh(o, st):
 
 
 def store_to_ontology(st, new_type_descs, provenance):
+    descs = st["type_descs"] if "type_descs" in st else new_type_descs
     abox = _abox(st)
 
     def n(kind, key, f):
@@ -578,7 +580,7 @@ def store_to_ontology(st, new_type_descs, provenance):
     return {
         "domain": st["domain"], "built_at": dt.datetime.now().isoformat(timespec="seconds"),
         "provenance": provenance,
-        "tbox": {"entity_types": [{"name": t, "desc": new_type_descs.get(t, "")}
+        "tbox": {"entity_types": [{"name": t, "desc": descs.get(t, "")}
                                    for t in sorted(st["tbox_types"])],
                  "relation_types": list(st["tbox_relations"].values())},
         "abox": abox,
@@ -757,8 +759,12 @@ def build(docs, domain, base=None, sample=4, ground=True, reground=True):
                tt(f"Domain: {domain}\nCorpus sample:\n" + "\n\n".join(d["text"][:1500] for d in docs[:sample]),
                   f"领域：{domain}\n语料样本：\n" + "\n\n".join(d["text"][:1500] for d in docs[:sample])))
     known = {e["name"] for e in tbox.get("entity_types", [])}
-    new_type_descs = {e["name"]: e.get("desc", "") for e in tbox.get("entity_types", [])
-                      if e["name"] not in st["tbox_types"]}
+    # a definition the base artifact carried stays (its assertions were judged against it); this
+    # run's pass fills a blank and names what is new — a merge used to bring them all back empty
+    kept = st.setdefault("type_descs", {})
+    new_type_descs = {e["name"]: e.get("desc") or kept.get(e["name"], "")
+                      for e in tbox.get("entity_types", []) if not kept.get(e["name"])}
+    kept.update(new_type_descs)
     st["tbox_types"] |= known
     for r in tbox.get("relation_types", []):
         st["tbox_relations"][(r.get("name"), r.get("domains"), r.get("ranges"))] = r

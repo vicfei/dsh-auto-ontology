@@ -72,6 +72,22 @@ jobs:
           M.fold_entity(base, "Old", "tool", "ev2", "d1")
           o = M.store_to_ontology(base, {}, {"model": "m"})
           assert len(M.query_ontology(o, "old")["entities"][0]["evidences"]) == 2
+          # a merge keeps the TBox definitions the base artifact carried (every inherited type used
+          # to come back with a blank desc), fills a blank, and adds the new ones
+          art = {"domain": "x", "tbox": {"entity_types": [{"name": "tool", "desc": "a thing"},
+                                                           {"name": "gadget", "desc": ""}], "relation_types": []},
+                 "abox": {"entities": [{"name": "Old", "type": "tool", "evidences": [{"quote": "ev1", "doc": "d0"}]}],
+                          "relations": []}}
+          _real_llm, M.llm = M.llm, (lambda sysmsg, user, json_out=True, model=None: (
+              {"entity_types": [{"name": "tool", "desc": "re-said"}, {"name": "gadget", "desc": "a gadget"},
+                                {"name": "widget", "desc": "a widget"}], "relation_types": []}
+              if "Corpus sample" in user else
+              {"entities": [{"name": "New", "type": "widget", "evidence": "New is a widget."}], "relations": []}))
+          ms, nd, _, _ = M.build([{"path": "d9", "text": "New is a widget."}], "x", base=M.load_store(art), sample=1, ground=False)
+          mo = M.store_to_ontology(ms, nd, {"model": "m"})
+          assert {t["name"]: t["desc"] for t in mo["tbox"]["entity_types"]} == {
+              "tool": "a thing", "gadget": "a gadget", "widget": "a widget"}, mo["tbox"]
+          M.llm = _real_llm
           ld = M.to_jsonld(o)
           ids = [n["@id"] for n in ld["@graph"]]
           assert len(ids) == len(set(ids)) and all(i.startswith("urn:dshao:") for i in ids)
