@@ -22,13 +22,16 @@
 npm i -g dsh-auto-ontology
 auto-ontology build --docs 'docs/*.md' --domain "内部设计文档" --save
 auto-ontology --query "WrenAI"                 # 该实体的全部断言+证据跨度
-auto-ontology validate ontologies/*.json       # 格式 v0.1 合规校验
+auto-ontology validate ontologies/*.json       # 格式 v0.2 合规校验
 ```
 
 仅需 `python3`（stdlib）+ DeepSeek key。产物落 `./ontologies/`：带证据的
 JSON、零依赖 SVG 分簇图、markdown 摘要、单文件 HTML、JSON-LD 导出。
 
-**纪律**：证据不可剥离；append-only；冲突双证据；每产物带溯源（模型/调用/
-token/耗时）。规范见 docs/FORMAT.md（evidence-linked ontology v0.1 开放格式）。
+**纪律**：证据不可剥离；构建期接地判定——引文是否真的支撑断言（原文逐字、
+点出断言、判官严判），不支撑者标记保留（实体 `type_grounding: false`、关系
+`grounding: false`），可查可认证，绝不静默丢弃；append-only；冲突双证据；每产物带
+溯源（模型/判官模型/调用/token/耗时）。规范见 docs/FORMAT.md（evidence-linked
+ontology v0.2 开放格式，v0.1 工件仍合规）。
 
 **不是企业建议。**

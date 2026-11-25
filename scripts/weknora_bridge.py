@@ -34,8 +34,15 @@ def entity_docs(o, limit=None):
         rel_by_end.setdefault(r["object"], []).append(r)
     docs = []
     for e in o.get("abox", {}).get("entities", []):
-        evs = "\n".join(f'- "{v["quote"]}" ({v["doc"]})' for v in e.get("evidences", [])[:5]) or "- (no evidence)"
+        evs = "\n".join(f'- "{v["quote"]}" ({v["doc"]})' + ("  — ungrounded" if v.get("grounded") is False else "")
+                        for v in e.get("evidences", [])[:5]) or "- (no evidence)"
         aliases = f"\nAliases: {', '.join(e.get('aliases', []))}." if e.get("aliases") else ""
+        flag = e.get("type_grounding")
+        # the verdict travels into the KB: a retriever must not read a mention-only lead as a fact
+        claim = ("" if flag is None else
+                 "\nType claim: grounded — a carried quote states what this entity is.\n" if flag else
+                 "\nType claim: NOT grounded — the quotes only mention the entity; its type is an "
+                 "unverified lead.\n")
         rels = rel_by_end.get(e["name"], [])
         rel_lines = "\n".join(
             f"- ({r['subject']}) -[{r['predicate']}]-> ({r['object']}) — \"{r['evidences'][0]['quote']}\""
@@ -43,7 +50,7 @@ def entity_docs(o, limit=None):
             for r in rels[:8])
         body = (f"# {e['name']} ({e['type']}){aliases}\n\n"
                 f"Domain: {o.get('domain', '?')} · type: {e['type']} · "
-                f"sources: {', '.join(e.get('docs', [])[:5]) or '?'}\n\n"
+                f"sources: {', '.join(e.get('docs', [])[:5]) or '?'}\n{claim}\n"
                 f"Evidence:\n{evs}\n"
                 + (f"\nRelations:\n{rel_lines}\n" if rel_lines else ""))
         docs.append((f"Ontology: {e['name']} ({e['type']})", body))

@@ -50,6 +50,7 @@ def _key(s):
 
 
 MODEL = os.environ.get("ONTOLOGY_MODEL") or "deepseek-chat"
+JUDGE_MODEL = MODEL  # set by --judge-model / ONTOLOGY_JUDGE_MODEL in main()
 
 
 def _usage(u):
@@ -58,13 +59,13 @@ def _usage(u):
     COST["out"] += int(u.get("completion_tokens") or 0)
 
 
-def llm(sysmsg, user, json_out=True):
+def llm(sysmsg, user, json_out=True, model=None):
     """Every LLM request of a run goes through here: cost guard first, then one
     retried call; each answered attempt lands in the ledger."""
     if MAX_CALLS is not None and COST["calls"] >= MAX_CALLS:
         raise SystemExit(f"cost guard: {MAX_CALLS} LLM calls reached (--max-calls)")
-    out, _ = grounding.complete(MODEL, [{"role": "system", "content": sysmsg},
-                                        {"role": "user", "content": user}],
+    out, _ = grounding.complete(model or MODEL, [{"role": "system", "content": sysmsg},
+                                                 {"role": "user", "content": user}],
                                 json_out=json_out, account=_usage)
     return out
 
@@ -74,7 +75,7 @@ def llm(sysmsg, user, json_out=True):
 def new_store(domain):
     return {"domain": domain, "entities": {}, "relations": {}, "conflicts": [],
             "flagged": [], "tbox_types": set(), "tbox_relations": {}, "merge_log": [],
-            "certifications": {}, "suppressed": 0}
+            "certifications": {}, "suppressed": 0, "flagged_ungrounded": []}
 
 
 def load_store(o):
@@ -92,6 +93,10 @@ def load_store(o):
                                            "docs": sorted(docs), "evidences": []}
         for ev in evs:
             _fold_ev(st["entities"][_key(e["name"])]["evidences"], ev)
+        # a writer that flagged the assertion but not its evidences keeps its verdict on reload
+        if e.get("type_grounding") is False and not any("grounded" in x for x in st["entities"][_key(e["name"])]["evidences"]):
+            for x in st["entities"][_key(e["name"])]["evidences"]:
+                x["grounded"] = False
     for r in o.get("abox", {}).get("relations", []):
         evs = r.get("evidences") or [{"quote": r.get("evidence", ""), "doc": r.get("doc", "?")}]
         docs = set(r.get("docs", [])) | ({r["doc"]} if r.get("doc") and r["doc"] != "?" else set())
@@ -100,15 +105,19 @@ def load_store(o):
                               "docs": sorted(docs), "evidences": []}
         for ev in evs:
             _fold_ev(st["relations"][k]["evidences"], ev)
+        if r.get("grounding") is False and not any("grounded" in x for x in st["relations"][k]["evidences"]):
+            for x in st["relations"][k]["evidences"]:
+                x["grounded"] = False
     st["conflicts"] = list(o.get("conflicts", []))
     st["flagged"] = list(o.get("flagged_unknown_types", []))
+    st["flagged_ungrounded"] = list(o.get("flagged_ungrounded", []))
     st["merge_log"] = list(o.get("merge_log", []))
     # re-key by the certified name so a key-scheme change never orphans a verdict
     st["certifications"] = {_key(c.get("name", k)): c for k, c in o.get("certifications", {}).items()}
     st["suppressed"] = 0
     return st
 
-def certify(o, name, verdict, note=""):
+def certify(o, name, verdict, note="", actor=None):
     """Human verdict on an entity (issue #13, the upstream Learn pillar,
     evidence-first version): record travels WITH the ontology (portable artifact).
     rejected — the (name, type) pair is suppressed in every later fold; the
@@ -116,23 +125,24 @@ def certify(o, name, verdict, note=""):
     type re-asserting the same name is a NEW assertion and re-enters (the
     rejection was about that typing, not the string).
     accepted  — the entity is marked trusted; conflicts against it still get
-    recorded (they are never silently resolved), the mark is the human word."""
+    recorded (they are never silently resolved), the mark is the human word.
+    `actor` names who issued the verdict — an agent applying one must say so."""
     st = load_store(o)
     k = _key(name)
     e = st["entities"].get(k)
     if e is None:
         raise SystemExit(tt(f"no such entity: {name}", f"无此实体：{name}"))
-    o.setdefault("certifications", {})[k] = {
-        "name": e["name"], "type": e["type"], "verdict": verdict, "at":
-        dt.datetime.now().isoformat(timespec="seconds"), "note": note,
-        "evidence": e["evidences"][0] if e["evidences"] else {}}
+    rec = {"name": e["name"], "type": e["type"], "verdict": verdict, "at":
+           dt.datetime.now().isoformat(timespec="seconds"), "note": note,
+           "evidence": _strongest(e["evidences"])[0] if e["evidences"] else {}}
+    if actor:
+        rec["actor"] = actor
+    o.setdefault("certifications", {})[k] = rec
     if verdict == "reject":
         del st["entities"][k]
         st["relations"] = {rk: r for rk, r in st["relations"].items()
                            if _key(r["subject"]) != k and _key(r["object"]) != k}
-        o["abox"] = {"entities": sorted(st["entities"].values(), key=lambda x: x["name"].lower()),
-                     "relations": sorted(st["relations"].values(),
-                                         key=lambda r: (r["subject"].lower(), r["predicate"]))}
+        o["abox"] = _abox(st)
         o["stats"]["entities"] = len(st["entities"])
         o["stats"]["relations"] = len(st["relations"])
     return o
@@ -143,13 +153,54 @@ def _fold_ev(evs, ev):
         ev = {"quote": ev, "doc": "?"}
     q, d = ev.get("quote", ""), ev.get("doc", "?")
     if q and not any(e["quote"] == q for e in evs):
-        evs.append({"quote": q, "doc": d})
+        item = {"quote": q, "doc": d}
+        for k in ("grounded", "reason"):
+            if k in ev:
+                item[k] = ev[k]
+        evs.append(item)
 
 
-def fold_entity(st, name, etype, quote, doc):
+def _flag(evs):
+    """The grounding flag of an assertion, derived from its evidences: True — some
+    carried quote grounds the claim; False — judged, and none does; None — never judged."""
+    if any(e.get("grounded") is True for e in evs):
+        return True
+    if evs and all(e.get("grounded") is False for e in evs):
+        return False
+    return None
+
+
+def _strongest(evs):
+    """Presentation order — stable, so fold order holds inside each class: a grounded
+    quote first, an unjudged one next, an ungrounded one last. Nothing is edited or
+    dropped; evidences[0] is simply the best quote the assertion carries."""
+    return sorted(evs, key=lambda e: {True: 0, None: 1, False: 2}[e.get("grounded")])
+
+
+def _flag_ungrounded(st, cur, etype, quote, doc):
+    """A different-type challenger whose own quote does not ground it is no evidence
+    of a conflict — it is a guess. Kept and flagged, never promoted on its own."""
+    if not any(f["entity"] == cur["name"] and f["asserted_type"] == etype and f["evidence"]["quote"] == quote
+               for f in st["flagged_ungrounded"]):
+        st["flagged_ungrounded"].append({"entity": cur["name"], "existing_type": cur["type"],
+                                         "asserted_type": etype, "evidence": {"quote": quote, "doc": doc}})
+
+
+def _ev(quote, doc, grounded=None, reason=None):
+    """A fold's evidence: the build's verdict rides on it when one was given."""
+    ev = {"quote": quote, "doc": doc}
+    if grounded is not None:
+        ev["grounded"] = grounded
+        if grounded is False and reason:
+            ev["reason"] = reason
+    return ev
+
+
+def fold_entity(st, name, etype, quote, doc, grounded=None, reason=None):
     """Append-only entity fold; the same name under a different type => conflict
     holding BOTH evidences — recorded, never silently resolved. A rejected
-    certification suppresses the (name, type) pair — counted, never re-asserted."""
+    certification suppresses the (name, type) pair — counted, never re-asserted.
+    `grounded` is the build's verdict on this quote (None = never judged)."""
     k = _key(name)
     if not k:
         return
@@ -158,22 +209,25 @@ def fold_entity(st, name, etype, quote, doc):
         st["suppressed"] = st.get("suppressed", 0) + 1
         return
     cur = st["entities"].get(k)
+    ev = _ev(quote, doc, grounded, reason)
     if cur is None:
         st["entities"][k] = {"name": name, "type": etype, "aliases": [],
-                             "docs": [doc] if doc != "?" else [],
-                             "evidences": [{"quote": quote, "doc": doc}]}
+                             "docs": [doc] if doc != "?" else [], "evidences": [ev]}
         return
     if cur["type"] != etype:
+        if grounded is False:
+            _flag_ungrounded(st, cur, etype, quote, doc)
+            return
         st["conflicts"].append({"entity": cur["name"], "types": {
-            cur["type"]: cur["evidences"][0] if cur["evidences"] else {"quote": "", "doc": "?"},
-            etype: {"quote": quote, "doc": doc}}})
+            cur["type"]: dict(_strongest(cur["evidences"])[0]) if cur["evidences"] else {"quote": "", "doc": "?"},
+            etype: dict(ev)}})
         return
-    _fold_ev(cur["evidences"], {"quote": quote, "doc": doc})
+    _fold_ev(cur["evidences"], ev)
     if doc != "?":
         cur["docs"] = sorted(set(cur["docs"]) | {doc})
 
 
-def fold_relation(st, subject, predicate, obj, quote, doc, alias_map=None):
+def fold_relation(st, subject, predicate, obj, quote, doc, alias_map=None, grounded=None, reason=None):
     if alias_map:  # canonicalize endpoints through the coref result before folding
         subject = alias_map.get(_key(subject), subject)
         obj = alias_map.get(_key(obj), obj)
@@ -181,12 +235,12 @@ def fold_relation(st, subject, predicate, obj, quote, doc, alias_map=None):
         return
     k = (_key(subject), predicate, _key(obj))
     cur = st["relations"].get(k)
+    ev = _ev(quote, doc, grounded, reason)
     if cur is None:
         st["relations"][k] = {"subject": subject, "predicate": predicate, "object": obj,
-                              "docs": [doc] if doc != "?" else [],
-                              "evidences": [{"quote": quote, "doc": doc}]}
+                              "docs": [doc] if doc != "?" else [], "evidences": [ev]}
         return
-    _fold_ev(cur["evidences"], {"quote": quote, "doc": doc})
+    _fold_ev(cur["evidences"], ev)
     if doc != "?":
         cur["docs"] = sorted(set(cur["docs"]) | {doc})
 
@@ -239,6 +293,11 @@ def query_ontology(o, term):
     return hits
 
 
+def _mark(x, key):
+    """Digest marker of an assertion's grounding flag: ✓ grounded · ⚠ ungrounded · none = never judged."""
+    return {True: " ✓", False: " ⚠"}.get(x.get(key), "")
+
+
 def to_markdown(o):
     """Ontology v2 -> shareable markdown digest (issue #12): stats + provenance,
     conflicts table, entities by type, relations with evidence quotes."""
@@ -250,7 +309,14 @@ def to_markdown(o):
          f"{st.get('conflicts', 0)} conflicts · {st.get('flagged', 0)} unknown types flagged**",
          f"- provenance: {prov.get('model', '?')} · {prov.get('calls', '?')} calls · "
          f"{prov.get('tokens_in', 0):,} in / {prov.get('tokens_out', 0):,} out tokens · "
-         f"{prov.get('elapsed_s', '?')}s · built {o.get('built_at', '?')}", ""]
+         f"{prov.get('elapsed_s', '?')}s · built {o.get('built_at', '?')}"]
+    if sum(st.get(k, 0) for k in ("entities_grounded", "entities_ungrounded",
+                                  "relations_grounded", "relations_ungrounded")):
+        L.append(f"- type grounding (judged at build time): entities {st.get('entities_grounded', 0)} grounded · "
+                 f"{st.get('entities_ungrounded', 0)} ungrounded; relations {st.get('relations_grounded', 0)} grounded · "
+                 f"{st.get('relations_ungrounded', 0)} ungrounded — ✓ the best carried quote grounds the claim; "
+                 "⚠ no carried quote grounds it (kept and flagged, never dropped)")
+    L.append("")
     if o.get("conflicts"):
         L += ["## Conflicts (both evidences kept, awaiting review)", "",
               "| Entity | Types | Evidence A | Evidence B |", "|---|---|---|---|"]
@@ -260,6 +326,14 @@ def to_markdown(o):
                      f"\"{t1[1].get('quote', '')[:50]}\" ({t1[1].get('doc', '?')}) | "
                      f"\"{t2[1].get('quote', '')[:50]}\" ({t2[1].get('doc', '?')}) |")
         L.append("")
+    if o.get("flagged_ungrounded"):
+        L += ["## Ungrounded type clashes (kept, not conflicts)", "",
+              "| Entity | Typed as | Challenged as | Challenger's quote |", "|---|---|---|---|"]
+        for c in o["flagged_ungrounded"][:20]:
+            L.append(f"| {c['entity']} | {c['existing_type']} | {c['asserted_type']} | "
+                     f"\"{c['evidence'].get('quote', '')[:50]}\" ({c['evidence'].get('doc', '?')}) |")
+        L += ["", "> A different type asserted with a quote that does not ground it is a guess, not a "
+              "conflict; it becomes one only when a grounded quote says so.", ""]
     by_type = defaultdict(list)
     for e in o.get("abox", {}).get("entities", []):
         by_type[e["type"]].append(e)
@@ -269,11 +343,11 @@ def to_markdown(o):
         for e in es[:40]:
             al = f" · aka {', '.join(e['aliases'])}" if e.get("aliases") else ""
             ev = e["evidences"][0]["quote"] if e.get("evidences") else ""
-            L.append(f"- **{e['name']}**{al} — \"{ev[:70]}\" ({', '.join(e.get('docs', [])[:3])})")
+            L.append(f"- **{e['name']}**{al}{_mark(e, 'type_grounding')} — \"{ev[:70]}\" ({', '.join(e.get('docs', [])[:3])})")
     L += ["", "## Relations", "", "| Subject | Predicate | Object | Evidence |", "|---|---|---|---|"]
     for r in o.get("abox", {}).get("relations", [])[:200]:
         ev = r["evidences"][0]["quote"] if r.get("evidences") else ""
-        L.append(f"| {r['subject']} | {r['predicate']} | {r['object']} | \"{ev[:50]}\" |")
+        L.append(f"| {r['subject']} | {r['predicate']} | {r['object']}{_mark(r, 'grounding')} | \"{ev[:50]}\" |")
     L += ["", "> Every assertion carries its evidence span in the JSON; this page is the digest. "
           "Not investment/enterprise advice."]
     return "\n".join(L)
@@ -353,34 +427,61 @@ def to_jsonld(o):
            "evidence": {"@id": "https://dsh-auto-ontology.dev/vocab/evidence", "@container": "@list"}}
     graph = []
     for e in o.get("abox", {}).get("entities", []):
-        graph.append({"@id": eid(e["name"]), "@type": e["type"], "name": e["name"],
-                      "aliases": e.get("aliases", []), "evidence": e.get("evidences", [])})
+        node = {"@id": eid(e["name"]), "@type": e["type"], "name": e["name"],
+                "aliases": e.get("aliases", []), "evidence": e.get("evidences", [])}
+        if "type_grounding" in e:
+            node["type_grounding"] = e["type_grounding"]
+        graph.append(node)
     for r in o.get("abox", {}).get("relations", []):
-        graph.append({"@id": rid(r), "@type": r["predicate"],
-                      "subject": {"@id": eid(r["subject"]), "name": r["subject"]},
-                      "object": {"@id": eid(r["object"]), "name": r["object"]},
-                      "evidence": r.get("evidences", [])})
+        node = {"@id": rid(r), "@type": r["predicate"],
+                "subject": {"@id": eid(r["subject"]), "name": r["subject"]},
+                "object": {"@id": eid(r["object"]), "name": r["object"]},
+                "evidence": r.get("evidences", [])}
+        if "grounding" in r:
+            node["grounding"] = r["grounding"]
+        graph.append(node)
     return {"@context": ctx, "@graph": graph,
             "dshao:domain": o.get("domain"), "dshao:built_at": o.get("built_at")}
 
 
+def _abox(st):
+    """The store's ABox in artifact shape — the ONE place entities and relations are
+    serialized, so a certification rebuild keeps every derived flag."""
+    ents, rels = [], []
+    for e in sorted(st["entities"].values(), key=lambda x: x["name"].lower()):
+        f = _flag(e["evidences"])
+        ents.append(dict(e, evidences=_strongest(e["evidences"]), **({"type_grounding": f} if f is not None else {})))
+    for r in sorted(st["relations"].values(), key=lambda r: (r["subject"].lower(), r["predicate"])):
+        f = _flag(r["evidences"])
+        rels.append(dict(r, evidences=_strongest(r["evidences"]), **({"grounding": f} if f is not None else {})))
+    return {"entities": ents, "relations": rels}
+
+
 def store_to_ontology(st, new_type_descs, provenance):
-    ents = sorted(st["entities"].values(), key=lambda e: e["name"].lower())
-    rels = sorted(st["relations"].values(), key=lambda r: (r["subject"].lower(), r["predicate"]))
+    abox = _abox(st)
+
+    def n(kind, key, f):
+        return sum(1 for x in abox[kind] if x.get(key) is f)
     return {
         "domain": st["domain"], "built_at": dt.datetime.now().isoformat(timespec="seconds"),
         "provenance": provenance,
         "tbox": {"entity_types": [{"name": t, "desc": new_type_descs.get(t, "")}
                                    for t in sorted(st["tbox_types"])],
                  "relation_types": list(st["tbox_relations"].values())},
-        "abox": {"entities": ents, "relations": rels},
+        "abox": abox,
         "conflicts": st["conflicts"],
         "flagged_unknown_types": st["flagged"],
+        "flagged_ungrounded": st["flagged_ungrounded"],
         "merge_log": st["merge_log"],
         "certifications": st.get("certifications", {}),
-        "stats": {"entities": len(ents), "relations": len(rels),
+        "stats": {"entities": len(abox["entities"]), "relations": len(abox["relations"]),
                   "conflicts": len(st["conflicts"]), "flagged": len(st["flagged"]),
-                  "suppressed_by_certification": st.get("suppressed", 0)},
+                  "suppressed_by_certification": st.get("suppressed", 0),
+                  "entities_grounded": n("entities", "type_grounding", True),
+                  "entities_ungrounded": n("entities", "type_grounding", False),
+                  "relations_grounded": n("relations", "grounding", True),
+                  "relations_ungrounded": n("relations", "grounding", False),
+                  "ungrounded_type_clashes": len(st["flagged_ungrounded"])},
     }
 
 
@@ -394,18 +495,6 @@ P_TBOX = {
            '{"entity_types":[{"name":"...","desc":"..."}],"relation_types":[{"name":"...","domains":"类型A","ranges":"类型B","desc":"..."}]}'
            "。类型名用英文 snake_case，desc 用中文。只抽取语料真实支撑的，宁缺毋滥。"),
 }
-P_ABOX = {
-    "en": ("You are an ontology instance extractor. From the document, extract entity and relation instances (ABox) based on the given TBox. "
-           "Discipline: every instance must carry evidence=a verbatim quote from the document (<=40 chars); types must come from the TBox; "
-           "when unsure, do not extract. Output JSON: "
-           '{"entities":[{"name":"...","type":"...","evidence":"..."}],'
-           '"relations":[{"subject":"...","predicate":"...","object":"...","evidence":"..."}]}'),
-    "zh": ("你是本体实例抽取器。基于给定 TBox 从文档抽取实体与关系实例（ABox）。"
-           "**纪律**：每条实例必须附 evidence=文档原文引文（不超过40字）；类型必须取自 TBox；"
-           "不确定的不抽。输出 JSON："
-           '{"entities":[{"name":"...","type":"...","evidence":"..."}],'
-           '"relations":[{"subject":"...","predicate":"...","object":"...","evidence":"..."}]}'),
-}
 P_COREF = {
     "en": ("You resolve entity mentions in an ontology. Given entity names (with types), output JSON "
            '{"pairs":[{"canonical":"...","alias":"..."}]} where alias is clearly the SAME real-world '
@@ -415,9 +504,122 @@ P_COREF = {
            '{"pairs":[{"canonical":"...","alias":"..."}]}——alias 与 canonical 须确定是同一现实事物'
            "（缩写/大小写/前缀差异）。只有确定才合并，可争议的不合；不同类型绝不配对。"),
 }
+P_ABOX = {
+    "en": ("You are an ontology instance extractor. From the document, extract entity and relation instances (ABox) based on the given TBox. "
+           "Discipline: types must come from the TBox; when unsure, do not extract. "
+           "EVIDENCE is a verbatim quote copied EXACTLY from the document (up to 200 chars, no paraphrase): "
+           "for an entity, the sentence that states what the entity IS - it must contain the entity's name as written; "
+           "for a relation, the sentence that names an endpoint and states the relation. "
+           "If the document only mentions a name without saying what it is, quote the sentence that mentions it. "
+           "Output JSON: "
+           '{"entities":[{"name":"...","type":"...","evidence":"..."}],'
+           '"relations":[{"subject":"...","predicate":"...","object":"...","evidence":"..."}]}'),
+    "zh": ("你是本体实例抽取器。基于给定 TBox 从文档抽取实体与关系实例（ABox）。"
+           "**纪律**：类型必须取自 TBox；不确定的不抽。"
+           "evidence 必须是**逐字**复制的原文引文（不超过 200 字，不得改写）："
+           "实体——说明该实体**是什么**的那句话，且必须包含实体名原文；"
+           "关系——点出关系一端并陈述该关系的那句话。"
+           "若文档只是提及名字而未说明其为何物，则引用提及它的那句话。"
+           "输出 JSON："
+           '{"entities":[{"name":"...","type":"...","evidence":"..."}],'
+           '"relations":[{"subject":"...","predicate":"...","object":"...","evidence":"..."}]}'),
+}
+P_REGROUND = {
+    "en": ("You repair evidence quotes for ontology assertions. For each numbered claim, find in the document the "
+           "verbatim sentence that STATES the claim and copy it exactly (up to 200 chars). An entity quote must "
+           "contain the entity's name as written and say what the entity is; a relation quote must name an endpoint "
+           "and state the relation. If the document does not state the claim, set quote to null - never paraphrase, "
+           "never stitch sentences together. "
+           'Output JSON: {"repairs":[{"i":1,"quote":"... or null"}]} - exactly one entry per item, same numbering.'),
+    "zh": ("你为 ontology 断言修复证据引文。对每条编号断言，在文档中找到**陈述**该断言的原文句子并逐字复制"
+           "（不超过 200 字）。实体引文必须包含实体名原文并说明该实体是什么；关系引文必须点出一个端点并陈述该关系。"
+           "若文档并未陈述该断言，quote 置为 null——不得改写、不得拼接句子。"
+           '输出 JSON：{"repairs":[{"i":1,"quote":"... 或 null"}]}——每项恰好一条，编号一致。'),
+}
+
+JUDGE_BATCH = 25
 
 
-def build(docs, domain, base=None, sample=4):
+def _reject_reason(kind, x, text):
+    """Why an extracted quote cannot ground its claim as written — None when it may be judged."""
+    q = x.get("evidence", "")
+    if not q or not grounding.is_verbatim(q, text):
+        return tt("quote is not verbatim in the source document", "引文并非文档原文")
+    if kind == "entity":
+        if not grounding.name_in_quote(x["name"], q):
+            return tt("quote does not contain the name as written", "引文不含实体名原文")
+    elif not any(grounding.endpoints_in_quote(x.get("subject") or "", x.get("object") or "", q)):
+        return tt("quote names no endpoint", "引文未点出任何关系端点")
+    return None
+
+
+def _item(kind, x, doc, descs):
+    tname = x["type"] if kind == "entity" else x["predicate"]
+    desc = descs.get(tname, "")
+    claim = (grounding.entity_claim(x["name"], x["type"]) if kind == "entity"
+             else grounding.relation_claim(x.get("subject") or "", x["predicate"], x.get("object") or ""))
+    return {"kind": kind, "type_name": tname, "type_desc": desc, "claim": claim, "quote": x["evidence"], "doc": doc}
+
+
+def _judge(cands, doc, descs):
+    """-> verdicts in the same order: the shared judge, one call per batch of JUDGE_BATCH."""
+    out = []
+    for i in range(0, len(cands), JUDGE_BATCH):
+        out += grounding.judge([_item(k, x, doc, descs) for k, x in cands[i:i + JUDGE_BATCH]], JUDGE_MODEL, call=llm)
+    return out
+
+
+def _reground(d, failed, descs):
+    """-> a replacement quote (or None) per failed assertion, from ONE call."""
+    L = [tt(f"Document ({d['path']}):", f"文档（{d['path']}）："), d["text"], "", tt("Claims:", "断言：")]
+    for i, (kind, x) in enumerate(failed, 1):
+        L.append(f"{i}. {_item(kind, x, d['path'], descs)['claim']}\n   "
+                 + tt("rejected quote", "被否决的引文") + f": {json.dumps(x['evidence'], ensure_ascii=False)}")
+    out = llm(P_REGROUND[LANG], "\n".join(L))
+    got = {}
+    for r in out.get("repairs", []):
+        try:
+            got[int(r.get("i", 0))] = r.get("quote")
+        except (AttributeError, TypeError, ValueError):
+            continue
+    return [got.get(i) for i in range(1, len(failed) + 1)]
+
+
+def ground_doc(d, out, known, descs, reground=True):
+    """The grounding pass for ONE document, in place on the extracted assertions: every
+    (claim, quote) leaves with `grounded` True / False, or untouched when it never had a
+    quote to judge. Order: the mechanical reject filter (no LLM), ONE batched judge call
+    for what passes, then — only if something failed — one re-ground call and one
+    re-judge. Nothing is dropped: an ungrounded assertion is folded like any other and
+    flagged. -> {entities: [grounded, ungrounded], relations: [...], regrounded}"""
+    cands = [("entity", e) for e in out.get("entities", []) if e.get("name") and e.get("type") in known]
+    cands += [("relation", r) for r in out.get("relations", [])]
+    todo = []
+    for kind, x in cands:
+        why = _reject_reason(kind, x, d["text"])
+        if why is None:
+            todo.append((kind, x))
+        else:
+            x["grounded"], x["judge_reason"] = False, why
+    for (kind, x), v in zip(todo, _judge(todo, d["path"], descs)):
+        x["grounded"], x["judge_reason"] = v["grounded"], v["reason"]
+    failed = [(k, x) for k, x in cands if x.get("evidence") and x.get("grounded") is False]
+    repaired = []
+    if reground and failed:
+        for (kind, x), q in zip(failed, _reground(d, failed, descs)):
+            if q and _reject_reason(kind, dict(x, evidence=q), d["text"]) is None:
+                x["evidence"], x["regrounded"] = q, True
+                repaired.append((kind, x))
+        for (kind, x), v in zip(repaired, _judge(repaired, d["path"], descs)):
+            x["grounded"], x["judge_reason"] = v["grounded"], v["reason"]
+    return {"entities": [sum(1 for k, x in cands if k == "entity" and x.get("grounded") is True),
+                         sum(1 for k, x in cands if k == "entity" and x.get("grounded") is False)],
+            "relations": [sum(1 for k, x in cands if k == "relation" and x.get("grounded") is True),
+                          sum(1 for k, x in cands if k == "relation" and x.get("grounded") is False)],
+            "regrounded": len(repaired)}
+
+
+def build(docs, domain, base=None, sample=4, ground=True, reground=True):
     st = base if base is not None else new_store(domain)
     tbox = llm(P_TBOX[LANG],
                tt(f"Domain: {domain}\nCorpus sample:\n" + "\n\n".join(d["text"][:1500] for d in docs[:sample]),
@@ -428,18 +630,28 @@ def build(docs, domain, base=None, sample=4):
     st["tbox_types"] |= known
     for r in tbox.get("relation_types", []):
         st["tbox_relations"][(r.get("name"), r.get("domains"), r.get("ranges"))] = r
+    descs = {t["name"]: t.get("desc", "") for t in tbox.get("entity_types", [])}
+    descs.update({r.get("name"): r.get("desc", "") for r in tbox.get("relation_types", [])})
 
-    per_doc = []
+    per_doc, tally, quoteless = [], {"entities": [0, 0], "relations": [0, 0], "regrounded": 0}, 0
     for d in docs:
         out = llm(P_ABOX[LANG],
                   tt(f"TBox:\n{json.dumps(tbox, ensure_ascii=False)}\n\nDocument ({d['path']}):\n{d['text']}",
                      f"TBox：{json.dumps(tbox, ensure_ascii=False)}\n\n文档（{d['path']}）：\n{d['text']}"))
+        if ground:
+            g = ground_doc(d, out, known, descs, reground=reground)
+            for k in ("entities", "relations"):
+                tally[k] = [a + b for a, b in zip(tally[k], g[k])]
+            tally["regrounded"] += g["regrounded"]
         per_doc.append((d, out))
         for e in out.get("entities", []):
             if not e.get("name"):
                 continue
-            if e.get("type") in known:
-                fold_entity(st, e["name"], e["type"], e.get("evidence", ""), d["path"])
+            if not e.get("evidence"):
+                quoteless += 1
+            elif e.get("type") in known:
+                fold_entity(st, e["name"], e["type"], e["evidence"], d["path"], grounded=e.get("grounded"),
+                            reason=e.get("judge_reason"))
             else:
                 st["flagged"].append({**e, "doc": d["path"]})  # type guard — never silently dropped
 
@@ -453,9 +665,15 @@ def build(docs, domain, base=None, sample=4):
                                                        if p.get("canonical") and p.get("alias")])
     for d, out in per_doc:  # relations fold AFTER coref so endpoints are canonical
         for r in out.get("relations", []):
-            fold_relation(st, r.get("subject"), r.get("predicate"), r.get("object"),
-                          r.get("evidence", ""), d["path"], alias_map=alias_map)
-    return st, new_type_descs, merged_aliases
+            if not r.get("evidence"):
+                quoteless += 1
+                continue
+            fold_relation(st, r.get("subject"), r.get("predicate"), r.get("object"), r["evidence"], d["path"],
+                          alias_map=alias_map, grounded=r.get("grounded"), reason=r.get("judge_reason"))
+    if quoteless:
+        print(tt(f"{quoteless} extracted assertion(s) arrived without a quote — not folded (no evidence, no assertion)",
+                 f"{quoteless} 条抽取结果未带引文——不予并入（无证据，无断言）"), file=sys.stderr)
+    return st, new_type_descs, merged_aliases, tally
 
 
 def _write_svg(path, o, domain):
@@ -487,10 +705,19 @@ def _write_svg(path, o, domain):
     open(path, "w").write("".join(svg))
 
 
+def _ev_mark(ev):
+    """Query-output marker of one evidence: its verdict, and why when it failed."""
+    if ev.get("grounded") is True:
+        return "  ✓"
+    if ev.get("grounded") is False:
+        return "  ⚠" + (f" — {ev['reason']}" if ev.get("reason") else "")
+    return ""
+
+
 def main():
-    global LANG, MAX_CALLS
+    global LANG, MAX_CALLS, JUDGE_MODEL
     ap = argparse.ArgumentParser()
-    ap.add_argument("--docs", default=None, help="directory or glob, e.g. '~/dsh-*/README.md'")
+    ap.add_argument("--docs", default=None, help="directory, glob or single file, e.g. '~/dsh-*/README.md'")
     ap.add_argument("--domain", default=None, help="corpus domain description (schema pass)")
     ap.add_argument("--merge", default=None, help="existing ontology JSON to fold into (append-only)")
     ap.add_argument("--query", default=None, help="query mode: every assertion about X, with evidence")
@@ -500,16 +727,24 @@ def main():
                     help="certification mode: --certify NAME --verdict accept|reject [--note ...] [--from x.json]")
     ap.add_argument("--verdict", choices=("accept", "reject"), default=None, help="verdict for --certify")
     ap.add_argument("--note", default="", help="optional note recorded with a certification")
+    ap.add_argument("--actor", default=None,
+                    help="who issues a --certify verdict, recorded with it (env ONTOLOGY_ACTOR; "
+                         "an agent applying a verdict must name itself)")
     ap.add_argument("--jsonld", action="store_true", help="export the ontology as JSON-LD 1.1 (with --from, or the newest artifact)")
     ap.add_argument("--html", action="store_true", help="render the ontology as a single-file HTML digest (with --save, or --from standalone)")
     ap.add_argument("--from", dest="frm", default=None, help="ontology file for --query (default: newest in outdir)")
     ap.add_argument("--sample", type=int, default=4, help="docs sampled for the TBox schema pass")
     ap.add_argument("--max-calls", type=int, default=None, help="cost guard: abort beyond this many LLM calls")
+    ap.add_argument("--no-ground", action="store_true",
+                    help="skip the type-grounding judge (no assertion gets a grounding flag)")
+    ap.add_argument("--judge-model", default=None,
+                    help="model for the grounding judge (default: the build model; env ONTOLOGY_JUDGE_MODEL)")
     ap.add_argument("--save", action="store_true")
     ap.add_argument("--lang", choices=("en", "zh"), default=LANG, help="output language (default en)")
     args = ap.parse_args()
     LANG = args.lang
     MAX_CALLS = args.max_calls
+    JUDGE_MODEL = args.judge_model or os.environ.get("ONTOLOGY_JUDGE_MODEL") or MODEL
     t0 = time.time()
 
     if args.diff:
@@ -521,7 +756,8 @@ def main():
         if not args.verdict:
             sys.exit("--certify needs --verdict accept|reject")
         path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
-        o = certify(json.load(open(path)), args.certify, args.verdict, note=args.note)
+        actor = args.actor or os.environ.get("ONTOLOGY_ACTOR") or "unspecified"
+        o = certify(json.load(open(path)), args.certify, args.verdict, note=args.note, actor=actor)
         out = os.path.join(OUTDIR, dt.datetime.now().strftime("%Y%m%d-%H%M%S") + "-certified.json")
         json.dump(o, open(out, "w"), ensure_ascii=False, indent=1)
         print(f"{args.certify} {args.verdict} -> {out}")
@@ -544,25 +780,30 @@ def main():
 
     if args.query:
         path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
-        hits = query_ontology(json.load(open(path)), args.query)
+        o = json.load(open(path))
+        hits = query_ontology(o, args.query)
         print(f"# {args.query} — {path}")
         for e in hits["entities"]:
             print(f"\n[{e['type']}] {e['name']}" +
-                  (f" (aliases: {', '.join(e['aliases'])})" if e.get("aliases") else ""))
+                  (f" (aliases: {', '.join(e['aliases'])})" if e.get("aliases") else "") + _mark(e, "type_grounding"))
             for ev in e.get("evidences", []):
-                print(f'  | {ev["doc"]}: "{ev["quote"]}"')
+                print(f'  | {ev["doc"]}: "{ev["quote"]}"' + _ev_mark(ev))
         for r in hits["relations"]:
-            print(f"\n({r['subject']}) -[{r['predicate']}]-> ({r['object']})")
+            print(f"\n({r['subject']}) -[{r['predicate']}]-> ({r['object']})" + _mark(r, "grounding"))
             for ev in r.get("evidences", []):
-                print(f'  | {ev["doc"]}: "{ev["quote"]}"')
+                print(f'  | {ev["doc"]}: "{ev["quote"]}"' + _ev_mark(ev))
         if not hits["entities"] and not hits["relations"]:
             print(tt("no assertions matched", "无匹配断言"))
+        elif any("type_grounding" in e for e in hits["entities"]) or any("grounding" in r for r in hits["relations"]):
+            print("\n" + tt("✓ the quote grounds the claim · ⚠ no carried quote grounds it (kept and flagged)",
+                            "✓ 引文支撑断言 · ⚠ 现有引文均不支撑（保留并标记）"))
         return
 
     if not args.docs or not args.domain:
         sys.exit(tt("--docs and --domain are required for a build", "构建需要 --docs 与 --domain"))
-    paths = sorted(glob.glob(os.path.expanduser(args.docs))) if "*" in args.docs else \
-        sorted(glob.glob(os.path.join(args.docs, "*")))
+    target = os.path.expanduser(args.docs)
+    paths = (sorted(glob.glob(target)) if "*" in args.docs else
+             [target] if os.path.isfile(target) else sorted(glob.glob(os.path.join(target, "*"))))
     docs = []
     for p in paths:
         try:
@@ -581,7 +822,8 @@ def main():
         prior_stats = {k: len(base[k]) for k in ("entities", "relations", "conflicts")}
         print(tt(f"merging into {args.merge} (append-only)", f"增量并入 {args.merge}（append-only）"), file=sys.stderr)
 
-    st, new_type_descs, corefed = build(docs, args.domain, base=base, sample=max(1, args.sample))
+    st, new_type_descs, corefed, tally = build(docs, args.domain, base=base, sample=max(1, args.sample),
+                                               ground=not args.no_ground)
     if corefed:
         st["merge_log"].append({"ran_at": dt.datetime.now().isoformat(timespec="seconds"),
                                 "coref_merges": corefed})
@@ -593,7 +835,8 @@ def main():
                                     "entities_after": len(st["entities"])})
     prov = {"model": MODEL, "temperature": 0, "elapsed_s": round(time.time() - t0),
             "calls": COST["calls"], "tokens_in": COST["in"], "tokens_out": COST["out"],
-            "docs_this_run": len(docs), "merged_from": bool(args.merge)}
+            "docs_this_run": len(docs), "merged_from": bool(args.merge),
+            "judge_model": JUDGE_MODEL, "grounding_pass": not args.no_ground}
     o = store_to_ontology(st, new_type_descs, prov)
 
     print(f"\n## Ontology build · {args.domain}\n")
@@ -603,6 +846,16 @@ def main():
              f"- 实体类型 {len(o['tbox']['entity_types'])} · 实体 {o['stats']['entities']} · "
              f"关系 {o['stats']['relations']} · 冲突 {o['stats']['conflicts']} · "
              f"未知类型拦截 {o['stats']['flagged']}"))
+    if not args.no_ground:
+        s = o["stats"]
+        print(tt(f"- type grounding (judge {JUDGE_MODEL}): entities {s['entities_grounded']} grounded · "
+                 f"{s['entities_ungrounded']} ungrounded; relations {s['relations_grounded']} grounded · "
+                 f"{s['relations_ungrounded']} ungrounded; {tally['regrounded']} quote(s) re-grounded · "
+                 f"{s['ungrounded_type_clashes']} ungrounded type clash(es) kept out of conflicts",
+                 f"- 类型接地（判官 {JUDGE_MODEL}）：实体 {s['entities_grounded']} 接地 · "
+                 f"{s['entities_ungrounded']} 未接地；关系 {s['relations_grounded']} 接地 · "
+                 f"{s['relations_ungrounded']} 未接地；{tally['regrounded']} 条引文重取 · "
+                 f"{s['ungrounded_type_clashes']} 条未接地类型冲突未计入 conflicts"))
     print(tt(f"- provenance: {prov['calls']} calls · {prov['tokens_in']:,} in / {prov['tokens_out']:,} out tokens · {prov['elapsed_s']}s",
              f"- 溯源：{prov['calls']} 次调用 · {prov['tokens_in']:,} 入 / {prov['tokens_out']:,} 出 · {prov['elapsed_s']}s"))
     for c in o["conflicts"][:6]:
@@ -623,13 +876,7 @@ def main():
                 open(base_path + ".html", "w", encoding="utf-8").write(render_html.render(to_markdown(o)))
             except Exception as exc:
                 print(f"⚠ html render skipped ({type(exc).__name__})", file=sys.stderr)
-        open(base_path + ".md", "w").write(tt(
-            f"# Ontology · {args.domain}\n\nEntities {o['stats']['entities']} · relations {o['stats']['relations']} · "
-            f"conflicts {o['stats']['conflicts']} · unknown types flagged {o['stats']['flagged']}.\n"
-            f"Evidence lives in the JSON; provenance: {prov['calls']} calls, {prov['elapsed_s']}s.\n",
-            f"# 本体 · {args.domain}\n\n实体 {o['stats']['entities']} · 关系 {o['stats']['relations']} · "
-            f"冲突 {o['stats']['conflicts']} · 未知类型拦截 {o['stats']['flagged']}。\n"
-            f"证据随 JSON；溯源：{prov['calls']} 次调用，{prov['elapsed_s']}s。\n"))
+        open(base_path + ".md", "w", encoding="utf-8").write(to_markdown(o))
         print(f"\n→ {base_path}.json / .svg / .md", file=sys.stderr)
 
 
