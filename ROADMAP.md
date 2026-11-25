@@ -151,4 +151,7 @@ stays gated on adoption.
 - [x] O5.3 adversarial set (2026-11-25) — `eval --adversarial`, 28 labelled
       cases (18 must-reject, 10 must-accept), gold checked in CI
 - [ ] O5.3 stretch: second-corpus eval (non-family)
-- [ ] O5.4 release train 0.3.0 (owner terminal publish)
+- [x] O5.4 release train 0.3.0 (2026-11-25) — CHANGELOG, tarball smoke from
+      a fresh prefix (validate · export · apply · typed tools · `build --docs`
+      17 s · `build --kb --limit 2` 20/20 chunk ids), tag `v0.3.0`. The npm
+      publish itself is the owner's terminal act
