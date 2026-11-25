@@ -13,6 +13,7 @@ and artifacts to Chinese (env `ONTOLOGY_LANG`).
 ```bash
 KIT=<this-directory>
 python3 $KIT/scripts/build_ontology.py --docs <dir-or-glob> --domain "<description>" --save
+python3 $KIT/scripts/build_ontology.py --proposals <run>.proposals.json --actor agent:<name>   # a judge's re-typing, applied
 ```
 
 Outputs land in `ontologies/` (typed JSON + SVG + md digest).
@@ -26,5 +27,10 @@ Outputs land in `ontologies/` (typed JSON + SVG + md digest).
   `grounding: false`) — kept, queryable, certifiable, never dropped.
   `--no-ground` skips the judge, `--judge-model` picks it; an agent applying a
   certification verdict names itself with `--actor`.
+- A re-typing proposed by a model (dsh-EvoOntology's adapter writes
+  `runs/<run>.proposals.json`) is applied only when a judge grounded its
+  quote, and lands as a certification on the old typing plus a new assertion —
+  never as an edit. A person's verdict on the name stops it; `--actor` must
+  start with `agent`.
 - TBox comes from the corpus, not from the model's prior — say so.
 - Rebuilds produce new timestamped artifacts; never edit ontologies in place.

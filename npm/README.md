@@ -20,6 +20,8 @@ auto-ontology build --docs ~/my-corpus/*.md --domain "internal design docs" --sa
   markdown digest.
 - `auto-ontology export x.json`: the artifact as an event stream
   (`ao-trajectory/0.1`, newline JSON) — what dsh-EvoOntology's adapter consumes.
+- `auto-ontology apply --proposals run.proposals.json --actor agent:<name>`:
+  a judge-grounded re-typing comes back as a certification, never as an edit.
 - Register the DSH skill:
   `ln -s "$(npm root -g)/dsh-auto-ontology/skills/dsh-auto-ontology" ~/.dsh/skills/dsh-auto-ontology`
 

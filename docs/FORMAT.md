@@ -43,7 +43,14 @@ valid v0.2 artifact.
 8. **Certifications** — keyed by name-match key: `{name, type, verdict:
    accept|reject, at, note?, evidence}`; a verdict that travels with the
    artifact; later folds respect it. Optional since v0.2: `actor` (string)
-   naming who issued it — an agent applying a verdict MUST say so.
+   naming who issued it — an agent applying a verdict MUST say so. A reject
+   written by `apply --proposals` (below) carries two more optional fields:
+   `retyped_to {type, quote, doc, judge, run?, reason?}` — the typing the name
+   was moved to and the judge-grounded quote that paid for it — and, when the
+   name had been re-typed before, `also_rejects` (array of type names): the
+   typings rejected earlier, which later folds keep suppressing. One
+   certification per name: a later verdict on the same name replaces the
+   earlier one.
 9. **Append-only discipline** (process rule): a merge never edits or drops prior
    evidence; removals happen only via certification and are recorded. A later
    fold never rewrites an earlier evidence's verdict.
@@ -71,7 +78,9 @@ reads the artifact and calls no model.
    `false` or `null`.
 3. **Kinds**, in this order within one artifact:
    - `build` — the run that wrote the artifact: `provenance`, `stats`,
-     `tbox {entity_types, relation_types}`.
+     `tbox {entity_types, relation_types, entity_type_descs,
+     relation_type_descs}` — the type definitions ride along, so a consumer
+     can judge or propose against them without opening the artifact.
    - `fold` — one per `merge_log` entry: `merge` (the entry without its alias
      list) and `alias_merges [{canonical, alias}]`.
    - `assertion` — **one per evidence quote**, the append-only unit: `claim`,
@@ -81,7 +90,8 @@ reads the artifact and calls no model.
      ungrounded quote.
    - `certification` — `claim`, `subject {name, type}`, `evidence` (the
      strongest quote, as the verdict cites it), `verdict` (`accept` | `reject`),
-     `by` (the actor), `note`.
+     `by` (the actor), `note`, and `retyped_to` / `also_rejects` when the
+     verdict re-typed the name.
    - `conflict` — `subject {name, types: {type → evidence}}`: both sides, as
      kept.
    - `unknown_type` — `claim`, `subject {name, type}`, `evidence`: the type
@@ -108,6 +118,42 @@ reads the artifact and calls no model.
 `validate_format.py` does not check streams. CI checks the exporter against
 the committed artifact: same bytes twice, ids independent of file names, one
 event per quote, verdicts and certification actors carried.
+
+### The trip back — `apply --proposals`
+
+A consumer that proposes a re-typing (dsh-EvoOntology's adapter is the first)
+writes a proposals file and hands it back: `{run_id?, judge_model?, proposals:
+[{name, from_type, to_type, quote, doc, why, grounded, judge_reason?}]}`.
+`auto-ontology apply --proposals FILE --actor agent:<name> [--from x.json]`
+turns each applied proposal into a new certification and a new assertion —
+never an edit of an old one. `--actor` is required and MUST start with
+`agent`: this path applies a machine's proposals, a person's verdict is
+`--certify`.
+
+1. **Only `grounded: true` is applied.** A quote no judge grounded re-types
+   nothing; it is counted and skipped.
+2. **A stale proposal is reported, not forced.** Stale: the name is gone from
+   the artifact, or is typed something other than `from_type` since the stream
+   was exported.
+3. **`to_type` must be in the artifact's TBox** — the type guard holds on the
+   way back too.
+4. **A person's verdict is not overwritten.** When the certification in force
+   on the name was not issued by an `agent:` actor, the name is not touched.
+5. **What is written.** A `reject` certification on the OLD typing — actor, a
+   note naming the judge, the strongest quote, `retyped_to` — and a new
+   assertion of the new type whose first evidence is the judge-grounded quote.
+   The name's other quotes follow **unjudged**: their verdicts were about the
+   old claim. Aliases, docs and every relation the name endpoints, with its
+   evidences and verdicts, are carried over unchanged.
+6. **Replay adds nothing.** After one apply every proposal is stale against
+   the new artifact, and nothing is written.
+7. **A name re-typed twice keeps rejecting its first typing** — the second
+   certification lists it in `also_rejects`, so the next fold does not let it
+   back in as a conflict.
+8. **The stream tells both halves.** Re-exported, the artifact carries the
+   rejected certification (endorsed `false`) and the new assertion (endorsed
+   `true`). The old typing's assertion events are in the earlier export, not
+   the new one — a consumer keeps both.
 
 ## Validation
 

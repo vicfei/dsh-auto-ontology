@@ -89,6 +89,12 @@ def validate(o):
             v.append(f"certification {k!r}: verdict must be accept|reject (clause 8)")
         if "actor" in c and not isinstance(c["actor"], str):
             v.append(f"certification {k!r}: actor must be a string (clause 8)")
+        if "retyped_to" in c and not (c.get("verdict") == "reject" and isinstance(c["retyped_to"], dict)
+                                      and all(isinstance(c["retyped_to"].get(f), str) for f in ("type", "quote", "doc"))):
+            v.append(f"certification {k!r}: retyped_to is {{type, quote, doc}} on a reject (clause 8)")
+        if "also_rejects" in c and not (c.get("verdict") == "reject" and isinstance(c["also_rejects"], list)
+                                        and all(isinstance(t, str) for t in c["also_rejects"])):
+            v.append(f"certification {k!r}: also_rejects is a list of type names on a reject (clause 8)")
     return v
 
 

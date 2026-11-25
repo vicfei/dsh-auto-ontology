@@ -314,7 +314,8 @@ def main():
             print(f"\nrows -> {args.out}")
         return
 
-    path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+    newest = sorted(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+    path = args.frm or (newest[-1] if newest else sys.exit(f"no ontology artifact in {OUTDIR} — pass --from"))
     o = json.load(open(path))
     samples, pool = sample_assertions(o, args.n, args.seed)
     if not samples:

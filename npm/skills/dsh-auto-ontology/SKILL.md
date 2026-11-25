@@ -40,3 +40,7 @@ the shareable overview, the JSON carries every assertion with its evidence span.
   JSON event per line: every quote with the judge's verdict, every
   certification, merges, conflicts). Use it when another tool — dsh-EvoOntology
   first — needs what happened, not just the current state.
+- `auto-ontology apply --proposals <run>.proposals.json --actor agent:<name>`
+  applies a judge-grounded re-typing as a certification on the old typing plus
+  a new assertion — never as an edit. Only a proposal a judge grounded is
+  applied; a person's verdict on the name stops it; a replay writes nothing.

@@ -26,6 +26,7 @@ auto-ontology build --docs 'docs/*.md' --domain "内部设计文档" --save
 auto-ontology --query "WrenAI"                 # 该实体的全部断言+证据跨度
 auto-ontology validate ontologies/*.json       # 格式 v0.2 合规校验
 auto-ontology export ontologies/x.json > trajectory.ndjson   # 工件转事件流
+auto-ontology apply --proposals run.proposals.json --actor agent:<name>   # 判官落地的改型，按认证写回
 ```
 
 仅需 `python3`（stdlib）+ DeepSeek key。产物落 `./ontologies/`：带证据的
@@ -38,6 +39,11 @@ JSON、零依赖 SVG 分簇图、markdown 摘要、单文件 HTML、JSON-LD 导�
 ontology v0.2 开放格式，v0.1 工件仍合规）。工件是状态，`auto-ontology export` 是
 过程：`ao-trajectory/0.1` 事件流（按行 JSON），每条引文一个事件并带判官裁定，外加
 认证（谁签发、备注）、合并、冲突与类型守卫拦截；确定性、按事件 id 幂等——重放不新增。
-这是 dsh-EvoOntology 适配器（evoontology #9）对接的契约。
+这是 dsh-EvoOntology 适配器（evoontology #9）对接的契约。回路也走这条流：适配器读流、
+投影出层（每个类型一个 Term，每条引文带裁定），对未接地的 Term 请模型提改型，再由判官
+对照该 Term 自己的引文核验，门槛提升才发布新层；`auto-ontology apply --proposals
+<run>.proposals.json --actor agent:<name>` 把判官落地的提议写成**认证**——对旧类型的一条
+reject（`retyped_to` 记新类型与引文）加一条新断言。不做编辑：人工裁决优先，过期提议只报告，
+重放不写。规范见 docs/FORMAT.md 的 *The trip back*。
 
 **不是企业建议。**

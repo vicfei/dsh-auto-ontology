@@ -362,6 +362,128 @@ jobs:
           assert t5[2]["merge"]["merged_into"] == "old.json" and t5[1]["alias_merges"] == [{"canonical": "A", "alias": "a"}]
           assert t5[0]["artifact"]["judge"] is None and "no grounding pass" in t5[0]["summary"]
           print("trajectory export: PASS")
+          # apply --proposals (the trip back from dsh-EvoOntology): a recorded certification + a new
+          # assertion — never a silent edit
+          base = json.load(open("ontologies/20261125-1718.json"))
+          un = [e for e in base["abox"]["entities"] if e["type_grounding"] is False]
+          touches = lambda n: [r for r in base["abox"]["relations"] if n in (r["subject"], r["object"])]
+          shape = lambda rs: {(r["subject"], r["predicate"], r["object"]): [(x["quote"], x.get("grounded")) for x in r["evidences"]]
+                              for r in rs}
+          ent = next(e for e in un if len(e["evidences"]) > 1 and touches(e["name"]))
+          picked = [ent]
+          for want in ("guarded", "third", "victim"):
+              picked.append(next(e for e in un if all(e is not x for x in picked) and touches(e["name"])))
+          guarded, third, victim = picked[1:]
+          other = next(t["name"] for t in base["tbox"]["entity_types"] if t["name"] != ent["type"])
+          q0 = ent["evidences"][0]
+          base = M.certify(base, guarded["name"], "accept", note="checked by hand", actor="human:v")   # a human verdict first
+          props = {"run_id": "r1", "judge_model": "fake-judge", "proposals": [
+              {"name": ent["name"], "from_type": ent["type"], "to_type": other, "quote": q0["quote"], "doc": q0["doc"],
+               "grounded": True, "judge_reason": "states it plainly"},
+              {"name": guarded["name"], "from_type": guarded["type"], "to_type": other, "quote": "q", "grounded": True},
+              {"name": "no such entity", "from_type": "x", "to_type": other, "quote": "q", "grounded": True},
+              {"name": third["name"], "from_type": "not its type", "to_type": other, "quote": "q", "grounded": True},
+              {"name": third["name"], "from_type": third["type"], "to_type": "not a type", "quote": "q", "grounded": True},
+              {"name": third["name"], "from_type": third["type"], "to_type": other, "quote": "q", "grounded": False}]}
+          o2, rep = M.apply_proposals(json.loads(json.dumps(base)), props, actor="agent:evoontology")
+          assert len(rep["applied"]) == 1 and rep["human_certified"] == [guarded["name"]]
+          assert len(rep["stale"]) == 2 and rep["off_tbox"] == [third["name"]] and rep["not_grounded"] == 1
+          assert not VF.validate(o2)
+          new = next(e for e in o2["abox"]["entities"] if e["name"] == ent["name"])
+          assert new["type"] == other and new["type_grounding"] is True
+          assert new["evidences"][0] == {"quote": q0["quote"], "doc": q0["doc"], "grounded": True}
+          assert len(new["evidences"]) == len(ent["evidences"])                 # no quote lost
+          assert all("grounded" not in x for x in new["evidences"][1:])         # the rest: unjudged for the new claim
+          assert shape(touches(ent["name"])) == shape([r for r in o2["abox"]["relations"]
+                                                       if ent["name"] in (r["subject"], r["object"])])   # relations back as they were
+          s0, s2 = base["stats"], o2["stats"]
+          assert (s2["entities"], s2["relations"]) == (s0["entities"], s0["relations"])
+          assert (s2["entities_grounded"], s2["entities_ungrounded"]) == (s0["entities_grounded"] + 1, s0["entities_ungrounded"] - 1)
+          certs = {c["name"]: c for c in o2["certifications"].values()}
+          assert {n: c["verdict"] for n, c in certs.items()} == {ent["name"]: "reject", guarded["name"]: "accept"}
+          c = certs[ent["name"]]
+          assert (c["type"], c["actor"], c["evidence"]["quote"]) == (ent["type"], "agent:evoontology", q0["quote"])
+          assert c["retyped_to"] == {"type": other, "quote": q0["quote"], "doc": q0["doc"], "judge": "fake-judge",
+                                     "run": "r1", "reason": "states it plainly"}       # the judge's why travels with it
+          o3, rep3 = M.apply_proposals(json.loads(json.dumps(o2)), props, actor="agent:evoontology")   # a replay changes nothing
+          assert not rep3["applied"] and len(rep3["stale"]) == 3 and o3 == o2
+          # a second re-typing of the same name keeps its FIRST typing rejected: one
+          # certification per name must not let that typing back in on the next fold
+          third_type = next(t["name"] for t in base["tbox"]["entity_types"] if t["name"] not in (ent["type"], other))
+          o4, rep4 = M.apply_proposals(json.loads(json.dumps(o2)), {"proposals": [
+              {"name": ent["name"], "from_type": other, "to_type": third_type, "quote": "Q2.", "doc": "d.md", "grounded": True}]},
+              actor="agent:evoontology")
+          assert len(rep4["applied"]) == 1 and not VF.validate(o4)
+          c4 = next(x for x in o4["certifications"].values() if x["name"] == ent["name"])
+          assert (c4["type"], c4["also_rejects"], c4["retyped_to"]["type"]) == (other, [ent["type"]], third_type)
+          st4 = M.load_store(o4)
+          for t in (ent["type"], other):
+              M.fold_entity(st4, ent["name"], t, "again.", "d.md", grounded=True)
+          assert st4["suppressed"] == 2 and not st4["conflicts"]
+          assert st4["entities"][M._key(ent["name"])]["type"] == third_type
+          k7 = next(e for e in TJ.export_events(o4, "a.json") if e["kind"] == "certification" and e.get("also_rejects"))
+          assert k7["also_rejects"] == [ent["type"]] and k7["retyped_to"]["type"] == third_type
+          bad = json.loads(json.dumps(o4))
+          next(x for x in bad["certifications"].values() if x.get("also_rejects"))["also_rejects"] = "tool"
+          assert any("also_rejects" in x for x in VF.validate(bad))
+          bad = json.loads(json.dumps(o4))
+          next(x for x in bad["certifications"].values() if x.get("retyped_to"))["retyped_to"] = "x"
+          assert any("retyped_to" in x for x in VF.validate(bad))
+          # a reject leaves the stats block consistent: grounded + ungrounded == what is left
+          rej = M.certify(json.loads(json.dumps(base)), victim["name"], "reject", actor="human:v")
+          assert rej["stats"]["entities"] == s0["entities"] - 1 and rej["stats"]["entities_ungrounded"] == s0["entities_ungrounded"] - 1
+          assert rej["stats"]["entities_grounded"] + rej["stats"]["entities_ungrounded"] == rej["stats"]["entities"]
+          assert rej["stats"]["relations_grounded"] + rej["stats"]["relations_ungrounded"] == rej["stats"]["relations"]
+          # the stream after the round trip: the old typing's events are gone, the judged quote is
+          # endorsed, the rest are unjudged, every relation event keeps its id
+          t6 = TJ.export_events(o2, "a.json")
+          k6 = next(e for e in t6 if e["kind"] == "certification" and e["verdict"] == "reject")
+          assert k6["retyped_to"] == c["retyped_to"] and (k6["agent"], k6["by"], k6["endorsed"]) == \
+              ("agent:evoontology", "agent:evoontology", False)
+          mine = [e for e in t6 if e["kind"] == "assertion" and e["subject"].get("name") == ent["name"]]
+          assert [(e["verdict"], e["endorsed"]) for e in mine] == [("grounded", True)] + [(None, None)] * (len(ent["evidences"]) - 1)
+          rid = lambda evs: {e["id"] for e in evs if e["kind"] == "assertion" and "subject" in e["subject"]}
+          assert rid(t6) == rid(t1)
+          # the build event carries the TBox definitions: the stream is all a judge needs
+          assert t1[0]["tbox"]["entity_type_descs"] == {t["name"]: t["desc"] for t in base["tbox"]["entity_types"]}
+          assert set(t1[0]["tbox"]["entity_type_descs"]) == set(t1[0]["tbox"]["entity_types"])
+          assert all(t1[0]["tbox"]["entity_type_descs"].values()) and all(t1[0]["tbox"]["relation_type_descs"].values())
+          # the CLI: an agent must name itself; an empty directory is a message, not a traceback;
+          # --from outside OUTDIR still writes into OUTDIR (created on the way); a replay writes nothing
+          import subprocess, tempfile
+          with tempfile.TemporaryDirectory() as d:
+              pf = os.path.join(d, "p.json"); open(pf, "w").write(json.dumps({**props, "proposals": props["proposals"][:1]}))
+              home = os.path.join(d, "ontologies")
+              env = dict(os.environ, ONTOLOGY_HOME=home, ONTOLOGY_ACTOR="")
+              cmd = [sys.executable, "scripts/build_ontology.py", "--proposals", pf]
+              r = subprocess.run(cmd + ["--actor", "agent:ci"], env=env, capture_output=True, text=True)        # nothing built here yet
+              assert r.returncode != 0 and "no ontology artifact" in r.stdout + r.stderr and "Traceback" not in r.stderr
+              r = subprocess.run(cmd + ["--from", "ontologies/20261125-1718.json"], env=env, capture_output=True, text=True)
+              assert r.returncode != 0 and "--actor" in r.stdout + r.stderr
+              r = subprocess.run(cmd + ["--from", "ontologies/20261125-1718.json", "--actor", "ci"], env=env,
+                                 capture_output=True, text=True)                                     # a person is --certify
+              assert r.returncode != 0 and "agent" in r.stdout + r.stderr
+              r = subprocess.run(cmd + ["--from", "ontologies/20261125-1718.json", "--actor", "agent:ci"], env=env,
+                                 capture_output=True, text=True)
+              written = glob.glob(os.path.join(home, "*-retyped.json"))
+              assert r.returncode == 0 and "re-typed 1" in r.stdout and len(written) == 1, r.stderr
+              r = subprocess.run(cmd + ["--actor", "agent:ci"], env=env, capture_output=True, text=True)      # newest = the re-typed one
+              assert r.returncode == 0 and "re-typed 0" in r.stdout and len(glob.glob(os.path.join(home, "*-retyped.json"))) == 1
+          with tempfile.TemporaryDirectory() as d:
+              home = os.path.join(d, "ontologies")
+              env = dict(os.environ, ONTOLOGY_HOME=home)
+              for script, extra in (("eval_evidence.py", ["--n", "1"]), ("weknora_bridge.py", ["--kb", "x"])):
+                  r = subprocess.run([sys.executable, "scripts/" + script, *extra], env=env, capture_output=True, text=True)
+                  assert r.returncode != 0 and "no ontology artifact" in r.stdout + r.stderr and "Traceback" not in r.stderr, script
+              r = subprocess.run([sys.executable, "scripts/build_ontology.py", "--certify", ent["name"], "--verdict", "accept",
+                                  "--from", "ontologies/20261125-1718.json", "--actor", "human:ci"], env=env,
+                                 capture_output=True, text=True)                                     # then: a verdict lands in a directory that did not exist
+              assert r.returncode == 0 and len(glob.glob(os.path.join(home, "*-certified.json"))) == 1, r.stderr
+          # a reader that stops early (| head) closes the pipe: no traceback, the pipeline's status is head's
+          r = subprocess.run(f"{sys.executable} scripts/build_ontology.py --trajectory --from ontologies/20261125-1718.json "
+                             "| head -c 200", shell=True, capture_output=True, text=True)
+          assert len(r.stdout) == 200 and "Traceback" not in r.stderr and "BrokenPipe" not in r.stderr, r.stderr
+          print("apply --proposals: PASS")
           EOF
       - name: committed artifacts conform to the format
         run: python3 scripts/validate_format.py ontologies/*.json
