@@ -19,15 +19,19 @@ coreference, and conflicts (issues #5 #6 #7 #8):
            is never edited or dropped (append-only across runs)
   cost:    per-call usage accounting + --max-calls hard cap; every artifact
            carries provenance (model/temp/elapsed/calls/tokens)
+  kb:      --kb reads a WeKnora knowledge base instead of files — one chunk is
+           one document, and every quote carries its chunk id (#56)
 
 Usage:
   python3 scripts/build_ontology.py --docs <dir_or_glob> --domain "..." --save [--lang zh]
+  python3 scripts/build_ontology.py --kb <weknora-kb-id> --domain "..." --save [--limit N]
   python3 scripts/build_ontology.py --docs <new> --domain "..." --merge ontologies/old.json --save
   python3 scripts/build_ontology.py --query "WrenAI" [--from ontologies/x.json]
   python3 scripts/build_ontology.py --trajectory [--from ontologies/x.json] [more.json ...] [--out traj.ndjson]
   python3 scripts/build_ontology.py --proposals run.proposals.json --actor agent:NAME [--from ontologies/x.json]
 """
 import argparse, concurrent.futures as cf, datetime as dt, glob, json, math, os, re, sys, threading, time
+import urllib.error, urllib.request
 from xml.sax.saxutils import escape
 
 KIT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -176,9 +180,10 @@ def apply_proposals(o, doc, actor=None):
         touched — a human verdict is not overwritten by a machine's;
       • applied = a reject certification on the OLD typing (actor, note, and
         `retyped_to` naming the new type and the quote) + a NEW assertion of the
-        new type carrying the one quote the judge grounded; the entity's other
-        quotes follow unjudged (their verdicts were about the old typing); every
-        relation it endpoints is folded back exactly as it was;
+        new type carrying the one quote the judge grounded — with the judge's
+        name and reason on it; the entity's other quotes follow unjudged (their
+        verdicts were about the old typing); every relation it endpoints is
+        folded back exactly as it was;
       • a name re-typed a second time keeps rejecting its first typing too
         (`also_rejects`): one certification per name would otherwise let that
         typing back in on the next fold.
@@ -222,22 +227,24 @@ def apply_proposals(o, doc, actor=None):
             **({"actor": actor} if actor else {}),
             "retyped_to": {"type": to, "quote": p["quote"], "doc": p.get("doc", "?"), "judge": judge,
                            **({"run": meta["run_id"]} if meta.get("run_id") else {}),
-                           **({"reason": judge_reason} if judge_reason else {})},
+                           **({"reason": judge_reason} if judge_reason else {}),
+                           **({"chunk_id": p["chunk_id"]} if p.get("chunk_id") else {})},
             **({"also_rejects": chain} if chain else {})}
         st["certifications"][k] = o.setdefault("certifications", {})[k] = rec   # the artifact carries the verdict
         for rk in [rk for rk in st["relations"] if k in (rk[0], rk[2])]:
             del st["relations"][rk]
         del st["entities"][k]
-        fold_entity(st, e["name"], to, p["quote"], p.get("doc", "?"), grounded=True)
+        fold_entity(st, e["name"], to, p["quote"], p.get("doc", "?"), grounded=True, reason=judge_reason,
+                    judge=None if judge == "?" else judge, chunk_id=p.get("chunk_id"))
         new = st["entities"][k]
         for x in olds:
             if x["quote"] != p["quote"]:
-                _fold_ev(new["evidences"], {"quote": x["quote"], "doc": x["doc"]})
+                _fold_ev(new["evidences"], {a: x[a] for a in ("quote", "doc", "chunk_id") if a in x})
         new["aliases"], new["docs"] = aliases, sorted(set(docs) | set(new["docs"]))
         for sub, pred, obj, evs, rdocs in rels:
             for x in evs:
                 fold_relation(st, sub, pred, obj, x["quote"], x["doc"],
-                              **{a: x[a] for a in ("grounded", "reason") if a in x})
+                              **{a: x[a] for a in ("grounded", "reason", "judge", "chunk_id") if a in x})
             st["relations"][_key(sub), pred, _key(obj)]["docs"] = rdocs
         rep["applied"].append({"name": e["name"], "from_type": old_type, "to_type": to,
                                "quote": p["quote"], "relations": len(rels)})
@@ -252,7 +259,7 @@ def _fold_ev(evs, ev):
     q, d = ev.get("quote", ""), ev.get("doc", "?")
     if q and not any(e["quote"] == q for e in evs):
         item = {"quote": q, "doc": d}
-        for k in ("grounded", "reason"):
+        for k in ("grounded", "reason", "judge", "chunk_id"):
             if k in ev:
                 item[k] = ev[k]
         evs.append(item)
@@ -275,31 +282,40 @@ def _strongest(evs):
     return sorted(evs, key=lambda e: {True: 0, None: 1, False: 2}[e.get("grounded")])
 
 
-def _flag_ungrounded(st, cur, etype, quote, doc):
+def _flag_ungrounded(st, cur, etype, quote, doc, chunk_id=None):
     """A different-type challenger whose own quote does not ground it is no evidence
     of a conflict — it is a guess. Kept and flagged, never promoted on its own."""
     if not any(f["entity"] == cur["name"] and f["asserted_type"] == etype and f["evidence"]["quote"] == quote
                for f in st["flagged_ungrounded"]):
         st["flagged_ungrounded"].append({"entity": cur["name"], "existing_type": cur["type"],
-                                         "asserted_type": etype, "evidence": {"quote": quote, "doc": doc}})
+                                         "asserted_type": etype,
+                                         "evidence": {"quote": quote, "doc": doc, **({"chunk_id": chunk_id} if chunk_id else {})}})
 
 
-def _ev(quote, doc, grounded=None, reason=None):
-    """A fold's evidence: the build's verdict rides on it when one was given."""
+def _ev(quote, doc, grounded=None, reason=None, judge=None, chunk_id=None):
+    """A fold's evidence: the build's verdict rides on it when one was given. The build
+    keeps a judge's reason only for a quote it rejected; `judge` is set by the one path
+    that folds a quote judged outside a build (`apply --proposals`), which keeps the
+    reason for a grounded quote too. `chunk_id` is where a --kb build read the quote."""
     ev = {"quote": quote, "doc": doc}
     if grounded is not None:
         ev["grounded"] = grounded
-        if grounded is False and reason:
+        if reason and (grounded is False or judge):
             ev["reason"] = reason
+    if judge:
+        ev["judge"] = judge
+    if chunk_id:
+        ev["chunk_id"] = chunk_id
     return ev
 
 
-def fold_entity(st, name, etype, quote, doc, grounded=None, reason=None):
+def fold_entity(st, name, etype, quote, doc, grounded=None, reason=None, judge=None, chunk_id=None):
     """Append-only entity fold; the same name under a different type => conflict
     holding BOTH evidences — recorded, never silently resolved. A rejected
     certification suppresses the (name, type) pair — counted, never re-asserted,
     and a re-typed name's earlier typings with it (`also_rejects`).
-    `grounded` is the build's verdict on this quote (None = never judged)."""
+    `grounded` is the build's verdict on this quote (None = never judged); `judge`
+    and `chunk_id` ride onto the evidence (_ev)."""
     k = _key(name)
     if not k:
         return
@@ -308,14 +324,14 @@ def fold_entity(st, name, etype, quote, doc, grounded=None, reason=None):
         st["suppressed"] = st.get("suppressed", 0) + 1
         return
     cur = st["entities"].get(k)
-    ev = _ev(quote, doc, grounded, reason)
+    ev = _ev(quote, doc, grounded, reason, judge, chunk_id)
     if cur is None:
         st["entities"][k] = {"name": name, "type": etype, "aliases": [],
                              "docs": [doc] if doc != "?" else [], "evidences": [ev]}
         return
     if cur["type"] != etype:
         if grounded is False:
-            _flag_ungrounded(st, cur, etype, quote, doc)
+            _flag_ungrounded(st, cur, etype, quote, doc, chunk_id)
             return
         st["conflicts"].append({"entity": cur["name"], "types": {
             cur["type"]: dict(_strongest(cur["evidences"])[0]) if cur["evidences"] else {"quote": "", "doc": "?"},
@@ -326,7 +342,8 @@ def fold_entity(st, name, etype, quote, doc, grounded=None, reason=None):
         cur["docs"] = sorted(set(cur["docs"]) | {doc})
 
 
-def fold_relation(st, subject, predicate, obj, quote, doc, alias_map=None, grounded=None, reason=None):
+def fold_relation(st, subject, predicate, obj, quote, doc, alias_map=None, grounded=None, reason=None, judge=None,
+                  chunk_id=None):
     if alias_map:  # canonicalize endpoints through the coref result before folding
         subject = alias_map.get(_key(subject), subject)
         obj = alias_map.get(_key(obj), obj)
@@ -334,7 +351,7 @@ def fold_relation(st, subject, predicate, obj, quote, doc, alias_map=None, groun
         return
     k = (_key(subject), predicate, _key(obj))
     cur = st["relations"].get(k)
-    ev = _ev(quote, doc, grounded, reason)
+    ev = _ev(quote, doc, grounded, reason, judge, chunk_id)
     if cur is None:
         st["relations"][k] = {"subject": subject, "predicate": predicate, "object": obj,
                               "docs": [doc] if doc != "?" else [], "evidences": [ev]}
@@ -403,12 +420,14 @@ def to_markdown(o):
     from collections import defaultdict
     st = o.get("stats", {})
     prov = o.get("provenance", {})
+    kb = prov.get("kb") or {}
     L = [f"# Ontology · {o.get('domain', '?')}", "",
          f"- **{st.get('entities', 0)} entities · {st.get('relations', 0)} relations · "
          f"{st.get('conflicts', 0)} conflicts · {st.get('flagged', 0)} unknown types flagged**",
          f"- provenance: {prov.get('model', '?')} · {prov.get('calls', '?')} calls · "
          f"{prov.get('tokens_in', 0):,} in / {prov.get('tokens_out', 0):,} out tokens · "
-         f"{prov.get('elapsed_s', '?')}s · built {o.get('built_at', '?')}"]
+         f"{prov.get('elapsed_s', '?')}s · built {o.get('built_at', '?')}"
+         + (f" · knowledge base {kb['id']}: {kb['chunks']} chunk(s) of {kb['documents']} document(s)" if kb else "")]
     if sum(st.get(k, 0) for k in ("entities_grounded", "entities_ungrounded",
                                   "relations_grounded", "relations_ungrounded")):
         L.append(f"- type grounding (judged at build time): entities {st.get('entities_grounded', 0)} grounded · "
@@ -660,6 +679,12 @@ P_REGROUND = {
 JUDGE_JOBS = int(os.environ.get("ONTOLOGY_JUDGE_JOBS") or 8)   # concurrent single-item judge calls
 
 
+def _doc_label(d):
+    """How a prompt names the text a model is reading: the document's path — or, for a
+    chunk read from a knowledge base, its place in its document."""
+    return d.get("label") or d["path"]
+
+
 def _reject_reason(x, text):
     """Why an extracted quote can never ground its claim — None when it may be judged.
 
@@ -704,7 +729,7 @@ def _judge_call(sysmsg, user):
 
 def _reground(d, failed, descs):
     """-> a replacement quote (or None) per failed assertion, from ONE call."""
-    L = [tt(f"Document ({d['path']}):", f"文档（{d['path']}）："), d["text"], "", tt("Claims:", "断言：")]
+    L = [tt(f"Document ({_doc_label(d)}):", f"文档（{_doc_label(d)}）："), d["text"], "", tt("Claims:", "断言：")]
     for i, (kind, x) in enumerate(failed, 1):
         L.append(f"{i}. {_item(kind, x, d['path'], descs)['claim']}\n   "
                  + tt("rejected quote", "被否决的引文") + f": {json.dumps(x['evidence'], ensure_ascii=False)}")
@@ -755,9 +780,11 @@ def ground_doc(d, out, known, descs, reground=True):
 
 def build(docs, domain, base=None, sample=4, ground=True, reground=True):
     st = base if base is not None else new_store(domain)
+    # a knowledge-base build samples DOCUMENTS, not chunks: the first chunk of each carries the opening
+    pool = [d for d in docs if d.get("schema_text")] or docs
     tbox = llm(P_TBOX[LANG],
-               tt(f"Domain: {domain}\nCorpus sample:\n" + "\n\n".join(d["text"][:1500] for d in docs[:sample]),
-                  f"领域：{domain}\n语料样本：\n" + "\n\n".join(d["text"][:1500] for d in docs[:sample])))
+               tt(f"Domain: {domain}\nCorpus sample:\n" + "\n\n".join((d.get("schema_text") or d["text"])[:1500] for d in pool[:sample]),
+                  f"领域：{domain}\n语料样本：\n" + "\n\n".join((d.get("schema_text") or d["text"])[:1500] for d in pool[:sample])))
     known = {e["name"] for e in tbox.get("entity_types", [])}
     # a definition the base artifact carried stays (its assertions were judged against it); this
     # run's pass fills a blank and names what is new — a merge used to bring them all back empty
@@ -774,8 +801,8 @@ def build(docs, domain, base=None, sample=4, ground=True, reground=True):
     per_doc, tally, quoteless = [], {"entities": [0, 0], "relations": [0, 0], "regrounded": 0}, 0
     for d in docs:
         out = llm(P_ABOX[LANG],
-                  tt(f"TBox:\n{json.dumps(tbox, ensure_ascii=False)}\n\nDocument ({d['path']}):\n{d['text']}",
-                     f"TBox：{json.dumps(tbox, ensure_ascii=False)}\n\n文档（{d['path']}）：\n{d['text']}"))
+                  tt(f"TBox:\n{json.dumps(tbox, ensure_ascii=False)}\n\nDocument ({_doc_label(d)}):\n{d['text']}",
+                     f"TBox：{json.dumps(tbox, ensure_ascii=False)}\n\n文档（{_doc_label(d)}）：\n{d['text']}"))
         if ground:
             g = ground_doc(d, out, known, descs, reground=reground)
             for k in ("entities", "relations"):
@@ -789,9 +816,9 @@ def build(docs, domain, base=None, sample=4, ground=True, reground=True):
                 quoteless += 1
             elif e.get("type") in known:
                 fold_entity(st, e["name"], e["type"], e["evidence"], d["path"], grounded=e.get("grounded"),
-                            reason=e.get("judge_reason"))
+                            reason=e.get("judge_reason"), chunk_id=d.get("chunk_id"))
             else:
-                st["flagged"].append({**e, "doc": d["path"]})  # type guard — never silently dropped
+                st["flagged"].append({**e, "doc": d["path"], **({"chunk_id": d["chunk_id"]} if d.get("chunk_id") else {})})  # type guard — never silently dropped
 
     merged_aliases, alias_map = [], {}
     names = [f"{e['name']} ({e['type']})" for e in st["entities"].values()]
@@ -807,11 +834,122 @@ def build(docs, domain, base=None, sample=4, ground=True, reground=True):
                 quoteless += 1
                 continue
             fold_relation(st, r.get("subject"), r.get("predicate"), r.get("object"), r["evidence"], d["path"],
-                          alias_map=alias_map, grounded=r.get("grounded"), reason=r.get("judge_reason"))
+                          alias_map=alias_map, grounded=r.get("grounded"), reason=r.get("judge_reason"),
+                          chunk_id=d.get("chunk_id"))
     if quoteless:
         print(tt(f"{quoteless} extracted assertion(s) arrived without a quote — not folded (no evidence, no assertion)",
                  f"{quoteless} 条抽取结果未带引文——不予并入（无证据，无断言）"), file=sys.stderr)
     return st, new_type_descs, merged_aliases, tally
+
+
+# ── a WeKnora knowledge base as documents (O5.2, issue #56) ──────────────────
+
+WK_PAGE = 100   # rows per page on a WeKnora list endpoint
+
+
+def _wk_get(method, path, body=None):
+    """One WeKnora API call with the family's auth convention (the bridge's): env
+    WEKNORA_URL / WEKNORA_API_KEY / WEKNORA_TENANT_ID. -> (status, parsed)"""
+    hdr = {"Content-Type": "application/json", "X-API-Key": os.environ.get("WEKNORA_API_KEY", "")}
+    if os.environ.get("WEKNORA_TENANT_ID"):
+        hdr["X-Tenant-ID"] = os.environ["WEKNORA_TENANT_ID"]
+    req = urllib.request.Request(os.environ.get("WEKNORA_URL", "").rstrip("/") + path,
+                                 data=json.dumps(body).encode() if body is not None else None,
+                                 method=method, headers=hdr)
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return r.status, json.load(r)
+    except urllib.error.HTTPError as e:
+        return e.code, e.read().decode(errors="ignore")[:300]
+    except (urllib.error.URLError, OSError, ValueError) as e:
+        return 0, f"{type(e).__name__}: {e}"
+
+
+def _wk_rows(get, path):
+    """Every row of a paged WeKnora list endpoint — it answers {success, data, page,
+    page_size, total}. A page that repeats rows already read ends the walk: an
+    endpoint that ignores `page` must not be walked forever."""
+    rows, seen, page = [], set(), 1
+    while True:
+        status, out = get("GET", f"{path}{'&' if '?' in path else '?'}page={page}&page_size={WK_PAGE}")
+        if status != 200 or not isinstance(out, dict) or out.get("success") is False or not isinstance(out.get("data"), list):
+            sys.exit(tt(f"WeKnora answered {status} on {path.split('?')[0]}: {str(out)[:200]} — check WEKNORA_URL / "
+                        f"WEKNORA_API_KEY / WEKNORA_TENANT_ID (family config: ~/.config/weknora-ops/config)",
+                        f"WeKnora 在 {path.split('?')[0]} 返回 {status}：{str(out)[:200]}——请检查 WEKNORA_URL / "
+                        f"WEKNORA_API_KEY / WEKNORA_TENANT_ID（家族配置：~/.config/weknora-ops/config）"))
+        fresh = [r for r in out["data"] if isinstance(r, dict) and r.get("id") not in seen]
+        rows += fresh
+        seen |= {r["id"] for r in fresh}
+        if not fresh or len(out["data"]) < WK_PAGE or page * WK_PAGE >= int(out.get("total") or 0):
+            return rows
+        page += 1
+
+
+def kb_chunks(kb, limit=None, get=None):
+    """A WeKnora knowledge base as the documents of a build: ONE CHUNK IS ONE DOCUMENT,
+    read whole — chunk-level evidence is the point. -> (docs, info)
+
+    Reading order is deterministic — documents by title, a document's chunks by
+    index — so a `limit` reads the same chunks every time. Only a document whose
+    parse completed is read; the others are counted in `info` and skipped (a
+    document still parsing has nothing to quote). Only text chunks are read: a
+    generated summary is not a source. An evidence's `doc` is the document's
+    TITLE — the name a person knows the source by, what a file build records —
+    and `chunk_id` says which chunk the quote was read from. `label` tells the
+    prompts they are reading a fragment. The schema pass samples DOCUMENTS: the
+    first chunk of each carries the document's opening as chunked
+    (`schema_text`), which is what a file build's sample reads.
+
+    get(method, path, body) -> (status, parsed) is the transport — stdlib urllib
+    against WEKNORA_URL unless a test hands in its own. A read scope is enough:
+    the build never writes to the knowledge base."""
+    if get is None:
+        if not (os.environ.get("WEKNORA_URL") and os.environ.get("WEKNORA_API_KEY")):
+            sys.exit(tt("WEKNORA_URL / WEKNORA_API_KEY not set (family config: ~/.config/weknora-ops/config)",
+                        "未设置 WEKNORA_URL / WEKNORA_API_KEY（家族配置：~/.config/weknora-ops/config）"))
+        get = _wk_get
+    docs = []
+    info = {"id": kb, "limit": limit, "skipped_documents": {}}
+    know = _wk_rows(get, f"/api/v1/knowledge-bases/{kb}/knowledge")
+    for k in sorted(know, key=lambda k: (k.get("title") or "", k.get("id") or "")):
+        if k.get("parse_status") != "completed":
+            why = k.get("parse_status") or "unknown"
+            info["skipped_documents"][why] = info["skipped_documents"].get(why, 0) + 1
+            continue
+        title = k.get("title") or k["id"]
+        group, opening = [], []
+        for c in sorted(_wk_rows(get, f"/api/v1/chunks/{k['id']}"), key=lambda c: c.get("chunk_index") or 0):
+            if (not (c.get("content") or "").strip() or c.get("chunk_type") not in (None, "text")
+                    or c.get("is_enabled") is False):
+                continue
+            if limit is not None and len(docs) + len(group) >= limit:
+                break
+            group.append({"path": title, "text": c["content"].strip(), "chunk_id": c.get("id"),
+                          "label": f"{title} · chunk {c.get('chunk_index') or 0} — a fragment of that document"})
+            if len("\n\n".join(opening)) < 1500:
+                opening.append(group[-1]["text"])
+        if group:
+            group[0]["schema_text"] = "\n\n".join(opening)
+        docs += group
+        if limit is not None and len(docs) >= limit:
+            break
+    info["documents"], info["chunks"] = len({d["path"] for d in docs}), len(docs)
+    return docs, info
+
+
+def file_docs(target):
+    """The documents a --docs target names: each file read up to the engine's 6000
+    characters, named by its parent directory (a README's repository)."""
+    paths = (sorted(glob.glob(target)) if "*" in target else
+             [target] if os.path.isfile(target) else sorted(glob.glob(os.path.join(target, "*"))))
+    docs = []
+    for p in paths:
+        try:
+            docs.append({"path": os.path.basename(os.path.dirname(p)) or p,
+                         "text": open(p, errors="ignore").read()[:6000]})
+        except OSError:
+            pass
+    return docs
 
 
 def _text_w(s, fs):
@@ -871,6 +1009,11 @@ def _write_svg(path, o, domain):
     open(path, "w").write("".join(svg))
 
 
+def _where(ev):
+    """Query-output locator of an evidence read from a knowledge base: its chunk id."""
+    return f" · chunk {ev['chunk_id']}" if ev.get("chunk_id") else ""
+
+
 def _ev_mark(ev):
     """Query-output marker of one evidence: its verdict, and why when it failed."""
     if ev.get("grounded") is True:
@@ -884,6 +1027,11 @@ def main():
     global LANG, MAX_CALLS, JUDGE_MODEL
     ap = argparse.ArgumentParser()
     ap.add_argument("--docs", default=None, help="directory, glob or single file, e.g. '~/dsh-*/README.md'")
+    ap.add_argument("--kb", default=None, metavar="ID",
+                    help="build from a WeKnora knowledge base instead of --docs: one chunk is one document and every "
+                         "evidence carries its chunk_id (env WEKNORA_URL / WEKNORA_API_KEY / WEKNORA_TENANT_ID)")
+    ap.add_argument("--limit", type=int, default=None,
+                    help="with --kb: read at most this many chunks, in reading order (default: the whole base)")
     ap.add_argument("--domain", default=None, help="corpus domain description (schema pass)")
     ap.add_argument("--merge", default=None, help="existing ontology JSON to fold into (append-only)")
     ap.add_argument("--query", default=None, help="query mode: every assertion about X, with evidence")
@@ -1027,11 +1175,11 @@ def main():
             print(f"\n[{e['type']}] {e['name']}" +
                   (f" (aliases: {', '.join(e['aliases'])})" if e.get("aliases") else "") + _mark(e, "type_grounding"))
             for ev in e.get("evidences", []):
-                print(f'  | {ev["doc"]}: "{ev["quote"]}"' + _ev_mark(ev))
+                print(f'  | {ev["doc"]}{_where(ev)}: "{ev["quote"]}"' + _ev_mark(ev))
         for r in hits["relations"]:
             print(f"\n({r['subject']}) -[{r['predicate']}]-> ({r['object']})" + _mark(r, "grounding"))
             for ev in r.get("evidences", []):
-                print(f'  | {ev["doc"]}: "{ev["quote"]}"' + _ev_mark(ev))
+                print(f'  | {ev["doc"]}{_where(ev)}: "{ev["quote"]}"' + _ev_mark(ev))
         if not hits["entities"] and not hits["relations"]:
             print(tt("no assertions matched", "无匹配断言"))
         elif any("type_grounding" in e for e in hits["entities"]) or any("grounding" in r for r in hits["relations"]):
@@ -1039,22 +1187,33 @@ def main():
                             "✓ 引文支撑断言 · ⚠ 现有引文均不支撑（保留并标记）"))
         return
 
-    if not args.docs or not args.domain:
-        sys.exit(tt("--docs and --domain are required for a build", "构建需要 --docs 与 --domain"))
-    target = os.path.expanduser(args.docs)
-    paths = (sorted(glob.glob(target)) if "*" in args.docs else
-             [target] if os.path.isfile(target) else sorted(glob.glob(os.path.join(target, "*"))))
-    docs = []
-    for p in paths:
-        try:
-            docs.append({"path": os.path.basename(os.path.dirname(p)) or p,
-                         "text": open(p, errors="ignore").read()[:6000]})
-        except OSError:
-            pass
+    if not args.domain or not (args.docs or args.kb):
+        sys.exit(tt("--docs and --domain are required for a build (--kb reads a WeKnora knowledge base)",
+                    "构建需要 --docs 与 --domain（--kb 读取 WeKnora 知识库）"))
+    if args.docs and args.kb:
+        ap.error("--docs and --kb name two corpora: one source per build")
+    if args.limit is not None and not args.kb:
+        ap.error("--limit applies to --kb (how many chunks to read)")
+    if args.limit is not None and args.limit < 1:
+        ap.error("--limit must be at least 1")
+    kb_info = None
+    if args.kb:
+        docs, kb_info = kb_chunks(args.kb, limit=args.limit)
+        skipped = kb_info["skipped_documents"]
+        corpus = tt(f"corpus: {len(docs)} chunk(s) of {kb_info['documents']} document(s) in knowledge base {args.kb}"
+                    + (f" — {sum(skipped.values())} not read: " + ", ".join(f"{v} {k}" for k, v in sorted(skipped.items()))
+                       if skipped else ""),
+                    f"语料：知识库 {args.kb} 的 {kb_info['documents']} 篇文档共 {len(docs)} 个分块"
+                    + (f"——{sum(skipped.values())} 篇未读：" + "、".join(f"{v} 篇 {k}" for k, v in sorted(skipped.items()))
+                       if skipped else ""))
+    else:
+        docs = file_docs(os.path.expanduser(args.docs))
+        corpus = tt(f"corpus: {len(docs)} doc(s)", f"语料：{len(docs)} 篇")
     if not docs:
-        sys.exit(tt("no documents matched", "无文档"))
-    print(tt(f"corpus: {len(docs)} doc(s) · domain: {args.domain}",
-             f"语料：{len(docs)} 篇 · 领域：{args.domain}"), file=sys.stderr)
+        sys.exit(tt(f"knowledge base {args.kb} holds no readable chunk (no completed document, or an empty base)"
+                    if args.kb else "no documents matched",
+                    f"知识库 {args.kb} 没有可读分块（没有解析完成的文档，或库为空）" if args.kb else "无文档"))
+    print(corpus + tt(f" · domain: {args.domain}", f" · 领域：{args.domain}"), file=sys.stderr)
 
     base, prior_stats = None, None
     if args.merge:
@@ -1076,10 +1235,16 @@ def main():
     prov = {"model": MODEL, "temperature": 0, "elapsed_s": round(time.time() - t0),
             "calls": COST["calls"], "tokens_in": COST["in"], "tokens_out": COST["out"],
             "docs_this_run": len(docs), "merged_from": bool(args.merge),
-            "judge_model": JUDGE_MODEL, "grounding_pass": not args.no_ground}
+            "judge_model": JUDGE_MODEL, "grounding_pass": not args.no_ground,
+            **({"kb": kb_info} if kb_info else {})}
     o = store_to_ontology(st, new_type_descs, prov)
 
     print(f"\n## Ontology build · {args.domain}\n")
+    if kb_info:
+        print(tt(f"- source: WeKnora knowledge base {kb_info['id']} — {kb_info['chunks']} chunk(s) of "
+                 f"{kb_info['documents']} document(s), every evidence carrying its chunk_id",
+                 f"- 来源：WeKnora 知识库 {kb_info['id']}——{kb_info['documents']} 篇文档的 {kb_info['chunks']} 个分块，"
+                 f"每条证据都带 chunk_id"))
     print(tt(f"- Entity types {len(o['tbox']['entity_types'])} · entities {o['stats']['entities']} · "
              f"relations {o['stats']['relations']} · conflicts {o['stats']['conflicts']} · "
              f"unknown types flagged {o['stats']['flagged']}",

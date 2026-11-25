@@ -1,0 +1,4 @@
++ 32 trajectory record(s) from /tmp/o5/e2/kb/smoke/20261125-1935.trajectory.ndjson · 0 already present (idempotent by event id) · 32 in the store
+events 32 assertions 30 with chunk_id in evidence: 30
+projected Term evidences: 24 | carrying chunk_id: 24 | keys: ['by', 'chunk_id', 'quote', 'reason', 'source', 'verdict']
+example Term evidence: {"quote": "`max-tokens`, or `aborted`.", "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a", "source": "agentdiary-dsh-plugin", "verdict": "grounded", "by": "judge"}

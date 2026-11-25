@@ -1,0 +1,504 @@
+{
+ "domain": "the vicfei dsh plugin family",
+ "built_at": "2026-11-25T19:49:14",
+ "provenance": {
+  "model": "deepseek-chat",
+  "temperature": 0,
+  "elapsed_s": 19,
+  "calls": 32,
+  "tokens_in": 17546,
+  "tokens_out": 2663,
+  "docs_this_run": 6,
+  "merged_from": false,
+  "judge_model": "deepseek-chat",
+  "grounding_pass": true,
+  "kb": {
+   "id": "035be669-f79c-458f-b119-f295d1e65859",
+   "limit": 6,
+   "skipped_documents": {},
+   "documents": 1,
+   "chunks": 6
+  }
+ },
+ "tbox": {
+  "entity_types": [
+   {
+    "name": "diary_entry",
+    "desc": "A single appended record in the diary, produced per settled turn, containing tool mix, event mix, closing words, duration, and end reason."
+   },
+   {
+    "name": "diary_file",
+    "desc": "An append-only markdown file, one per node per day, holding diary entries."
+   },
+   {
+    "name": "event",
+    "desc": "A message on the harness session/event stream, such as turn/end, session/disposed, blocked, interrupted, or forked."
+   },
+   {
+    "name": "git_repository",
+    "desc": "A local git repo owned by the user (GitHub/Gitea/bare) where diary files are appended."
+   },
+   {
+    "name": "plugin",
+    "desc": "A DeepSeek Harness extension that subscribes to harness event streams and performs a function, such as writing diary entries."
+   },
+   {
+    "name": "settle_reason",
+    "desc": "The reason a turn settled, e.g. completed, error, max-tokens, aborted, blocked, interrupted, forked."
+   },
+   {
+    "name": "sibling_tool",
+    "desc": "A related tool in the same family, such as the agentdiary CLI or dsh-super-agent."
+   },
+   {
+    "name": "turn",
+    "desc": "A unit of agent work in the harness that settles with a reason such as completed, error, max-tokens, or aborted."
+   }
+  ],
+  "relation_types": [
+   {
+    "name": "subscribes_to",
+    "domains": "plugin",
+    "ranges": "event",
+    "desc": "The plugin listens to a harness event stream."
+   },
+   {
+    "name": "writes",
+    "domains": "plugin",
+    "ranges": "diary_entry",
+    "desc": "The plugin appends a diary entry per settled turn."
+   },
+   {
+    "name": "appends_to",
+    "domains": "diary_entry",
+    "ranges": "diary_file",
+    "desc": "Diary entries are appended into a diary file."
+   },
+   {
+    "name": "stored_in",
+    "domains": "diary_file",
+    "ranges": "git_repository",
+    "desc": "Diary files live inside the user-owned git repository."
+   },
+   {
+    "name": "settles_with",
+    "domains": "turn",
+    "ranges": "settle_reason",
+    "desc": "A turn ends with a particular settle reason."
+   },
+   {
+    "name": "triggers",
+    "domains": "event",
+    "ranges": "diary_entry",
+    "desc": "A turn/end event with a settled reason triggers creation of a diary entry."
+   },
+   {
+    "name": "sibling_of",
+    "domains": "plugin",
+    "ranges": "sibling_tool",
+    "desc": "The plugin is a sibling of related tools in the same family."
+   }
+  ]
+ },
+ "abox": {
+  "entities": [
+   {
+    "name": "aborted",
+    "type": "settle_reason",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "`max-tokens`, or `aborted`.",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "agentdiary CLI",
+    "type": "sibling_tool",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "Sibling of the `agentdiary` CLI (personal agent diary across machines) and `dsh-super-agent` (admission control & trust ladder for any CLI agent).",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "agentdiary for DeepSeek Harness",
+    "type": "plugin",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "blocked",
+    "type": "settle_reason",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "Reasons you will *not* see as entries: `blocked` (retried as a new turn), `interrupted`/`forked`",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": false,
+      "reason": "Quote says blocked is NOT an entry reason, contradicting it being a settle_reason.",
+      "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "completed",
+    "type": "settle_reason",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "diary entry",
+    "type": "diary_entry",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-agentdiary-plugin",
+    "type": "plugin",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh plugin --profile web add dsh-agentdiary-plugin",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": false,
+      "reason": "Quote only shows an install command naming the plugin, no type information.",
+      "chunk_id": "7dcd29de-094a-4d1e-a47b-9f562479ff1c"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-super-agent",
+    "type": "sibling_tool",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "Sibling of the `agentdiary` CLI (personal agent diary across machines) and `dsh-super-agent` (admission control & trust ladder for any CLI agent).",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "error",
+    "type": "settle_reason",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "forked",
+    "type": "settle_reason",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "Reasons you will *not* see as entries: `blocked` (retried as a new turn), `interrupted`/`forked`",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": false,
+      "reason": "Quote lists forked as a reason not seen as entries, not as a settle_reason.",
+      "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "interrupted",
+    "type": "settle_reason",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "Reasons you will *not* see as entries: `blocked` (retried as a new turn), `interrupted`/`forked`",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": false,
+      "reason": "Quote lists interrupted as a reason not seen as entries, not as a settle_reason type.",
+      "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "local git repository",
+    "type": "git_repository",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "max-tokens",
+    "type": "settle_reason",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "`max-tokens`, or `aborted`.",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "session/event",
+    "type": "event",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "sessions/2026-11/2026-11-12-<node>.md",
+    "type": "diary_file",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "sessions/2026-11/2026-11-12-<node>.md   # append-only, one file per node per day",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "turn",
+    "type": "turn",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "turn/end",
+    "type": "event",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     }
+    ],
+    "type_grounding": true
+   }
+  ],
+  "relations": [
+   {
+    "subject": "agentdiary for DeepSeek Harness",
+    "predicate": "subscribes_to",
+    "object": "session/event",
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "agentdiary for DeepSeek Harness",
+    "predicate": "writes",
+    "object": "diary entry",
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "diary entry",
+    "predicate": "appends_to",
+    "object": "sessions/2026-11/2026-11-12-<node>.md",
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "sessions/2026-11/2026-11-12-<node>.md   # append-only, one file per node per day",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "sessions/2026-11/2026-11-12-<node>.md",
+    "predicate": "stored_in",
+    "object": "local git repository",
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "turn/end",
+    "predicate": "triggers",
+    "object": "diary_entry",
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     }
+    ],
+    "grounding": true
+   }
+  ]
+ },
+ "conflicts": [],
+ "flagged_unknown_types": [],
+ "flagged_ungrounded": [],
+ "merge_log": [],
+ "certifications": {},
+ "stats": {
+  "entities": 17,
+  "relations": 5,
+  "conflicts": 0,
+  "flagged": 0,
+  "suppressed_by_certification": 0,
+  "entities_grounded": 13,
+  "entities_ungrounded": 4,
+  "relations_grounded": 5,
+  "relations_ungrounded": 0,
+  "ungrounded_type_clashes": 0
+ }
+}

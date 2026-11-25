@@ -14,11 +14,13 @@ unknown types are flagged, never silently dropped.
 
 ```bash
 auto-ontology build --docs <dir-or-glob> --domain "<description>" --save   # typed JSON + SVG cluster graph + md digest
+auto-ontology build --kb <weknora-kb-id> --domain "..." --save [--limit N]  # a WeKnora knowledge base: every quote names its chunk
 auto-ontology build --docs '*.md' --domain "..." --lang zh                # Chinese prompts/artifacts
 auto-ontology export ontologies/x.json > trajectory.ndjson                  # the artifact as an event stream
 ```
 
-Requires `python3` (stdlib only) and a `DEEPSEEK_API_KEY` in `~/.bashrc`.
+Requires `python3` (stdlib only) and a `DEEPSEEK_API_KEY` in `~/.bashrc`;
+`--kb` also needs `WEKNORA_URL` / `WEKNORA_API_KEY` in the environment.
 Artifacts land in `./ontologies/` (relative to where you invoke); the SVG is
 the shareable overview, the JSON carries every assertion with its evidence span.
 
@@ -34,6 +36,9 @@ the shareable overview, the JSON carries every assertion with its evidence span.
 - Report ungrounded assertions as ungrounded — `--query X` marks each ✓ or ⚠.
 - Instance types must come from the extracted TBox; unknown types are recorded
   in `flagged_unknown_types`, never silently dropped.
+- From a knowledge base (`--kb`, or the typed tool's `kb` + `limit`): every
+  evidence carries the `chunk_id` it was read from — keep it when you quote an
+  assertion back; it is how the claim resolves into the base.
 - Artifacts are append-only in spirit: a new run writes new files; it never
   edits a prior ontology.
 - `auto-ontology export` is the artifact as events (`ao-trajectory/0.1`, one

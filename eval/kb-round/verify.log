@@ -1,0 +1,10 @@
+artifact: /tmp/o5/e2/kb/ontologies/20261125-1945.json
+knowledge base: 035be669-f79c-458f-b119-f295d1e65859 — the build read 369 chunk(s) of 23 document(s); 112 distinct chunk id(s) are cited by 248 evidence record(s)
+evidence with a chunk_id: 248/248 · grounded 76 · ungrounded 172 · never judged 0
+api: chunk found 248/248 · in this knowledge base 248 · title is the evidence's doc 248 · text and enabled 248
+     quote contained (verbatim form) 247/248 · raw substring 204/248
+sql: chunk found 248/248 · in this knowledge base 248 · title is the evidence's doc 248 · text and enabled 248
+     quote contained (verbatim form) 247/248 · raw substring 204/248
+the build's verbatim gate rejected 1 quote(s) as not in their chunk — expected to be absent there
+FAILED evidence records: 0
+findings written to /tmp/o5/e2/kb/verify-full.json

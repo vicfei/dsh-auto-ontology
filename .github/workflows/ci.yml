@@ -407,7 +407,9 @@ jobs:
           assert not VF.validate(o2)
           new = next(e for e in o2["abox"]["entities"] if e["name"] == ent["name"])
           assert new["type"] == other and new["type_grounding"] is True
-          assert new["evidences"][0] == {"quote": q0["quote"], "doc": q0["doc"], "grounded": True}
+          # v0.3 (#56): the new assertion's evidence names the judge that grounded it, with its reason
+          assert new["evidences"][0] == {"quote": q0["quote"], "doc": q0["doc"], "grounded": True,
+                                         "judge": "fake-judge", "reason": "states it plainly"}
           assert len(new["evidences"]) == len(ent["evidences"])                 # no quote lost
           assert all("grounded" not in x for x in new["evidences"][1:])         # the rest: unjudged for the new claim
           assert shape(touches(ent["name"])) == shape([r for r in o2["abox"]["relations"]
@@ -458,6 +460,7 @@ jobs:
               ("agent:evoontology", "agent:evoontology", False)
           mine = [e for e in t6 if e["kind"] == "assertion" and e["subject"].get("name") == ent["name"]]
           assert [(e["verdict"], e["endorsed"]) for e in mine] == [("grounded", True)] + [(None, None)] * (len(ent["evidences"]) - 1)
+          assert (mine[0]["by"], mine[0]["reason"]) == ("judge:fake-judge", "states it plainly")   # and the stream says who
           rid = lambda evs: {e["id"] for e in evs if e["kind"] == "assertion" and "subject" in e["subject"]}
           assert rid(t6) == rid(t1)
           # the build event carries the TBox definitions: the stream is all a judge needs
@@ -500,9 +503,212 @@ jobs:
                              "| head -c 200", shell=True, capture_output=True, text=True)
           assert len(r.stdout) == 200 and "Traceback" not in r.stderr and "BrokenPipe" not in r.stderr, r.stderr
           print("apply --proposals: PASS")
+          # O5.2 (#56): a knowledge base as documents — one chunk is one document, read whole, in a
+          # reading order nothing can change. The transport is faked: three pages, a non-text chunk, a
+          # disabled one, a blank one, two documents that are not ready
+          long_rows = [{"id": f"c2{i}", "chunk_index": i, "chunk_type": "text", "content": f"beta {i} " * 20} for i in range(205)]
+          tables = {"/api/v1/knowledge-bases/K/knowledge": [
+                        {"id": "k2", "title": "beta", "parse_status": "completed"},
+                        {"id": "k1", "title": "alpha", "parse_status": "completed"},
+                        {"id": "k3", "title": "gamma", "parse_status": "failed"},
+                        {"id": "k4", "title": "delta", "parse_status": "processing"}],
+                    "/api/v1/chunks/k1": [
+                        {"id": "c1b", "chunk_index": 1, "chunk_type": "text", "is_enabled": True, "content": " second "},
+                        {"id": "c1a", "chunk_index": 0, "chunk_type": "text", "is_enabled": True, "content": " first "},
+                        {"id": "c1s", "chunk_index": 2, "chunk_type": "summary", "content": "a generated summary"},
+                        {"id": "c1d", "chunk_index": 3, "chunk_type": "text", "is_enabled": False, "content": "disabled"},
+                        {"id": "c1e", "chunk_index": 4, "chunk_type": "text", "content": "   "}],
+                    "/api/v1/chunks/k2": long_rows}
+          asked = []
+          def fake(method, path, body=None):
+              asked.append(path)
+              base = next((b for b in tables if path.startswith(b)), None)
+              page = int(_re.search(r"page=(\d+)", path).group(1))
+              rows = tables.get(base, [])
+              return 200, {"success": True, "data": rows[(page - 1) * M.WK_PAGE: page * M.WK_PAGE],
+                           "page": page, "page_size": M.WK_PAGE, "total": len(rows)}
+          kd, kinfo = M.kb_chunks("K", get=fake)
+          assert [d["chunk_id"] for d in kd] == ["c1a", "c1b"] + [f"c2{i}" for i in range(205)], kd
+          assert kinfo == {"id": "K", "limit": None, "skipped_documents": {"failed": 1, "processing": 1},
+                           "documents": 2, "chunks": 207}, kinfo
+          assert (kd[0]["path"], kd[0]["text"], kd[0]["label"]) == \
+              ("alpha", "first", "alpha · chunk 0 — a fragment of that document")
+          assert kd[0]["schema_text"] == "first\n\nsecond"          # the document's opening, as chunked
+          assert kd[2]["schema_text"].startswith("beta 0 beta 0") and "schema_text" not in kd[1] and "schema_text" not in kd[3]
+          assert asked == ["/api/v1/knowledge-bases/K/knowledge?page=1&page_size=100",
+                           "/api/v1/chunks/k1?page=1&page_size=100"] + \
+                          [f"/api/v1/chunks/k2?page={n}&page_size=100" for n in (1, 2, 3)], asked
+          asked.clear()
+          k3, i3 = M.kb_chunks("K", limit=3, get=fake)
+          assert [d["chunk_id"] for d in k3] == ["c1a", "c1b", "c20"] and (i3["documents"], i3["chunks"], i3["limit"]) == (2, 3, 3)
+          assert asked[-4:] == ["/api/v1/chunks/k1?page=1&page_size=100"] + \
+                              [f"/api/v1/chunks/k2?page={n}&page_size=100" for n in (1, 2, 3)]
+          # ^ the limit caps the chunks a build reads; a document's list is read whole (no model call rides on a listing)
+          def stuck(method, path, body=None):                        # an endpoint that ignores `page`
+              rows = [{"id": f"r{i}", "chunk_index": i, "content": "x"} for i in range(M.WK_PAGE)]
+              return 200, {"success": True, "data": rows, "page": 1, "page_size": M.WK_PAGE, "total": 250}
+          assert len(M._wk_rows(stuck, "/x")) == M.WK_PAGE
+          for status, out in ((403, "Forbidden: API key scope does not allow this operation"), (404, {"success": False}), (0, "URLError: refused")):
+              try:
+                  M.kb_chunks("K", get=lambda m, p, b=None, s=status, o=out: (s, o)); raise AssertionError("no exit")
+              except SystemExit as e:
+                  assert f"WeKnora answered {status}" in str(e), e
+          # the real transport against a local server: the family's headers, two pages, a refused key
+          import http.server, threading
+          served = []
+          class H(http.server.BaseHTTPRequestHandler):
+              def log_message(self, *a): pass
+              def _send(self, code, body):
+                  b = json.dumps(body).encode()
+                  self.send_response(code); self.send_header("Content-Type", "application/json")
+                  self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b)
+              def do_GET(self):
+                  served.append((self.path, self.headers.get("X-API-Key"), self.headers.get("X-Tenant-ID")))
+                  if self.headers.get("X-API-Key") != "k1":
+                      return self._send(403, {"success": False, "message": "Forbidden"})
+                  page = int(_re.search(r"page=(\d+)", self.path).group(1))
+                  rows = [{"id": f"r{i}", "chunk_index": i, "content": "x"} for i in range(M.WK_PAGE)] if page == 1 else [
+                        {"id": "last", "chunk_index": M.WK_PAGE, "content": "y"}]
+                  self._send(200, {"success": True, "data": rows, "page": page, "page_size": M.WK_PAGE, "total": M.WK_PAGE + 1})
+          srv = http.server.HTTPServer(("127.0.0.1", 0), H)
+          threading.Thread(target=srv.serve_forever, daemon=True).start()
+          os.environ.update(WEKNORA_URL=f"http://127.0.0.1:{srv.server_port}", WEKNORA_API_KEY="k1", WEKNORA_TENANT_ID="7")
+          try:
+              assert [r["id"] for r in M._wk_rows(M._wk_get, "/api/v1/x")] == [f"r{i}" for i in range(M.WK_PAGE)] + ["last"]
+              assert served[0] == ("/api/v1/x?page=1&page_size=100", "k1", "7")
+              os.environ["WEKNORA_API_KEY"] = "nope"
+              try:
+                  M._wk_rows(M._wk_get, "/api/v1/x"); raise AssertionError("no exit")
+              except SystemExit as e:
+                  assert "answered 403" in str(e), e
+          finally:
+              srv.shutdown(); srv.server_close()
+              for k in ("WEKNORA_URL", "WEKNORA_API_KEY", "WEKNORA_TENANT_ID"):
+                  os.environ.pop(k, None)
+          # a chunk build puts the chunk id on every evidence — with a verdict or without — and samples
+          # DOCUMENTS for the schema pass; the prompts read the fragment's label
+          seen = []
+          def stub3(sysmsg, user, json_out=True, model=None):
+              seen.append(user)
+              if "Corpus sample" in user:
+                  return {"entity_types": [{"name": "tool", "desc": "a thing"}, {"name": "gadget", "desc": "another thing"}],
+                          "relation_types": [{"name": "uses"}]}
+              if "Entities:" in user:
+                  return {"pairs": []}
+              if "repairs" in sysmsg:
+                  return {"repairs": []}
+              if "verdicts" in sysmsg:
+                  return {"verdicts": [{"i": 1, "grounded": True, "reason": "says so"}]}
+              label = _re.search(r"Document \((.*?)\):\n", user).group(1)
+              if label.startswith("alpha · chunk 0"):
+                  return {"entities": [{"name": "W", "type": "tool", "evidence": "first"}], "relations": []}
+              if label.startswith("alpha · chunk 1"):
+                  return {"entities": [], "relations": [{"subject": "W", "predicate": "uses", "object": "U", "evidence": "second"}]}
+              return {"entities": [{"name": "U", "type": "gadget", "evidence": "beta 0 beta 0"}], "relations": []}
+          M.llm = stub3
+          ks, _, _, _ = M.build(kd[:3], "k", sample=2)
+          ko = M.store_to_ontology(ks, {}, {"model": "m", "kb": kinfo})
+          M.llm = _real_llm
+          Wq, Rq = M.query_ontology(ko, "W")["entities"][0], M.query_ontology(ko, "W")["relations"][0]
+          assert Wq["evidences"] == [{"quote": "first", "doc": "alpha", "grounded": True, "chunk_id": "c1a"}], Wq
+          assert Rq["evidences"] == [{"quote": "second", "doc": "alpha", "grounded": True, "chunk_id": "c1b"}], Rq
+          assert seen[0].count("first\n\nsecond") == 1 and "beta 0 beta 0" in seen[0]     # one sample per DOCUMENT, not per chunk
+          assert seen[1].startswith("TBox:\n") and "Document (alpha · chunk 0 — a fragment of that document):\nfirst" in seen[1]
+          assert M.load_store(ko)["entities"]["w"]["evidences"][0]["chunk_id"] == "c1a"    # survives a reload
+          assert "knowledge base K: 207 chunk(s) of 2 document(s)" in M.to_markdown(ko)
+          assert M._where({"quote": "q", "doc": "d", "chunk_id": "c1a"}) == " · chunk c1a" and M._where({"quote": "q"}) == ""
+          # an ungrounded type clash carries the chunk id too ...
+          sk = M.new_store("k")
+          sk["tbox_types"] |= {"tool", "gadget"}
+          M.fold_entity(sk, "W", "tool", "first", "alpha", grounded=True, chunk_id="c1a")
+          M.fold_entity(sk, "W", "gadget", "not a gadget line", "alpha", grounded=False, reason="mention", chunk_id="c1b")
+          assert sk["flagged_ungrounded"][0]["evidence"] == {"quote": "not a gadget line", "doc": "alpha", "chunk_id": "c1b"}
+          M.fold_entity(sk, "W", "gadget", "W, a gadget,", "alpha", grounded=True, chunk_id="c1b")
+          assert sk["conflicts"][0]["types"]["gadget"]["chunk_id"] == "c1b"
+          # ... and so does the type guard's catch — from a chunk, never from a file
+          M.llm = lambda sysmsg, user, json_out=True, model=None: (
+              {"entity_types": [{"name": "tool", "desc": "a thing"}], "relation_types": []} if "Corpus sample" in user else
+              {"entities": [{"name": "Z", "type": "widget", "evidence": "Z is a widget."}], "relations": []})
+          stg2, _, _, _ = M.build([{"path": "alpha", "text": "Z is a widget.", "chunk_id": "c1b"}], "k", sample=1, ground=False)
+          assert stg2["flagged"] == [{"name": "Z", "type": "widget", "evidence": "Z is a widget.", "doc": "alpha", "chunk_id": "c1b"}]
+          stf, _, _, _ = M.build([{"path": "alpha", "text": "Z is a widget."}], "k", sample=1, ground=False)
+          assert stf["flagged"] == [{"name": "Z", "type": "widget", "evidence": "Z is a widget.", "doc": "alpha"}]
+          # ... and the stream carries a chunk id on every kind that holds an evidence
+          sk["flagged"].append({"name": "Q", "type": "widget", "evidence": "Q, a widget,", "doc": "alpha", "chunk_id": "c1c"})
+          by_kind = {e["kind"]: e for e in TJ.export_events(M.store_to_ontology(sk, {}, {"model": "m"}), "k.json")
+                     if e["kind"] in ("conflict", "unknown_type", "ungrounded_clash")}
+          assert by_kind["conflict"]["subject"]["types"]["gadget"]["chunk_id"] == "c1b"
+          assert by_kind["unknown_type"]["evidence"]["chunk_id"] == "c1c"
+          assert by_kind["ungrounded_clash"]["evidence"]["chunk_id"] == "c1b"
+          M.llm = _real_llm
+          # the trip back keeps a chunk id on the new assertion and names the judge on it (v0.3)
+          ko2, repk = M.apply_proposals(json.loads(json.dumps(ko)), {"run_id": "r9", "judge_model": "fake-judge", "proposals": [
+              {"name": "W", "from_type": "tool", "to_type": "gadget", "quote": "W, a gadget,", "doc": "alpha",
+               "chunk_id": "c1z", "grounded": True, "judge_reason": "an apposition"}]}, actor="agent:x")
+          assert len(repk["applied"]) == 1
+          Wk = M.query_ontology(ko2, "W")["entities"][0]
+          assert Wk["evidences"] == [{"quote": "W, a gadget,", "doc": "alpha", "grounded": True, "judge": "fake-judge",
+                                      "reason": "an apposition", "chunk_id": "c1z"},                         # judged elsewhere
+                                     {"quote": "first", "doc": "alpha", "chunk_id": "c1a"}], Wk               # unjudged: chunk kept, no judge
+          assert M.query_ontology(ko2, "W")["relations"][0]["evidences"] == Rq["evidences"]
+          ck = ko2["certifications"]["w"]
+          assert ck["retyped_to"]["chunk_id"] == "c1z" and ck["evidence"]["chunk_id"] == "c1a" and "judge" not in ck["evidence"]
+          # the validator (v0.3): optional fields typed; a judge only on a judged evidence; a reason only
+          # beside a verdict — and on a grounded quote only beside the judge who gave it. v0.2 still passes
+          def W_of(a): return next(e for e in a["abox"]["entities"] if e["name"] == "W")
+          assert VF.VERSION == "v0.3" and not VF.validate(ko2) and not VF.validate(og) and not VF.validate(base)
+          for mutate in (lambda a: W_of(a)["evidences"][0].__setitem__("chunk_id", 7),
+                         lambda a: W_of(a)["evidences"][0].__setitem__("judge", ""),
+                         lambda a: W_of(a)["evidences"][1].__setitem__("judge", "j"),
+                         lambda a: W_of(a)["evidences"][1].__setitem__("reason", "orphan"),
+                         lambda a: W_of(a)["evidences"][0].pop("judge")):
+              bad = json.loads(json.dumps(ko2)); mutate(bad)
+              assert VF.validate(bad), mutate
+          # the stream: the assertion names its judge, every evidence names its chunk
+          tk = TJ.export_events(ko2, "k.json")
+          mine_w = [e for e in tk if e["kind"] == "assertion" and e["subject"].get("name") == "W" and e["endorsed"] is True]
+          assert len(mine_w) == 1 and (mine_w[0]["evidence"], mine_w[0]["by"], mine_w[0]["reason"]) == \
+              ({"quote": "W, a gadget,", "doc": "alpha", "chunk_id": "c1z"}, "judge:fake-judge", "an apposition"), mine_w
+          unnamed = json.loads(json.dumps(ko2))
+          W_of(unnamed)["evidences"][0].pop("judge")
+          au = next(e for e in TJ.export_events(unnamed, "k.json") if e["kind"] == "assertion"
+                    and e["subject"].get("name") == "W" and e["endorsed"] is True)
+          assert au["by"] == "judge" and au["id"] != mine_w[0]["id"]          # who judged is part of what the event says
+          assert next(e for e in tk if e["kind"] == "certification")["evidence"]["chunk_id"] == "c1a"
+          assert all(e["evidence"].get("chunk_id") for e in tk if e["kind"] == "assertion")
+          # the CLI: --kb without the family config is a message; two corpora is an error; --limit is --kb's;
+          # a file build reads as before
+          clean = {k: v for k, v in os.environ.items() if not k.startswith("WEKNORA_")}
+          r = subprocess.run([sys.executable, "scripts/build_ontology.py", "--kb", "K", "--domain", "d"], env=clean,
+                             capture_output=True, text=True)
+          assert r.returncode != 0 and "WEKNORA_URL" in r.stdout + r.stderr and "Traceback" not in r.stderr
+          for extra in (["--docs", "x", "--kb", "K"], ["--limit", "3"], ["--kb", "K", "--limit", "0"]):
+              r = subprocess.run([sys.executable, "scripts/build_ontology.py", "--domain", "d", *extra], env=clean,
+                                 capture_output=True, text=True)
+              assert r.returncode != 0 and "Traceback" not in r.stderr, extra
+          r = subprocess.run([sys.executable, "scripts/build_ontology.py", "--docs", "x", "--domain", "d"], env=clean,
+                             capture_output=True, text=True)
+          assert r.returncode != 0 and "no documents matched" in r.stdout + r.stderr
+          print("knowledge-base build + format v0.3: PASS")
           EOF
       - name: committed artifacts conform to the format
         run: python3 scripts/validate_format.py ontologies/*.json
+      - name: ontology artifacts under eval/ conform to the format
+        run: |
+          python3 - <<'EOF'
+          import glob, importlib.util, json
+          spec = importlib.util.spec_from_file_location("vf", "scripts/validate_format.py")
+          vf = importlib.util.module_from_spec(spec); spec.loader.exec_module(vf)
+          REQ = ("domain", "built_at", "tbox", "abox", "provenance", "stats")
+          n = 0
+          for p in sorted(glob.glob("eval/**/*.json", recursive=True)):
+              o = json.load(open(p))
+              if isinstance(o, dict) and all(k in o for k in REQ):   # an ontology artifact: the format's required top-level keys
+                  errs = vf.validate(o)
+                  assert not errs, (p, errs[:3])
+                  n += 1
+          print(f"{n} ontology artifact(s) under eval/ conform to format {vf.VERSION}")
+          EOF
       - name: committed SVGs keep the title and every label on the canvas
         run: |
           python3 - <<'EOF'

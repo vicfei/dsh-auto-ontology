@@ -1,0 +1,14 @@
+registered: ontology_build, ontology_query, ontology_export
+ontology_build params: docs, kb, limit, domain, merge, sample, max_calls, lang | required: ["domain"]
+throws: ontology_build needs docs (a document corpus) or kb (a WeKnora knowledge-base id)
+throws: ontology_build takes docs or kb, not both: one source per build
+--- live kb build, limit 6, 19 s:
+## Ontology build · the vicfei dsh plugin family
+
+- source: WeKnora knowledge base 035be669-f79c-458f-b119-f295d1e65859 — 6 chunk(s) of 1 document(s), every evidence carrying its chunk_id
+- Entity types 8 · entities 17 · relations 5 · conflicts 0 · unknown types flagged 0
+- type grounding (judge deepseek-chat): entities 13 grounded · 4 ungrounded; relations 5 grounded · 0 ungrounded; 0 quote(s) re-grounded · 0 ungrounded type clash(es) kept out of conflicts
+- provenance: 32 calls · 17,546 in / 2,663 out tokens · 19s
+  - R: (agentdiary for DeepSeek Harness) -[subscribes_to]-> (session/event) | ev: A [DeepSeek Harness](https://github.com/
+  - R: (agentdiary for DeepSeek Harness) -[writes]-> (diary entry) | ev: A [DeepSeek Harness](https://github.com/
+artifact: 20261125-1949.json | evidences 22 | with chunk_id 22 | provenance.kb {"id":"035be669-f79c-458f-b119-f295d1e65859","limit":6,"skipped_documents":{},"documents":1,"chunks":6}

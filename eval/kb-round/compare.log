@@ -1,0 +1,24 @@
+FILE BUILD — eval/live-round/artifacts/20261125-183444-certified.json
+  source      4 chunk(s)/document(s) read this run — a merge, the documents of earlier runs are in the artifact but not in this count · 22 entity types · 23 relation types
+  assertions  128 entities · 177 relations
+  grounded    entities 81/128 · relations 127/177
+  evidence    370 quotes · 226 grounded (61%) · 0 distinct chunk(s) cited
+  cost this run 53 calls · 38166 in / 4741 out tokens · 29 s · judge deepseek-chat
+KB BUILD — eval/kb-round/ontologies/20261125-1945.json
+  source      369 chunk(s)/document(s) read this run · 15 entity types · 15 relation types
+  assertions  72 entities · 55 relations
+  grounded    entities 35/72 · relations 23/55
+  evidence    248 quotes · 76 grounded (30%) · 112 distinct chunk(s) cited
+  cost this run 751 calls · 735632 in / 31107 out tokens · 546 s · judge deepseek-chat
+
+BY NAME
+  in both builds 41 · only in the file build 87 · only in the chunk build 31
+  of the 41 shared names: grounded in both 23 · file only 11 · chunk only 1 · neither 6
+  the 11 names grounded by the file build but not by the chunk build were typed there: {'dsh_plugin': 6, 'upstream_project': 5}
+  of those types, absent from the chunk build's TBox: ['upstream_project']
+  of the 87 file-only entities, 47 are grounded; by type: {'upstream_project': 15, 'guardrail': 7, 'output_artifact': 4, 'agent_role': 3, 'ontology_component': 3, 'evidence_tag': 3, 'market_data_payload': 2, 'profile': 2, 'ledger_entry': 1, 'dsh_plugin': 1, 'harness_service': 1, 'harness_event': 1, 'trust_ladder': 1, 'git_repository': 1, 'type_conflict': 1, 'format_spec': 1}
+  chunk-only entities (31): agentdiary-dsh-plugin (dsh_plugin), binance (exchange), ccxt_bridge.py (dsh_plugin), ccxt_research.py (dsh_plugin), deepseek-ai/dsh-superagent-prototype (dsh_plugin), deepseek-bot (dsh_plugin), deepseek-chat (agent_persona), deepseek-harness (dsh_plugin), diary (dsh_plugin), dsh-agentdiary-plugin (dsh_plugin), dsh-Kronos v0 (dsh_plugin), dsh-Kronos v0 (baseline) (dsh_plugin), dsh-plugin-atlas (dsh_plugin), evidence ledger for DeepSeek Harness (dsh_plugin), exchange (exchange), guard (trading_guard), investment committee (investment_committee), market data payload (market_data_payload), ontologies/20261118-1441 (ontology), ontologies/20261125-1718 (ontology), PASS @ 55 (ic_memo), PM (investment_committee), settled turn (turn), trading guard (trading_guard), trajectory (diary_entry), turn (turn), vicfei dsh family (dsh_plugin), 凯瑟琳·伍德 (agent_persona), 彼得·林奇 (agent_persona), 查理·芒格 (agent_persona), 沃伦·巴菲特 (agent_persona)
+
+  37 chunk-build entities are ungrounded; for 24 of them the judge's first reason speaks of "plugin" — typed dsh_plugin because the TBox had no closer type, and the quote says something else
+
+NOT CONTROLLED: different TBox (each build sampled its own), different extraction calls (a whole document's opening against one chunk), the same judge model. A same-TBox comparison has not been run.

@@ -1,0 +1,8 @@
++ 374 trajectory record(s) from /tmp/o5/e2/live/ao/round1.ndjson · 0 already present (idempotent by event id) · 374 in the store
++ 2 trajectory record(s) from /tmp/o5/e2/live/ao/round2.ndjson · 373 already present (idempotent by event id) · 376 in the store
++ 2 trajectory record(s) from /tmp/o5/e2/live/ao-v03/round2.ndjson · 373 already present (idempotent by event id) · 378 in the store
+events in the mixed store: 378
+records: {'Term': 128, 'Relation': 177, 'Constraint': 2}
+TERM OAR upstream_project | verdict grounded | evidence:
+   by judge:deepseek-reasoner | verdict grounded | same quote as first: True
+   by judge | verdict grounded | same quote as first: True

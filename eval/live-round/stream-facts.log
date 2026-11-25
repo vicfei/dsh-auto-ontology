@@ -1,0 +1,33 @@
+round1 (the input): 374 event(s) — 1 build · 1 fold · 370 assertion · 2 certification
+   build: [build] the vicfei dsh plugin family: multi-agent investment committees, quant research plugins, semantic layers, ontology construction for DeepSeek H
+   certification: [certification · accept] turn/end is a harness_event. by agent:shanghai-window — README states the harness emits turn/end with a reason: a harness eve
+   certification: [certification · reject] ontology_build is a harness_service. by agent:shanghai-window — the quote calls ontology_build a typed tool registered by the
+round2, v0.3 engine (19:38): 375 event(s) — 1 build · 1 fold · 370 assertion · 3 certification
+round2, v0.2 engine (18:52): 375 event(s) — 1 build · 1 fold · 370 assertion · 3 certification
+
+round 2 against round 1 (v0.3 ids): +2 event(s), -1 event(s)
+   added   assertion · OAR is a upstream_project. · by judge:deepseek-reasoner · at None
+   added   certification · OAR is a dsh_plugin. · by agent:evoontology-adapter · at 2026-11-25T19:38:23
+   retired assertion · OAR is a dsh_plugin. · by judge · at None
+
+v0.3 export against v0.2-engine export of the same round 2: 2 id(s) differ on each side
+   v0.3 assertion · OAR is a upstream_project. · by judge:deepseek-reasoner · at None
+   v0.3 certification · OAR is a dsh_plugin. · by agent:evoontology-adapter · at 2026-11-25T19:38:23
+   v0.2 assertion · OAR is a upstream_project. · by judge · at None
+   v0.2 certification · OAR is a dsh_plugin. · by agent:evoontology-adapter · at 2026-11-25T18:48:44
+
+assertions exported as grounded: round 1 226/370 · round 2 227/370 (the same 370 claims; the re-typed one was ungrounded before)
+who an assertion's verdict is attributed to, round 2: judge 369 · judge:deepseek-reasoner 1
+
+the re-typed Term as round 2 exports it:
+  claim    OAR is a upstream_project.
+  verdict  grounded
+  by       judge:deepseek-reasoner
+  reason   Quote names OAR as Open Agent Runtime with GitHub link and an adapter integrating it.
+  evidence {"quote": "- **OAR** (`src/adapters/oar.ts`) — [Open Agent Runtime](https://github.com/botiverse/oar):\n  the host owns the OAR session and hands it in duck-typ…
+
+the same Term as round 1 exports it:
+  claim    OAR is a dsh_plugin.
+  verdict  ungrounded
+  by       judge
+  evidence {"quote": "- **OAR** (`src/adapters/oar.ts`) — [Open Agent Runtime](https://github.com/botiverse/oar):\n  the host owns the OAR session and hands it in duck-typ…

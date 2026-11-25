@@ -3,6 +3,7 @@
 // (the dsh-laya sidecar precedent, proven across the family).
 //
 //   auto-ontology build --docs <dir-or-glob> --domain "..." --save [--lang zh]
+//   auto-ontology build --kb <weknora-kb-id> --domain "..." --save [--limit N]   (a knowledge base: every quote names its chunk)
 //   auto-ontology export ontologies/x.json > trajectory.ndjson   (the artifact as events)
 //   auto-ontology apply run.proposals.json --actor agent:<name>   (a judge's re-typing, applied as a certification)
 //   auto-ontology --docs ... (build is the default subcommand)

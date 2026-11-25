@@ -1,0 +1,3309 @@
+{
+ "domain": "the vicfei dsh plugin family: multi-agent investment committees, quant research plugins, semantic layers, ontology construction for DeepSeek Harness",
+ "built_at": "2026-11-25T19:45:57",
+ "provenance": {
+  "model": "deepseek-chat",
+  "temperature": 0,
+  "elapsed_s": 546,
+  "calls": 751,
+  "tokens_in": 735632,
+  "tokens_out": 31107,
+  "docs_this_run": 369,
+  "merged_from": false,
+  "judge_model": "deepseek-chat",
+  "grounding_pass": true,
+  "kb": {
+   "id": "035be669-f79c-458f-b119-f295d1e65859",
+   "limit": null,
+   "skipped_documents": {},
+   "documents": 23,
+   "chunks": 369
+  }
+ },
+ "tbox": {
+  "entity_types": [
+   {
+    "name": "agent_persona",
+    "desc": "A named investor or analyst persona (e.g. Buffett, Munger, Lynch, Wood) that produces an independent valuation or verdict."
+   },
+   {
+    "name": "diary_entry",
+    "desc": "An append-only record written per settled turn into a user-owned git repository."
+   },
+   {
+    "name": "dsh_plugin",
+    "desc": "A DeepSeek Harness plugin in the vicfei dsh family, packaged as a repository with a README and installable into DSH."
+   },
+   {
+    "name": "evidence_tag",
+    "desc": "A source quote or citation attached to an assertion, claim, or ontology element to ground it."
+   },
+   {
+    "name": "exchange",
+    "desc": "A crypto trading venue accessed through the CCXT bridge."
+   },
+   {
+    "name": "ic_memo",
+    "desc": "An auditable investment-committee memo recording verdicts, named drivers, dissent, and evidence tags."
+   },
+   {
+    "name": "investment_committee",
+    "desc": "A multi-agent committee that aggregates independent persona verdicts into a single decision memo."
+   },
+   {
+    "name": "market_data_payload",
+    "desc": "A read-only market data record returned by an exchange bridge, tagged with exchange and timestamp."
+   },
+   {
+    "name": "ontology",
+    "desc": "A typed knowledge structure consisting of a TBox schema and ABox instances, produced by ontology construction."
+   },
+   {
+    "name": "ontology_entity",
+    "desc": "A typed entity instance in an ontology's ABox, carrying its source evidence."
+   },
+   {
+    "name": "ontology_relation",
+    "desc": "A typed relation between ontology entities, carrying its source evidence."
+   },
+   {
+    "name": "ontology_type",
+    "desc": "A schema-level class or relation type in the TBox, possibly flagged as unknown or conflicting."
+   },
+   {
+    "name": "session_event",
+    "desc": "A durable event on the harness session/event stream (e.g. turn/end, session/disposed) that plugins subscribe to."
+   },
+   {
+    "name": "trading_guard",
+    "desc": "A fail-closed code-level safeguard (unlock arming, notional caps, symbol whitelist) that constrains order placement."
+   },
+   {
+    "name": "turn",
+    "desc": "A unit of agent execution that settles with a reason such as completed, error, max-tokens, or aborted."
+   }
+  ],
+  "relation_types": [
+   {
+    "name": "has_persona",
+    "domains": "investment_committee",
+    "ranges": "agent_persona",
+    "desc": "A committee is composed of independent investor personas that each value the target."
+   },
+   {
+    "name": "produces_memo",
+    "domains": "investment_committee",
+    "ranges": "ic_memo",
+    "desc": "A committee emits an auditable IC-MEMO as its output."
+   },
+   {
+    "name": "records_dissent",
+    "domains": "ic_memo",
+    "ranges": "agent_persona",
+    "desc": "A memo names unrebutted objections raised by a persona, preserving dissent."
+   },
+   {
+    "name": "supports_claim",
+    "domains": "evidence_tag",
+    "ranges": "ic_memo",
+    "desc": "An evidence tag grounds a claim or verdict recorded in a memo."
+   },
+   {
+    "name": "contains_entity",
+    "domains": "ontology",
+    "ranges": "ontology_entity",
+    "desc": "An ontology holds typed entity instances in its ABox."
+   },
+   {
+    "name": "contains_relation",
+    "domains": "ontology",
+    "ranges": "ontology_relation",
+    "desc": "An ontology holds typed relations between entities."
+   },
+   {
+    "name": "has_type",
+    "domains": "ontology_entity",
+    "ranges": "ontology_type",
+    "desc": "An entity instance is assigned a schema type from the TBox."
+   },
+   {
+    "name": "grounded_by",
+    "domains": "ontology_entity",
+    "ranges": "evidence_tag",
+    "desc": "An entity assertion is backed by its source quote; ungrounded ones are flagged."
+   },
+   {
+    "name": "relation_grounded_by",
+    "domains": "ontology_relation",
+    "ranges": "evidence_tag",
+    "desc": "A relation assertion is backed by its source quote."
+   },
+   {
+    "name": "subscribes_to",
+    "domains": "dsh_plugin",
+    "ranges": "session_event",
+    "desc": "A plugin listens to the durable session/event stream."
+   },
+   {
+    "name": "writes_entry",
+    "domains": "dsh_plugin",
+    "ranges": "diary_entry",
+    "desc": "The diary plugin appends a diary entry per settled turn."
+   },
+   {
+    "name": "settles_as",
+    "domains": "turn",
+    "ranges": "session_event",
+    "desc": "A turn settles when the harness emits turn/end with a terminal reason."
+   },
+   {
+    "name": "guards_orders",
+    "domains": "trading_guard",
+    "ranges": "exchange",
+    "desc": "A trading guard constrains order placement against an exchange."
+   },
+   {
+    "name": "returns_payload",
+    "domains": "exchange",
+    "ranges": "market_data_payload",
+    "desc": "An exchange bridge returns market data payloads tagged with exchange and timestamp."
+   },
+   {
+    "name": "sibling_of",
+    "domains": "dsh_plugin",
+    "ranges": "dsh_plugin",
+    "desc": "A plugin is a sibling or sister project of another plugin in the family."
+   }
+  ]
+ },
+ "abox": {
+  "entities": [
+   {
+    "name": "agentdiary",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     },
+     {
+      "quote": "Sibling of the `agentdiary` CLI (personal agent diary across machines) and `dsh-super-agent` (admission control & trust ladder for any CLI agent).",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": false,
+      "reason": "Quote only mentions agentdiary as a CLI sibling, not a dsh_plugin.",
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "agentdiary-dsh-plugin",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "2. ~~Live smoke~~ **PASSED 2026-11-18 with 0.1.3** (win11, real web turn): the day file gains a `turn N completed` entry with the event mix, `commitEveryEntry` commits land on the chain, zero warnings.",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": false,
+      "reason": "Quote only reports a test result; never states the entity is a dsh_plugin.",
+      "chunk_id": "8aaa9dbc-c9a2-4e9b-84e7-4252fe7266ca"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "binance",
+    "type": "exchange",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt",
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "python3 scripts/ccxt_bridge.py --run market.fetch_ticker --params '{\"exchange\":\"binance\",\"symbol\":\"BTC/USDT\"}'",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only passes 'binance' as a parameter value; no type information stated.",
+      "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4"
+     },
+     {
+      "quote": "Real smoke (2026-11-16, binance BTC/USDT 500×1m via relay): **48 buys / 48 sells,",
+      "doc": "dsh-hummingbot",
+      "grounded": false,
+      "reason": "Quote only mentions binance in a test context, no type information.",
+      "chunk_id": "28dbd7bd-153d-4f3a-8c85-36dec305d3c0"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "Buffett",
+    "type": "agent_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     },
+     {
+      "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239"
+     },
+     {
+      "quote": "the four guest seats split three ways — Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62",
+      "doc": "dsh-tradingagents",
+      "grounded": true,
+      "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319"
+     },
+     {
+      "quote": "Buffett / Munger / Lynch / Wood",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote only lists names, no type or persona information.",
+      "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "ccxt_bridge.py",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "python3 scripts/ccxt_bridge.py --run market.fetch_ticker --params '{\"exchange\":\"binance\",\"symbol\":\"BTC/USDT\"}'",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only shows a command invocation; no mention of dsh_plugin or plugin packaging.",
+      "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "ccxt_research.py",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "python3 scripts/ccxt_research.py --question \"BTC 近 90 日量价结构？\" --save",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only shows a command invocation; no mention of dsh_plugin or plugin packaging.",
+      "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "Cordis",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-evidence-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "- **Cordis** (`index.ts`) — DeepSeek Harness, the original.",
+      "doc": "dsh-evidence-plugin",
+      "grounded": false,
+      "reason": "Quote mentions Cordis as DeepSeek Harness original, not stated as dsh_plugin.",
+      "chunk_id": "81cf02d8-27a7-45d8-b746-7fc1e8cf2580"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "deepseek-ai/dsh-superagent-prototype",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "- [deepseek-ai/dsh-superagent-prototype](https://github.com/deepseek-ai/dsh-superagent-prototype) (MIT) — the observed bundle format this repo follows.",
+      "doc": "dsh-weknora-ops",
+      "grounded": false,
+      "reason": "Quote only mentions the repo as a bundle format reference, no plugin type stated.",
+      "chunk_id": "a12a7122-9a20-4c7c-a71b-57e88abf3ba5"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "deepseek-bot",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-super-agent"
+    ],
+    "evidences": [
+     {
+      "quote": "[deepseek-bot](https://github.com/vicfei/deepseek-bot) — a personal agent runtime guarded end-to-end by a hash-chained ledger and a constitution layer: this project guards coding agents at the gate, that one guards a personal agent over months of runtime",
+      "doc": "dsh-super-agent",
+      "grounded": false,
+      "reason": "Quote describes a personal agent runtime, not a DSH plugin; no plugin type stated.",
+      "chunk_id": "a9de54b0-8a06-4d82-8ef5-8528490b45f3"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "deepseek-chat",
+    "type": "agent_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-evoontology"
+    ],
+    "evidences": [
+     {
+      "quote": "Proposer `deepseek-chat`",
+      "doc": "dsh-evoontology",
+      "grounded": false,
+      "reason": "Quote only names deepseek-chat as proposer, not an investor/analyst persona.",
+      "chunk_id": "87c881ff-bba9-4689-8a93-0b3a8289975a"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "deepseek-harness",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-super-agent"
+    ],
+    "evidences": [
+     {
+      "quote": "- [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness)",
+      "doc": "dsh-super-agent",
+      "grounded": false,
+      "reason": "Quote only lists a link; no type information about deepseek-harness.",
+      "chunk_id": "84c65ce5-124f-4d7f-9038-f85e40287859"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "diary",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "The diary is the counterweight — an append-only, git-native record of what was done and said, re-readable after the context is gone.",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": false,
+      "reason": "Quote describes diary as a record, not a DSH plugin; no type info.",
+      "chunk_id": "72745891-0a7e-4f1a-bad6-091a1360396a"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "diary entry",
+    "type": "diary_entry",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-agentdiary-plugin",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh plugin --profile web add dsh-agentdiary-plugin",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": false,
+      "reason": "Quote only shows an install command mentioning the name; no type information stated.",
+      "chunk_id": "b958f2e7-a934-49d8-9a09-2fedada6f4c8"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-ai-hedge-fund",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-ccxt",
+     "dsh-hummingbot",
+     "dsh-kronos",
+     "dsh-nautilus",
+     "dsh-quantstats",
+     "dsh-tradingagents",
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "Inspired by [virattt/ai-hedge-fund](https://github.com/virattt/ai-hedge-fund) —\n> restructured as a native DeepSeek Harness experience.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "e525f22d-a132-4c26-8c37-88bc4db34aae"
+     },
+     {
+      "quote": "# dsh-ai-hedge-fund — an AI hedge fund of investor legends, on DeepSeek Harness",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": false,
+      "reason": "Quote only gives a title/tagline; no statement it is a plugin or installable.",
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     },
+     {
+      "quote": "| | ai-hedge-fund | **dsh-ai-hedge-fund** |",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": false,
+      "reason": "Quote only shows a table row naming the entity, no type information.",
+      "chunk_id": "93581b58-27d6-4f03-8801-8a5eb2070339"
+     },
+     {
+      "quote": "git clone https://github.com/vicfei/dsh-ai-hedge-fund && cd dsh-ai-hedge-fund",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": false,
+      "reason": "Quote only shows clone command; no statement that it is a DSH plugin.",
+      "chunk_id": "a864fcc5-db22-4ab2-a3f9-ab26c62e1d4b"
+     },
+     {
+      "quote": "v0 engine smoke-tested (see `memos/`). Real-data adapters (US & A-share, zero keys, CN-cloud friendly ladder) inherited from the sister project.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": false,
+      "reason": "Quote never names dsh-ai-hedge-fund nor states it is a DSH plugin.",
+      "chunk_id": "2cc3760b-1b20-456d-ad8c-0d69491a9a45"
+     },
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only mentions the name/link; no type information about dsh-ai-hedge-fund.",
+      "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193"
+     },
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund).",
+      "doc": "dsh-kronos",
+      "grounded": false,
+      "reason": "Quote only mentions the name/link; no type information about dsh-ai-hedge-fund.",
+      "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907"
+     },
+     {
+      "quote": "from sister repo dsh-ai-hedge-fund;",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote only mentions repo name; no type information about dsh-ai-hedge-fund.",
+      "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09"
+     },
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) (persona fund).",
+      "doc": "dsh-vibe-trading",
+      "grounded": false,
+      "reason": "Quote only names the repo with a parenthetical; no plugin type stated.",
+      "chunk_id": "cdbe9d1d-7b24-4f27-8991-b70f3d6900d9"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-auto-ontology",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology",
+     "dsh-evoontology"
+    ],
+    "evidences": [
+     {
+      "quote": "# dsh-auto-ontology — auto ontology construction with evidence, for DeepSeek Harness",
+      "doc": "dsh-auto-ontology",
+      "grounded": true,
+      "chunk_id": "ea32d0ec-d751-47c5-8247-bdc08c0b6d10"
+     },
+     {
+      "quote": "With the plugin installed, agents get `ontology_build` / `ontology_query` /\n`ontology_export` as typed tools (`dsh plugin add dsh-auto-ontology`).",
+      "doc": "dsh-auto-ontology",
+      "grounded": true,
+      "chunk_id": "df423ea1-87ca-4e7a-a277-c2fad7b7ad17"
+     },
+     {
+      "quote": "**E2, the first adapter** — the family's own [dsh-auto-ontology](https://github.com/vicfei/dsh-auto-ontology)\nplugs in: its `ao-trajectory/0.1`",
+      "doc": "dsh-evoontology",
+      "grounded": true,
+      "chunk_id": "599e1e08-391e-438d-85a6-af514c01ab00"
+     },
+     {
+      "quote": "Implements the concept of [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology)\n> (13.3k★) natively for DSH, with the family's evidence discipline.",
+      "doc": "dsh-auto-ontology",
+      "grounded": false,
+      "reason": "Quote never names dsh-auto-ontology nor states it is a DSH plugin.",
+      "chunk_id": "b1cc7f3f-db49-48f3-a4d0-3348a94c8d9e"
+     },
+     {
+      "quote": "| | NVIDIA auto-ontology (upstream) | ontology viewers/bridges | **dsh-auto-ontology** |",
+      "doc": "dsh-auto-ontology",
+      "grounded": false,
+      "reason": "Quote only mentions the name in a table row; no type information stated.",
+      "chunk_id": "7e5a53c4-1b72-4001-bfc3-07935eb0cbc6"
+     },
+     {
+      "quote": "dsh-auto-ontology builds a typed layer from documents and keeps the judge's verdict on every quote.",
+      "doc": "dsh-evoontology",
+      "grounded": false,
+      "reason": "Quote only describes function; never states it is a dsh_plugin or installable into DSH.",
+      "chunk_id": "0a9a4a30-8b43-49f3-a3f5-97eeb1f506a0"
+     },
+     {
+      "quote": "A dsh-auto-ontology build over the 23 public READMEs of the plugin family, folded once and certified twice",
+      "doc": "dsh-evoontology",
+      "grounded": false,
+      "reason": "Quote mentions dsh-auto-ontology only as a build, not as a plugin/repository.",
+      "chunk_id": "87c881ff-bba9-4689-8a93-0b3a8289975a"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-CCXT",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt",
+     "dsh-freqtrade",
+     "dsh-jesse",
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "# dsh-CCXT — 100+ crypto exchanges as DeepSeek Harness tools, fail-closed by design",
+      "doc": "dsh-ccxt",
+      "grounded": true,
+      "chunk_id": "a5241405-bd85-4a12-9f68-e42e184aa884"
+     },
+     {
+      "quote": "Built on [ccxt](https://github.com/ccxt/ccxt) (44.9k★, MIT) — independent community bridge, not affiliated.",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only mentions ccxt and affiliation; no statement that dsh-ccxt is a DSH plugin.",
+      "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193"
+     },
+     {
+      "quote": "This is the **standalone, agent-first bridge** — and the only one with a trading guard:",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote never names dsh-CCXT nor states it is a DSH plugin.",
+      "chunk_id": "0b07ecb3-3038-4f40-a21d-eaac0d068296"
+     },
+     {
+      "quote": "| | raw ccxt via bash | invest-app ccxt providers | **dsh-CCXT** |",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-CCXT in a table row; no type information.",
+      "chunk_id": "a4cc47dc-12e5-4b15-9ba6-5edf7565bceb"
+     },
+     {
+      "quote": "git clone https://github.com/vicfei/dsh-CCXT && cd dsh-CCXT",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only gives clone command; no statement that it is a DSH plugin.",
+      "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4"
+     },
+     {
+      "quote": "v0 bridge + guard + research engine smoke-tested on live data.",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote never names dsh-ccxt nor states it is a plugin.",
+      "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361"
+     },
+     {
+      "quote": "M2 **native TypeScript cordis plugin** (ccxt is JS-first — this family member goes\npure-TS naturally).",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote calls it a cordis plugin, not a DeepSeek Harness dsh_plugin.",
+      "chunk_id": "76f1e6cb-c0cb-4b1e-9142-dae03442e80b"
+     },
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+      "doc": "dsh-freqtrade",
+      "grounded": false,
+      "reason": "Quote only lists dsh-CCXT as a link; no type information stated.",
+      "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-compaction-semantic",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-compaction-semantic"
+    ],
+    "evidences": [
+     {
+      "quote": "# dsh-compaction-semantic — semantic context compaction for DeepSeek Harness",
+      "doc": "dsh-compaction-semantic",
+      "grounded": true,
+      "chunk_id": "f500fd31-8918-403a-8f67-d1fb5ca39975"
+     },
+     {
+      "quote": "That slot is this repo.",
+      "doc": "dsh-compaction-semantic",
+      "grounded": false,
+      "reason": "Quote only says 'this repo'; no plugin type or name stated.",
+      "chunk_id": "f7f0d231-ffd7-42f9-9381-6cc82caa8e22"
+     },
+     {
+      "quote": "Install dsh-compaction-semantic from https://github.com/vicfei/dsh-compaction-semantic into this profile: run `dsh plugin --profile <name> add dsh-compaction-semantic`",
+      "doc": "dsh-compaction-semantic",
+      "grounded": false,
+      "reason": "quote is not verbatim in the source document",
+      "chunk_id": "0b9b8b0e-1c33-4a8a-9567-d0d54977f3b0"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-evidence-plugin",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-evidence-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "From the plugin market, or `dsh plugin --profile web add dsh-evidence-plugin`.",
+      "doc": "dsh-evidence-plugin",
+      "grounded": false,
+      "reason": "Quote only gives an install command; no statement that it is a DSH plugin.",
+      "chunk_id": "54d62040-9a4b-4016-aad7-ab43507e092d"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-EvoOntology",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology",
+     "dsh-evoontology"
+    ],
+    "evidences": [
+     {
+      "quote": "dsh-EvoOntology's adapter imports it, projects the layer (one Term per typing, every quote with its verdict), asks a model for a better typing of each ungrounded Term",
+      "doc": "dsh-auto-ontology",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-EvoOntology's adapter; no statement that it is a plugin.",
+      "chunk_id": "794c75e1-b83b-4811-98e3-549a48be2d56"
+     },
+     {
+      "quote": "# dsh-EvoOntology — a self-evolving ontology layer for DeepSeek Harness",
+      "doc": "dsh-evoontology",
+      "grounded": false,
+      "reason": "Quote calls it an ontology layer, not a plugin; no plugin type stated.",
+      "chunk_id": "e5c2c701-3836-451d-8eaa-0935256a392b"
+     },
+     {
+      "quote": "**Phase E1 complete** — the zero-LLM kernel ships:",
+      "doc": "dsh-evoontology",
+      "grounded": false,
+      "reason": "Quote mentions no plugin name or type; only a phase completion statement.",
+      "chunk_id": "599e1e08-391e-438d-85a6-af514c01ab00"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-freqtrade",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "# dsh-freqtrade — a GPL-free strategy-bot toolkit for DeepSeek Harness",
+      "doc": "dsh-freqtrade",
+      "grounded": false,
+      "reason": "Quote calls it a strategy-bot toolkit, not a DSH plugin; no plugin type stated.",
+      "chunk_id": "b24a2918-1a13-4117-88c1-559ce5cccb89"
+     },
+     {
+      "quote": "Concept slot of [freqtrade](https://github.com/freqtrade/freqtrade) (57k★) +\n> [freqtrade-strategies](https://github.com/freqtrade/freqtrade-strategies) (5.7k★),\n> **rebuilt clean-room for DSH** — see the license posture below.",
+      "doc": "dsh-freqtrade",
+      "grounded": false,
+      "reason": "Quote mentions rebuilding for DSH but never states dsh-freqtrade is a DSH plugin.",
+      "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2"
+     },
+     {
+      "quote": "git clone https://github.com/vicfei/dsh-freqtrade && cd dsh-freqtrade",
+      "doc": "dsh-freqtrade",
+      "grounded": false,
+      "reason": "Quote only gives clone command; no statement that it is a DSH plugin.",
+      "chunk_id": "86f93c72-3802-4691-8a72-5c32dc12425f"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-genui",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-uigen"
+    ],
+    "evidences": [
+     {
+      "quote": "and `dsh-genui` renders the result inline in the conversation.",
+      "doc": "dsh-uigen",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-genui rendering; no plugin type stated.",
+      "chunk_id": "e3875939-45f0-436f-a129-f2b968d3f774"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-hummingbot",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-hummingbot",
+     "dsh-jesse",
+     "dsh-kronos",
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "# dsh-hummingbot — market making, natively on DeepSeek Harness",
+      "doc": "dsh-hummingbot",
+      "grounded": false,
+      "reason": "Quote only gives a title/tagline; no statement that it is a DSH plugin.",
+      "chunk_id": "0a79f867-c354-4261-896a-3b545c974eda"
+     },
+     {
+      "quote": "Implements the core concept of [Hummingbot](https://github.com/hummingbot/hummingbot)\n> (21.2k★) — pure market making — as a native DSH engine; the heavy upstream app\n> (Docker) joins in M2 as the live executor behind the family's fail-closed guard.",
+      "doc": "dsh-hummingbot",
+      "grounded": false,
+      "reason": "Quote describes an engine concept, never states it is a DSH plugin or repository.",
+      "chunk_id": "22fb9b71-03eb-4b36-a042-86ea77f110b8"
+     },
+     {
+      "quote": "| | Hummingbot app (Docker) | **dsh-hummingbot** |",
+      "doc": "dsh-hummingbot",
+      "grounded": false,
+      "reason": "Quote only lists the name in a table; no type information about plugin.",
+      "chunk_id": "e85d93de-c0a5-4204-8e5b-28f46d4f9134"
+     },
+     {
+      "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) (MM) ·",
+      "doc": "dsh-jesse",
+      "grounded": false,
+      "reason": "Quote only mentions the name in a link list; no type information stated.",
+      "chunk_id": "516a6230-b74e-453b-a193-4ce0a8353756"
+     },
+     {
+      "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+      "doc": "dsh-kronos",
+      "grounded": false,
+      "reason": "Quote only lists the name/link; no statement that it is a dsh_plugin.",
+      "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907"
+     },
+     {
+      "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-jesse](https://github.com/vicfei/dsh-jesse).",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only lists the name/link; no statement that it is a dsh_plugin.",
+      "chunk_id": "2020e77a-329b-4501-9cbd-6b139eb3fd6c"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-jesse",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-jesse",
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "# dsh-jesse — strategy optimization for DeepSeek Harness, with the overfit meter on",
+      "doc": "dsh-jesse",
+      "grounded": false,
+      "reason": "Quote mentions DeepSeek Harness but never names dsh-jesse as a plugin.",
+      "chunk_id": "05150703-f95b-45ef-b9c7-6fa5de8bffae"
+     },
+     {
+      "quote": "Implements the core concept of [Jesse](https://github.com/jesse-ai/jesse) (8.8k★) — the optimization loop — natively for DSH, with anti-overfit discipline borrowed from the factor-research world.",
+      "doc": "dsh-jesse",
+      "grounded": false,
+      "reason": "Quote never names dsh-jesse nor states it is a DSH plugin.",
+      "chunk_id": "edcbcab2-19c3-4452-8174-b78c0dea78d9"
+     },
+     {
+      "quote": "dsh-jesse is the **zero-dependency auditable lightweight** for the DSH session: stdlib-only, honest-by-construction reports, family artifact interop.",
+      "doc": "dsh-jesse",
+      "grounded": false,
+      "reason": "Quote never states dsh-jesse is a plugin; only describes features.",
+      "chunk_id": "caa58631-78b1-49ca-a311-91601744066a"
+     },
+     {
+      "quote": "| | upstream jesse (complement) | dsh-nautilus_trader (sibling) | **dsh-jesse** |",
+      "doc": "dsh-jesse",
+      "grounded": false,
+      "reason": "Quote only lists dsh-jesse in a table row; no type information stated.",
+      "chunk_id": "416d4a23-f641-4146-bd0e-abd936a88c89"
+     },
+     {
+      "quote": "git clone https://github.com/vicfei/dsh-jesse && cd dsh-jesse",
+      "doc": "dsh-jesse",
+      "grounded": false,
+      "reason": "Quote only gives clone command; no type information about dsh-jesse.",
+      "chunk_id": "76a43333-8313-46fe-8ea2-ac3d2c22b837"
+     },
+     {
+      "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-jesse](https://github.com/vicfei/dsh-jesse).",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only lists dsh-jesse as a link; no type information stated.",
+      "chunk_id": "2020e77a-329b-4501-9cbd-6b139eb3fd6c"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-Kronos",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-kronos"
+    ],
+    "evidences": [
+     {
+      "quote": "# dsh-Kronos — K-line scenario forecasting for DeepSeek Harness",
+      "doc": "dsh-kronos",
+      "grounded": false,
+      "reason": "Quote only gives a title; no statement that it is a plugin or installable.",
+      "chunk_id": "3ed78cf9-f96d-4c11-ac70-ae27174a9650"
+     },
+     {
+      "quote": "npm i -g dsh-kronos             # or: dsh plugin add dsh-kronos",
+      "doc": "dsh-kronos",
+      "grounded": false,
+      "reason": "Quote only shows install commands, no statement that dsh-kronos is a DSH plugin.",
+      "chunk_id": "53ec6148-2f1e-466d-a837-c5cab9bf922b"
+     },
+     {
+      "quote": "git clone https://github.com/vicfei/dsh-Kronos && cd dsh-kronos",
+      "doc": "dsh-kronos",
+      "grounded": false,
+      "reason": "Quote only gives clone command; no statement that dsh-kronos is a plugin.",
+      "chunk_id": "1a6046c8-9563-422f-8d37-23e2c2895415"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-Kronos v0",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-kronos"
+    ],
+    "evidences": [
+     {
+      "quote": "| Role | learned conditional structure | **the anchor any learned model must beat** — and the honest fallback when weights/network aren't there |",
+      "doc": "dsh-kronos",
+      "grounded": false,
+      "reason": "Quote never names dsh-Kronos v0 nor states it is a plugin.",
+      "chunk_id": "53ec6148-2f1e-466d-a837-c5cab9bf922b"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-Kronos v0 (baseline)",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-kronos"
+    ],
+    "evidences": [
+     {
+      "quote": "| | Kronos (neural FM) | **dsh-Kronos v0 (baseline)** |",
+      "doc": "dsh-kronos",
+      "grounded": false,
+      "reason": "Quote only names it in a table cell; no type or plugin information.",
+      "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-Nautilus",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "# dsh-Nautilus — a professional backtesting engine as DeepSeek Harness tools",
+      "doc": "dsh-nautilus",
+      "grounded": true,
+      "chunk_id": "5bbca2b2-5015-4149-8c56-db8ac05d0187"
+     },
+     {
+      "quote": "Built on [NautilusTrader](https://github.com/nautechsystems/nautilus_trader) (31.6k★) — independent community bridge, not affiliated.",
+      "doc": "dsh-nautilus",
+      "grounded": false,
+      "reason": "Quote only describes a bridge built on NautilusTrader; no plugin type stated.",
+      "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914"
+     },
+     {
+      "quote": "| | toy SMA cross in dsh-Vibe-Trading | **dsh-Nautilus** |",
+      "doc": "dsh-nautilus",
+      "grounded": false,
+      "reason": "Quote only mentions the name in a table cell; no type information.",
+      "chunk_id": "e6db34ff-fdd0-430f-b4d8-07889b60d15e"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-nautilus_trader",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-freqtrade",
+     "dsh-jesse",
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) ·",
+      "doc": "dsh-freqtrade",
+      "grounded": false,
+      "reason": "Quote only mentions the name/link, no type information about dsh-nautilus_trader.",
+      "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2"
+     },
+     {
+      "quote": "| | upstream jesse (complement) | dsh-nautilus_trader (sibling) | **dsh-jesse** |",
+      "doc": "dsh-jesse",
+      "grounded": false,
+      "reason": "Quote only lists dsh-nautilus_trader as a sibling in a table; no type info.",
+      "chunk_id": "416d4a23-f641-4146-bd0e-abd936a88c89"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-OpenBB",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt",
+     "dsh-freqtrade",
+     "dsh-jesse",
+     "dsh-nautilus",
+     "dsh-openbb",
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "# dsh-OpenBB — the OpenBB data platform as DeepSeek Harness tools",
+      "doc": "dsh-openbb",
+      "grounded": true,
+      "chunk_id": "d07245c1-b908-4609-b42e-7d4ff302759d"
+     },
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only mentions the name/link; no type information about dsh-OpenBB.",
+      "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193"
+     },
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB).",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only mentions the name/link; no type information about dsh-OpenBB.",
+      "chunk_id": "0b07ecb3-3038-4f40-a21d-eaac0d068296"
+     },
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+      "doc": "dsh-freqtrade",
+      "grounded": false,
+      "reason": "Quote only lists the name/link; no statement that it is a dsh_plugin.",
+      "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2"
+     },
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) ·",
+      "doc": "dsh-nautilus",
+      "grounded": false,
+      "reason": "Quote only mentions the name in a link; no type information stated.",
+      "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914"
+     },
+     {
+      "quote": "Built on [OpenBB](https://github.com/openbq-org/OpenBB) — independent community bridge, not affiliated. Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) · [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) · [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading).",
+      "doc": "dsh-openbb",
+      "grounded": false,
+      "reason": "Quote only mentions family links; does not state dsh-openbb is a DSH plugin.",
+      "chunk_id": "53998508-7049-428c-9241-57b53f39dcb4"
+     },
+     {
+      "quote": "| | raw `pip install openbb` in DSH | **dsh-OpenBB** |",
+      "doc": "dsh-openbb",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-OpenBB in a table cell; no type information stated.",
+      "chunk_id": "35911607-dfb2-4121-826a-5a42f69ad2c3"
+     },
+     {
+      "quote": "MIT bridge over Apache-2.0 upstream — no upstream code vendored; install via pip.",
+      "doc": "dsh-openbb",
+      "grounded": false,
+      "reason": "Quote mentions install via pip but never names dsh-openbb or states it is a DSH plugin.",
+      "chunk_id": "78a23d67-667f-4209-85cf-9323d08a32a1"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-plugin-atlas",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-super-agent"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-plugin-atlas](https://github.com/vicfei/dsh-plugin-atlas) — a live, daily-refreshed map of the whole DSH plugin ecosystem",
+      "doc": "dsh-super-agent",
+      "grounded": true,
+      "chunk_id": "03d7dea1-677c-43de-954c-446192aa4a10"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-QuantLib",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "# dsh-QuantLib — derivatives pricing as DeepSeek Harness tools",
+      "doc": "dsh-quantlib",
+      "grounded": true,
+      "chunk_id": "9c4cf0ec-9335-4294-bd77-c9aba8508155"
+     },
+     {
+      "quote": "Implements the core of [QuantLib](https://github.com/lballabio/QuantLib) —\n> the standard open-source quant finance library — natively for DSH.",
+      "doc": "dsh-quantlib",
+      "grounded": false,
+      "reason": "Quote describes implementing QuantLib for DSH but never names dsh-quantlib or states it is a plugin.",
+      "chunk_id": "cb7e537e-f88a-4d06-baea-0af1f473ea77"
+     },
+     {
+      "quote": "| | QuantLib (C++/SWIG) | **dsh-QuantLib** |",
+      "doc": "dsh-quantlib",
+      "grounded": false,
+      "reason": "Quote only lists the name in a table; no type or plugin information stated.",
+      "chunk_id": "e399fc7c-4f0d-48dc-acdf-b03497192c93"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-quantstats",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-quantlib",
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "| Form | Python library for notebooks | **DSH plugin** — agent asks, report out |",
+      "doc": "dsh-quantstats",
+      "grounded": true,
+      "chunk_id": "5486f42c-16c2-48b3-a1e9-50b551bf3f33"
+     },
+     {
+      "quote": "[dsh-quantstats](https://github.com/vicfei/dsh-quantstats).",
+      "doc": "dsh-quantlib",
+      "grounded": false,
+      "reason": "Quote only mentions the name/link, no type information.",
+      "chunk_id": "e399fc7c-4f0d-48dc-acdf-b03497192c93"
+     },
+     {
+      "quote": "# dsh-quantstats — performance tearsheets for DeepSeek Harness, honesty included",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only gives a title/tagline; never states it is a plugin or installable.",
+      "chunk_id": "e3fef65b-3b13-4991-b0fc-06f87c1648c8"
+     },
+     {
+      "quote": "Implements the core concept of [QuantStats](https://github.com/ranaroussi/quantstats) (7.9k★, by the yfinance author) natively for DSH.",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote never names dsh-quantstats nor states it is a DSH plugin.",
+      "chunk_id": "3ef70155-7d10-4ac6-97d1-fa42d950622d"
+     },
+     {
+      "quote": "dsh-quantstats is the **DSH-session report layer**: zero-dependency, every metric rides with its caliber (period-based, disclosed), inline-SVG tearsheets, family-artifact consumption (committee ledgers, engine series).",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote describes a report layer, never states it is a DSH plugin or installable.",
+      "chunk_id": "a16503d5-1c58-4b68-bc54-526c343fffab"
+     },
+     {
+      "quote": "| | upstream quantstats (complement) | **dsh-quantstats** |",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only mentions the name in a table; no type information.",
+      "chunk_id": "53702145-0aba-4c4f-9d4b-1e5b4fc8d522"
+     },
+     {
+      "quote": "| | QuantStats library | **dsh-quantstats** |",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only mentions the name in a table; no type information about being a plugin.",
+      "chunk_id": "f9e4f5e0-545c-4dde-8a11-4c50238b8d75"
+     },
+     {
+      "quote": "git clone https://github.com/vicfei/dsh-quantstats && cd dsh-quantstats",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only gives clone command; no statement that it is a DSH plugin.",
+      "chunk_id": "e99ef79d-a964-401a-a541-fb7bd16f992d"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-super-agent",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin",
+     "dsh-evidence-plugin",
+     "dsh-super-agent",
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "Sibling of the `agentdiary` CLI (personal agent diary across machines) and `dsh-super-agent` (admission control & trust ladder for any CLI agent).",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-super-agent as sibling; no plugin type stated.",
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     },
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin porting the v1.5 evidence ledger of [dsh-super-agent](https://github.com/vicfei/dsh-super-agent) into the official harness: trust is not a claim, it's a chain you can verify.",
+      "doc": "dsh-evidence-plugin",
+      "grounded": false,
+      "reason": "Quote describes a different plugin porting dsh-super-agent's ledger; dsh-super-agent only mentioned as source.",
+      "chunk_id": "7f59d6d0-f3f6-4cb1-90b0-e84705526427"
+     },
+     {
+      "quote": "# dsh-super-agent",
+      "doc": "dsh-super-agent",
+      "grounded": false,
+      "reason": "Quote only a title heading, no type information about the entity.",
+      "chunk_id": "00b43630-6a23-49f9-bf3f-063ff63a27cd"
+     },
+     {
+      "quote": "orchestration design — the part every other orchestrator skipped: **who is allowed to start work, and how you learn to trust it.**",
+      "doc": "dsh-super-agent",
+      "grounded": false,
+      "reason": "Quote only describes orchestration design; never names dsh-super-agent or states it is a plugin.",
+      "chunk_id": "ea27ba84-2799-4392-b02e-a9821d92ba7b"
+     },
+     {
+      "quote": "git clone https://github.com/vicfei/dsh-super-agent && cd dsh-super-agent",
+      "doc": "dsh-super-agent",
+      "grounded": false,
+      "reason": "Quote only gives clone command; no statement that it is a DSH plugin.",
+      "chunk_id": "90197e20-2bb2-4bc7-aad3-535f9d6fbd6d"
+     },
+     {
+      "quote": "This mirrors the admission-control philosophy of [dsh-super-agent](https://github.com/vicfei/dsh-super-agent): trust is structural, not persuaded.",
+      "doc": "dsh-weknora-ops",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-super-agent, no type information about it.",
+      "chunk_id": "d31197f6-9a25-4b8b-8538-0ed719a32d8d"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-superagent-prototype",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-super-agent"
+    ],
+    "evidences": [
+     {
+      "quote": "- [dsh-superagent-prototype](https://github.com/deepseek-ai/dsh-superagent-prototype) (MIT) — docs 000–008 are the specification this project follows; the admission-table semantics, observe mode and ticket stages are adapted from docs 002 and 003 with gratitude.",
+      "doc": "dsh-super-agent",
+      "grounded": false,
+      "reason": "Quote only mentions the name in a link; no statement that it is a DSH plugin.",
+      "chunk_id": "84c65ce5-124f-4d7f-9038-f85e40287859"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "dsh-TradingAgents",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-ccxt",
+     "dsh-freqtrade",
+     "dsh-hummingbot",
+     "dsh-nautilus",
+     "dsh-quantstats",
+     "dsh-tradingagents",
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "Install as a plugin (npm 0.1.0, ships the engine + skill):",
+      "doc": "dsh-tradingagents",
+      "grounded": true,
+      "chunk_id": "d8f2b756-0446-458b-9aa8-ec056b0edc2c"
+     },
+     {
+      "quote": "Sister project of [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)\n> (the bull/bear debate committee).",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-TradingAgents as sister project; no plugin type stated.",
+      "chunk_id": "e525f22d-a132-4c26-8c37-88bc4db34aae"
+     },
+     {
+      "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only mentions the name in a family link, no type information.",
+      "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193"
+     },
+     {
+      "quote": "# dsh-tradingagents — TradingAgents, natively on DeepSeek Harness",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote only gives a title; no statement that it is a DSH plugin.",
+      "chunk_id": "fdaa952b-a35e-4d14-b18c-c991a4cbfd31"
+     },
+     {
+      "quote": "Inspired by [Tauric Research's TradingAgents](https://github.com/TauricResearch/TradingAgents) and\n> [virattt/ai-hedge-fund](https://github.com/virattt/ai-hedge-fund) — restructured as a\n> native DeepSeek Harness experience.",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote only says inspired by and restructured; no plugin/repository/README/installable claim.",
+      "chunk_id": "dde84593-20c6-47f4-a350-524f9d463e37"
+     },
+     {
+      "quote": "| | TradingAgents | ai-hedge-fund | **dsh-tradingagents** |",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote only lists the name in a table; no type information about dsh_plugin.",
+      "chunk_id": "53497b14-dd8c-4177-a966-177e6ccb517b"
+     },
+     {
+      "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)\n> (bull/bear committee)",
+      "doc": "dsh-vibe-trading",
+      "grounded": false,
+      "reason": "Quote only lists dsh-TradingAgents as family member; no plugin type stated.",
+      "chunk_id": "cdbe9d1d-7b24-4f27-8991-b70f3d6900d9"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-trustquant",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://www.deepseek.com/en/harness/) plugin (skill + `trustquant-dsh` CLI passthrough) for [TrustQuant](https://github.com/vicfei/trustquant) — the open, local-first, agent-facing financial tool layer (Apache-2.0).",
+      "doc": "dsh-trustquant",
+      "grounded": true,
+      "chunk_id": "422dce00-00d5-4b8d-91e8-36aa716b35cf"
+     },
+     {
+      "quote": "This plugin makes the honest path the easy path: **compute, don't recall** — and when the tool refuses (american option, >10y swap, missing provider), the answer is the structured error, never an approximation.",
+      "doc": "dsh-trustquant",
+      "grounded": true,
+      "chunk_id": "6671ae55-e13e-4f1d-a964-570c63b912f4"
+     },
+     {
+      "quote": "npm i -g vicfei/dsh-trustquant          # exposes trustquant-dsh",
+      "doc": "dsh-trustquant",
+      "grounded": false,
+      "reason": "Quote only shows install command; no statement that it is a DSH plugin.",
+      "chunk_id": "9fcf4f6d-fa11-4768-a1e8-5581288a6012"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-uigen",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-uigen"
+    ],
+    "evidences": [
+     {
+      "quote": "`Install dsh-uigen from https://github.com/vicfei/dsh-uigen into this profile: run \\`dsh plugin --profile <name> add dsh-uigen\\` AND add \"dsh-uigen\" to the profile's dsh.profile.bundles list, then verify the ui_compose tool answers.`",
+      "doc": "dsh-uigen",
+      "grounded": true,
+      "chunk_id": "cb061aee-5b81-4a5e-8147-6eedd1c14f95"
+     },
+     {
+      "quote": "# dsh-uigen — generate-and-render inline UI components for DeepSeek Harness",
+      "doc": "dsh-uigen",
+      "grounded": false,
+      "reason": "Quote only gives a title/tagline; does not state it is a plugin or installable.",
+      "chunk_id": "08961c9b-e035-473d-828e-1a8beed03d65"
+     },
+     {
+      "quote": "dsh-uigen completes the loop with the generation quality neither has.",
+      "doc": "dsh-uigen",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-uigen, no type information or plugin description.",
+      "chunk_id": "e3875939-45f0-436f-a129-f2b968d3f774"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-Vibe-Trading",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt",
+     "dsh-jesse",
+     "dsh-kronos",
+     "dsh-nautilus",
+     "dsh-quantstats",
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "npm i -g dsh-vibe-trading          # or: dsh plugin add dsh-vibe-trading",
+      "doc": "dsh-vibe-trading",
+      "grounded": true,
+      "chunk_id": "a56eef8c-5879-4196-9336-bb0ccd77ca73"
+     },
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only mentions the name/link; no statement that it is a plugin.",
+      "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193"
+     },
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading).",
+      "doc": "dsh-jesse",
+      "grounded": false,
+      "reason": "Quote only mentions the name/link; no type information stated.",
+      "chunk_id": "516a6230-b74e-453b-a193-4ce0a8353756"
+     },
+     {
+      "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+      "doc": "dsh-kronos",
+      "grounded": false,
+      "reason": "Quote only lists the name/link; no statement that it is a plugin.",
+      "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907"
+     },
+     {
+      "quote": "# dsh-vibe-trading — interactive trading research, natively on DeepSeek Harness",
+      "doc": "dsh-vibe-trading",
+      "grounded": false,
+      "reason": "Quote only gives a title/tagline; does not state it is a plugin or installable.",
+      "chunk_id": "9fd00821-1908-4829-8211-b12967ccd55c"
+     },
+     {
+      "quote": "Inspired by [HKUDS/Vibe-Trading](https://github.com/HKUDS/Vibe-Trading) —\n> restructured as a native DeepSeek Harness experience.",
+      "doc": "dsh-vibe-trading",
+      "grounded": false,
+      "reason": "Quote only says inspired by and restructured; no explicit plugin/repository/installable claim.",
+      "chunk_id": "cdbe9d1d-7b24-4f27-8991-b70f3d6900d9"
+     },
+     {
+      "quote": "| | raw Vibe-Trading MCP in DSH | **dsh-vibe-trading** |",
+      "doc": "dsh-vibe-trading",
+      "grounded": false,
+      "reason": "Quote only mentions the name in a table; no type information stated.",
+      "chunk_id": "931499cc-a8c3-455e-8be6-1e3b7d8335bb"
+     },
+     {
+      "quote": "git clone https://github.com/vicfei/dsh-Vibe-Trading && cd dsh-vibe-trading",
+      "doc": "dsh-vibe-trading",
+      "grounded": false,
+      "reason": "Quote only gives clone command; no statement that it is a DSH plugin.",
+      "chunk_id": "6fe74990-50c7-40dc-9dd2-1256009c06b4"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-weknora-ops",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-super-agent",
+     "dsh-weknora-ops"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://www.deepseek.com/en/harness/) plugin (skill + `weknora-ops` CLI) for [WeKnora](https://github.com/Tencent/WeKnora)",
+      "doc": "dsh-weknora-ops",
+      "grounded": true,
+      "chunk_id": "5789b745-c70c-4a7b-9730-a2f8f8f0c00b"
+     },
+     {
+      "quote": "[dsh-weknora-ops](https://github.com/vicfei/dsh-weknora-ops) — the WeKnora write path with the same philosophy: trust is structural, not persuaded",
+      "doc": "dsh-super-agent",
+      "grounded": false,
+      "reason": "Quote only mentions the repo name and description; no statement it is a DSH plugin.",
+      "chunk_id": "03d7dea1-677c-43de-954c-446192aa4a10"
+     },
+     {
+      "quote": "npm i -g dsh-weknora-ops        # exposes the weknora-ops CLI",
+      "doc": "dsh-weknora-ops",
+      "grounded": false,
+      "reason": "Quote only gives install command; never states it is a DSH plugin.",
+      "chunk_id": "f009c015-7091-490a-88d1-6a6236e5e26c"
+     },
+     {
+      "quote": "with cited hits; the run also caught and fixed two real integration bugs (env scrubbing → config file; `query_text`/`match_count` on v0.8.0-line servers).",
+      "doc": "dsh-weknora-ops",
+      "grounded": false,
+      "reason": "Quote never names dsh-weknora-ops nor states it is a plugin.",
+      "chunk_id": "62a0d68e-d228-4f5a-8f41-f7a1a985bc60"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "dsh-WrenAI",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-wrenai"
+    ],
+    "evidences": [
+     {
+      "quote": "Implements the differentiated core of [WrenAI](https://github.com/Canner/WrenAI)\n> (18.3k★ — GenBI / governed text-to-SQL) natively for\n> [DeepSeek Harness](https://github.com/deepseek-ai): the **self-hosted\n> semantic layer**.",
+      "doc": "dsh-wrenai",
+      "grounded": true,
+      "chunk_id": "47ce5b01-e608-464e-8c4f-3ca539c9d1e9"
+     },
+     {
+      "quote": "the npm package is a thin launcher plus the DSH plugin manifest and skill",
+      "doc": "dsh-wrenai",
+      "grounded": true,
+      "chunk_id": "47d446a6-ed40-488f-9c8f-33e50dc0b517"
+     },
+     {
+      "quote": "# dsh-WrenAI — a self-hosted semantic layer for DeepSeek Harness",
+      "doc": "dsh-wrenai",
+      "grounded": false,
+      "reason": "Quote calls it a semantic layer, not a DSH plugin; no plugin type stated.",
+      "chunk_id": "244a9c5d-7da0-4eeb-9901-f3fed5b1ed65"
+     },
+     {
+      "quote": "| | raw NL2SQL plugins | **dsh-WrenAI** |",
+      "doc": "dsh-wrenai",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-WrenAI in a table cell; no type information.",
+      "chunk_id": "448ec792-d33f-41ba-ab74-8ff0df977961"
+     },
+     {
+      "quote": "git clone https://github.com/vicfei/dsh-WrenAI && cd dsh-wrenai",
+      "doc": "dsh-wrenai",
+      "grounded": false,
+      "reason": "Quote only gives clone command; no statement that it is a DSH plugin.",
+      "chunk_id": "e04f607e-6c4a-4a7e-809b-8581012f9211"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "evidence ledger for DeepSeek Harness",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-evidence-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin porting the v1.5 evidence ledger of [dsh-super-agent](https://github.com/vicfei/dsh-super-agent) into the official harness",
+      "doc": "dsh-evidence-plugin",
+      "grounded": true,
+      "chunk_id": "7f59d6d0-f3f6-4cb1-90b0-e84705526427"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "evidence tag",
+    "type": "evidence_tag",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "**Every claim carries an evidence tag.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "exchange",
+    "type": "exchange",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "Real smoke (2026-11-17, binance via relay, 8s, temperature=0): BTC −16.2% over the visible window with **volume expanding into the breakdown**",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote mentions binance but does not state it is a CCXT-bridge exchange.",
+      "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "fast-jev-compaction",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-compaction-semantic"
+    ],
+    "evidences": [
+     {
+      "quote": "The strongest pain signal in the entire cross-harness dataset: the original `fast-jev-compaction`",
+      "doc": "dsh-compaction-semantic",
+      "grounded": false,
+      "reason": "Quote only names fast-jev-compaction; no type or plugin information given.",
+      "chunk_id": "dfb6ab20-a878-4dc3-8247-0633078fea75"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "format-anything",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "format-anything"
+    ],
+    "evidences": [
+     {
+      "quote": "`Install format-anything from https://github.com/vicfei/format-anything (npm i -g format-anything), then run \\`format-anything analyze <file>\\` on my mystery file and show me the FORMAT.md it produces.`",
+      "doc": "format-anything",
+      "grounded": false,
+      "reason": "Quote only gives install/run commands; never states it is a DSH plugin.",
+      "chunk_id": "7ac1fc4f-ab25-4813-bce2-d28880e18feb"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "guard",
+    "type": "trading_guard",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "The guard, demonstrated:",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only mentions 'the guard' without stating it is a fail-closed safeguard.",
+      "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "IC-MEMO",
+    "type": "ic_memo",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "每个主张带证据标签，输出可审计的 IC-MEMO。",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     },
+     {
+      "quote": "| Output | trade tables | **[IC-MEMO](templates/IC-MEMO.md)** — auditable open format |",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "93581b58-27d6-4f03-8801-8a5eb2070339"
+     },
+     {
+      "quote": "portfolio manager ──► IC-MEMO\n                    (names its influences; dissent recorded)",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239"
+     },
+     {
+      "quote": "| Output | text logs | trades table | **[IC-MEMO](templates/IC-MEMO.md)** — open, auditable memo format |",
+      "doc": "dsh-tradingagents",
+      "grounded": true,
+      "chunk_id": "53497b14-dd8c-4177-a966-177e6ccb517b"
+     },
+     {
+      "quote": "Every session emits an [IC-MEMO](templates/IC-MEMO.md): decision yaml head, tagged\nfact layer, full debate, guardrails, and a verdict that must name its influences.",
+      "doc": "dsh-tradingagents",
+      "grounded": true,
+      "chunk_id": "5e07ad13-a63a-42fb-84e9-decda68f0a4a"
+     },
+     {
+      "quote": "![IC-MEMO](resource://8uw-SNRKFHgQoXXfJr3AoA)",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote only shows an image reference, no definition or type information.",
+      "chunk_id": "fdaa952b-a35e-4d14-b18c-c991a4cbfd31"
+     },
+     {
+      "quote": "The same session as a map — parsed from the archived IC-MEMO (`scripts/render_session_svg.py`",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote only mentions IC-MEMO as archived file, no type definition given.",
+      "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319"
+     },
+     {
+      "quote": "risk (guardrails only) ──► portfolio manager ──► IC-MEMO",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote only mentions IC-MEMO in a flow diagram; no definition or type information.",
+      "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "investment committee",
+    "type": "investment_committee",
+    "aliases": [],
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "**A multi-agent investment committee that debates in your terminal — every claim tagged, every verdict auditable.**",
+      "doc": "dsh-tradingagents",
+      "grounded": true,
+      "chunk_id": "fdaa952b-a35e-4d14-b18c-c991a4cbfd31"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "Kronos",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-kronos"
+    ],
+    "evidences": [
+     {
+      "quote": "The concept slot of [Kronos](https://github.com/shiyu-coder/Kronos) — the 47.9k★ \"foundation model for the language of financial markets\" — natively in DSH.",
+      "doc": "dsh-kronos",
+      "grounded": false,
+      "reason": "Quote only mentions Kronos as a concept slot, no plugin type stated.",
+      "chunk_id": "e826056e-58fe-4c87-937b-b2777e7575c6"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "Lynch",
+    "type": "agent_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     },
+     {
+      "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239"
+     },
+     {
+      "quote": "the four guest seats split three ways — Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62",
+      "doc": "dsh-tradingagents",
+      "grounded": true,
+      "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319"
+     },
+     {
+      "quote": "Buffett / Munger / Lynch / Wood",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote only lists names, no type or persona information stated.",
+      "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "market data payload",
+    "type": "market_data_payload",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "| Provenance | — | — | exchange + fetched_at on every payload |",
+      "doc": "dsh-ccxt",
+      "grounded": true,
+      "chunk_id": "a4cc47dc-12e5-4b15-9ba6-5edf7565bceb"
+     },
+     {
+      "quote": "Every payload carries its exchange and timestamp.",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote mentions payload fields but does not name market_data_payload or state it is a read-only record.",
+      "chunk_id": "a5241405-bd85-4a12-9f68-e42e184aa884"
+     },
+     {
+      "quote": "when the bridge's 15-candle payload didn't cover the requested 90d range, the findings said so",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote mentions payload but not as read-only record tagged with exchange/timestamp",
+      "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "Munger",
+    "type": "agent_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     },
+     {
+      "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239"
+     },
+     {
+      "quote": "the four guest seats split three ways — Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62",
+      "doc": "dsh-tradingagents",
+      "grounded": true,
+      "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319"
+     },
+     {
+      "quote": "Buffett / Munger / Lynch / Wood",
+      "doc": "dsh-tradingagents",
+      "grounded": true,
+      "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "NVIDIA auto-ontology",
+    "type": "ontology",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "| | NVIDIA auto-ontology (upstream) | ontology viewers/bridges | **dsh-auto-ontology** |",
+      "doc": "dsh-auto-ontology",
+      "grounded": false,
+      "reason": "Quote only lists name in a table row, no definition or type predication.",
+      "chunk_id": "7e5a53c4-1b72-4001-bfc3-07935eb0cbc6"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "OAR",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-evidence-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "- **OAR** (`src/adapters/oar.ts`) — [Open Agent Runtime](https://github.com/botiverse/oar):",
+      "doc": "dsh-evidence-plugin",
+      "grounded": false,
+      "reason": "Quote only names OAR as an adapter file, no plugin type stated.",
+      "chunk_id": "81cf02d8-27a7-45d8-b746-7fc1e8cf2580"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "ontologies/20261118-1441",
+    "type": "ontology",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "An earlier run with 4 organically detected type conflicts is kept as `ontologies/20261118-1441.*`.",
+      "doc": "dsh-auto-ontology",
+      "grounded": false,
+      "reason": "Quote only mentions the path as a kept earlier run, no type information.",
+      "chunk_id": "acb6ab6f-e7ed-4a93-9901-3dd7f4b010c5"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "ontologies/20261125-1718",
+    "type": "ontology",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "The build judged 189 of them grounded ✓ and kept 86 flagged ⚠ — `ontologies/20261125-1718.*`.",
+      "doc": "dsh-auto-ontology",
+      "grounded": false,
+      "reason": "Quote only mentions the path; no statement that it is an ontology.",
+      "chunk_id": "acb6ab6f-e7ed-4a93-9901-3dd7f4b010c5"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "PASS @ 55",
+    "type": "ic_memo",
+    "aliases": [],
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "**PASS @ 55** — \"Abstain rather than lean bullish or bearish… the bear's timing-mismatch argument ([R1][R2][R4]: revenue / gross margin / share all predate the price-cut signal [A7]) persuades me toward caution; [A8] undisclosed contract value and [A9] an unverifiable valuation basis are two hard gaps; the evidence does not support a ruling, so by discipline PASS — reopen when any [G8] re-review event lands.\"",
+      "doc": "dsh-tradingagents",
+      "grounded": true,
+      "chunk_id": "67d8fba4-5f02-4540-b167-86d13de749a6"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "PM",
+    "type": "investment_committee",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "session/event",
+    "type": "session_event",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "settled turn",
+    "type": "turn",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "trading guard",
+    "type": "trading_guard",
+    "aliases": [],
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "Read-only market data flows freely; orders don't — a triple-armed guard with notional caps and a symbol whitelist, enforced in bridge code the LLM cannot bypass.",
+      "doc": "dsh-ccxt",
+      "grounded": true,
+      "chunk_id": "a5241405-bd85-4a12-9f68-e42e184aa884"
+     },
+     {
+      "quote": "| Orders | nothing stops a fat finger | n/a | **fail-closed**: dry-run default, `--live` + env key + notional cap + whitelist |",
+      "doc": "dsh-ccxt",
+      "grounded": true,
+      "chunk_id": "a4cc47dc-12e5-4b15-9ba6-5edf7565bceb"
+     },
+     {
+      "quote": "实盘需 --live + CCXT_LIVE_TRADING=1 + 密钥三重解锁",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote describes unlock requirements, not a fail-closed safeguard constraining order placement.",
+      "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "trajectory",
+    "type": "diary_entry",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "With `trajectory: true`, every settled turn ALSO lands one JSONL line at\n`trajectories/YYYY-MM/DD-node.jsonl`",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": false,
+      "reason": "Quote describes trajectory as a flag option, not a diary_entry record",
+      "chunk_id": "65607dff-3d5b-4dd7-9a26-7deeb0e518e7"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "TrustQuant",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-trustquant"
+    ],
+    "evidences": [
+     {
+      "quote": "TrustQuant is local, credential-free and network-free for computation — the only network step is an explicit, person-approved `trustquant provider install`.",
+      "doc": "dsh-trustquant",
+      "grounded": false,
+      "reason": "Quote describes features but never states TrustQuant is a DSH plugin.",
+      "chunk_id": "596a535d-6b08-45d8-b781-7dd76fe36053"
+     },
+     {
+      "quote": "v0.1.0 — skill (three workflows + audit discipline) + CLI passthrough + doctor. TrustQuant itself: M2 complete (v0.2.0), 58 tests green, QuantLib-pinned options/rates, independent second oracle in CI.",
+      "doc": "dsh-trustquant",
+      "grounded": false,
+      "reason": "Quote mentions TrustQuant but never states it is a dsh_plugin or describes its type.",
+      "chunk_id": "2dbc252c-77ff-4488-b2ed-9bc20d5d4110"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "turn",
+    "type": "turn",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     },
+     {
+      "quote": "Reasons you will *not* see as entries: `blocked` (retried as a new turn), `interrupted`/`forked`",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": false,
+      "reason": "Quote only mentions 'turn' in passing, no definition or type information.",
+      "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "turn/end",
+    "type": "session_event",
+    "aliases": [],
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "vicfei dsh family",
+    "type": "dsh_plugin",
+    "aliases": [],
+    "docs": [
+     "dsh-auto-ontology"
+    ],
+    "evidences": [
+     {
+      "quote": "A real run over the 19 public READMEs of the vicfei dsh family",
+      "doc": "dsh-auto-ontology",
+      "grounded": false,
+      "reason": "Quote only mentions the family; no statement that it is a plugin.",
+      "chunk_id": "acb6ab6f-e7ed-4a93-9901-3dd7f4b010c5"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "Wood",
+    "type": "agent_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     },
+     {
+      "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239"
+     },
+     {
+      "quote": "the four guest seats split three ways — Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62",
+      "doc": "dsh-tradingagents",
+      "grounded": true,
+      "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319"
+     },
+     {
+      "quote": "Buffett / Munger / Lynch / Wood",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote only lists names, no statement that Wood is a persona producing valuations.",
+      "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "凯瑟琳·伍德",
+    "type": "agent_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "| 凯瑟琳·伍德 | HOLD | 58 |",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": false,
+      "reason": "Quote only lists name with verdict; no statement she is an investor persona.",
+      "chunk_id": "3da58494-36a7-4705-be17-83e07a7d793c"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "彼得·林奇",
+    "type": "agent_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "| 彼得·林奇 | HOLD | 55 |",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "3da58494-36a7-4705-be17-83e07a7d793c"
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "查理·芒格",
+    "type": "agent_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "| 查理·芒格 | PASS | 72 |",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": false,
+      "reason": "Quote only shows a table row with name and PASS/score, no persona type stated.",
+      "chunk_id": "3da58494-36a7-4705-be17-83e07a7d793c"
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "沃伦·巴菲特",
+    "type": "agent_persona",
+    "aliases": [],
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "| 人格 | 立场 | 信念 |\n|---|---|---|\n| 沃伦·巴菲特 | PASS | 70 |",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "3da58494-36a7-4705-be17-83e07a7d793c"
+     },
+     {
+      "quote": "| 沃伦·巴菲特 | PASS | 70 |",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": false,
+      "reason": "Quote only lists name with PASS/score, no persona/valuation role stated.",
+      "chunk_id": "a864fcc5-db22-4ab2-a3f9-ab26c62e1d4b"
+     }
+    ],
+    "type_grounding": true
+   }
+  ],
+  "relations": [
+   {
+    "subject": "agentdiary",
+    "predicate": "sibling_of",
+    "object": "dsh-super-agent",
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "Sibling of the `agentdiary` CLI (personal agent diary across machines) and `dsh-super-agent` (admission control & trust ladder for any CLI agent).",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "agentdiary",
+    "predicate": "subscribes_to",
+    "object": "session/event",
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "agentdiary",
+    "predicate": "writes_entry",
+    "object": "diary entry",
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "Buffett",
+    "predicate": "sibling_of",
+    "object": "Munger",
+    "docs": [
+     "dsh-ai-hedge-fund",
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": false,
+      "reason": "Quote only mentions Buffett/Munger as personas, not plugins or sibling relation.",
+      "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239"
+     },
+     {
+      "quote": "the four guest seats split three ways — Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote only lists Buffett/Munger together as a pair, no sibling relation stated.",
+      "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "Buffett",
+    "predicate": "sibling_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "from sister repo dsh-ai-hedge-fund;",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote names dsh-ai-hedge-fund as sister repo, not Buffett; Buffett absent.",
+      "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "ccxt_bridge.py",
+    "predicate": "sibling_of",
+    "object": "ccxt_research.py",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "python3 scripts/ccxt_bridge.py --run market.fetch_ticker --params '{\"exchange\":\"binance\",\"symbol\":\"BTC/USDT\"}'\npython3 scripts/ccxt_research.py --question \"BTC 近 90 日量价结构？\" --save",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only lists commands for both scripts; no sibling relation stated.",
+      "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-ai-hedge-fund",
+    "predicate": "sibling_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "Sister project of [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)\n> (the bull/bear debate committee).",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "e525f22d-a132-4c26-8c37-88bc4db34aae"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "dsh-auto-ontology",
+    "predicate": "sibling_of",
+    "object": "dsh-evoontology",
+    "docs": [
+     "dsh-evoontology"
+    ],
+    "evidences": [
+     {
+      "quote": "**E2, the first adapter** — the family's own [dsh-auto-ontology](https://github.com/vicfei/dsh-auto-ontology)\nplugs in: its `ao-trajectory/0.1`",
+      "doc": "dsh-evoontology",
+      "grounded": true,
+      "chunk_id": "599e1e08-391e-438d-85a6-af514c01ab00"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "dsh-ccxt",
+    "predicate": "sibling_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+      "doc": "dsh-ccxt",
+      "grounded": true,
+      "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "dsh-ccxt",
+    "predicate": "sibling_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only mentions the other plugin name, no sibling relation stated.",
+      "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-ccxt",
+    "predicate": "sibling_of",
+    "object": "dsh-Vibe-Trading",
+    "docs": [
+     "dsh-ccxt",
+     "dsh-jesse"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only lists a link, no sibling relation stated.",
+      "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193"
+     },
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+      "doc": "dsh-jesse",
+      "grounded": false,
+      "reason": "Quote only lists dsh-CCXT; no mention of dsh-Vibe-Trading or sibling relation.",
+      "chunk_id": "516a6230-b74e-453b-a193-4ce0a8353756"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-ccxt",
+    "predicate": "sibling_of",
+    "object": "dsh-OpenBB",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-OpenBB link; no sibling relation stated.",
+      "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193"
+     },
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB).",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-OpenBB link; no sibling relation stated.",
+      "chunk_id": "0b07ecb3-3038-4f40-a21d-eaac0d068296"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-CCXT",
+    "predicate": "sibling_of",
+    "object": "dsh-nautilus_trader",
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT) · [dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) ·",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only lists both names as links; no sibling relation stated.",
+      "chunk_id": "2020e77a-329b-4501-9cbd-6b139eb3fd6c"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-freqtrade",
+    "predicate": "sibling_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+      "doc": "dsh-freqtrade",
+      "grounded": true,
+      "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "dsh-freqtrade",
+    "predicate": "sibling_of",
+    "object": "dsh-OpenBB",
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+      "doc": "dsh-freqtrade",
+      "grounded": false,
+      "reason": "Quote only lists links, no sibling relation stated.",
+      "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-freqtrade",
+    "predicate": "sibling_of",
+    "object": "dsh-CCXT",
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+      "doc": "dsh-freqtrade",
+      "grounded": false,
+      "reason": "Quote only lists dsh-CCXT as a link; no sibling relation stated.",
+      "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-freqtrade",
+    "predicate": "sibling_of",
+    "object": "dsh-nautilus_trader",
+    "docs": [
+     "dsh-freqtrade"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) ·",
+      "doc": "dsh-freqtrade",
+      "grounded": false,
+      "reason": "Quote only mentions the other plugin name, no sibling relation stated.",
+      "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-hummingbot",
+    "predicate": "sibling_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+      "doc": "dsh-hummingbot",
+      "grounded": true,
+      "chunk_id": "22fb9b71-03eb-4b36-a042-86ea77f110b8"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "dsh-hummingbot",
+    "predicate": "sibling_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-hummingbot"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·\n> [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·",
+      "doc": "dsh-hummingbot",
+      "grounded": true,
+      "chunk_id": "22fb9b71-03eb-4b36-a042-86ea77f110b8"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "dsh-hummingbot",
+    "predicate": "sibling_of",
+    "object": "dsh-OpenBB",
+    "docs": [
+     "dsh-jesse"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) (MM) ·",
+      "doc": "dsh-jesse",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-hummingbot; no dsh-OpenBB or sibling relation stated.",
+      "chunk_id": "516a6230-b74e-453b-a193-4ce0a8353756"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-hummingbot",
+    "predicate": "sibling_of",
+    "object": "dsh-Vibe-Trading",
+    "docs": [
+     "dsh-kronos"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+      "doc": "dsh-kronos",
+      "grounded": false,
+      "reason": "Quote only lists both names; no statement they are siblings or related.",
+      "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-hummingbot",
+    "predicate": "sibling_of",
+    "object": "dsh-jesse",
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-jesse](https://github.com/vicfei/dsh-jesse).",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only lists two links; no statement they are sibling projects.",
+      "chunk_id": "2020e77a-329b-4501-9cbd-6b139eb3fd6c"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-jesse",
+    "predicate": "sibling_of",
+    "object": "dsh-nautilus_trader",
+    "docs": [
+     "dsh-jesse"
+    ],
+    "evidences": [
+     {
+      "quote": "| | upstream jesse (complement) | dsh-nautilus_trader (sibling) | **dsh-jesse** |",
+      "doc": "dsh-jesse",
+      "grounded": true,
+      "chunk_id": "416d4a23-f641-4146-bd0e-abd936a88c89"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "dsh-nautilus",
+    "predicate": "sibling_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+      "doc": "dsh-nautilus",
+      "grounded": true,
+      "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "dsh-nautilus",
+    "predicate": "sibling_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·",
+      "doc": "dsh-nautilus",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-ai-hedge-fund link, no sibling relation stated.",
+      "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-nautilus",
+    "predicate": "sibling_of",
+    "object": "dsh-Vibe-Trading",
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+      "doc": "dsh-nautilus",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-Vibe-Trading link; no sibling relation stated.",
+      "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-nautilus",
+    "predicate": "sibling_of",
+    "object": "dsh-OpenBB",
+    "docs": [
+     "dsh-nautilus"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) ·",
+      "doc": "dsh-nautilus",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-OpenBB link, no sibling relation stated.",
+      "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-nautilus_trader",
+    "predicate": "sibling_of",
+    "object": "dsh-hummingbot",
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) · [dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) ·",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only lists both names; no sibling relationship stated.",
+      "chunk_id": "2020e77a-329b-4501-9cbd-6b139eb3fd6c"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-OpenBB",
+    "predicate": "sibling_of",
+    "object": "dsh-CCXT",
+    "docs": [
+     "dsh-jesse",
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+      "doc": "dsh-jesse",
+      "grounded": false,
+      "reason": "Quote only lists both names, no sibling relation stated.",
+      "chunk_id": "516a6230-b74e-453b-a193-4ce0a8353756"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-QuantLib",
+    "predicate": "sibling_of",
+    "object": "dsh-quantstats",
+    "docs": [
+     "dsh-quantlib"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-quantstats](https://github.com/vicfei/dsh-quantstats).",
+      "doc": "dsh-quantlib",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-quantstats link; no sibling relation stated.",
+      "chunk_id": "e399fc7c-4f0d-48dc-acdf-b03497192c93"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-quantstats",
+    "predicate": "sibling_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+      "doc": "dsh-quantstats",
+      "grounded": true,
+      "chunk_id": "3ef70155-7d10-4ac6-97d1-fa42d950622d"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "dsh-quantstats",
+    "predicate": "sibling_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-ai-hedge-fund link, no sibling relation stated.",
+      "chunk_id": "3ef70155-7d10-4ac6-97d1-fa42d950622d"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-quantstats",
+    "predicate": "sibling_of",
+    "object": "dsh-Vibe-Trading",
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-Vibe-Trading link; no sibling relation stated.",
+      "chunk_id": "3ef70155-7d10-4ac6-97d1-fa42d950622d"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-quantstats",
+    "predicate": "sibling_of",
+    "object": "dsh-OpenBB",
+    "docs": [
+     "dsh-quantstats"
+    ],
+    "evidences": [
+     {
+      "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) ·",
+      "doc": "dsh-quantstats",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-OpenBB link, no sibling relation stated.",
+      "chunk_id": "3ef70155-7d10-4ac6-97d1-fa42d950622d"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-uigen",
+    "predicate": "sibling_of",
+    "object": "dsh-genui",
+    "docs": [
+     "dsh-uigen"
+    ],
+    "evidences": [
+     {
+      "quote": "The missing layer atop two proven demands: describe→component (Magic/21st, 14k/wk — cloud-locked) and components-in-replies on DSH (dsh-genui, 9.9k/wk — render surface only).",
+      "doc": "dsh-uigen",
+      "grounded": false,
+      "reason": "Quote only mentions dsh-genui as a demand; no sibling relation stated.",
+      "chunk_id": "e3875939-45f0-436f-a129-f2b968d3f774"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "dsh-Vibe-Trading",
+    "predicate": "sibling_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-kronos",
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)\n> (bull/bear committee) · [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) (persona fund).",
+      "doc": "dsh-vibe-trading",
+      "grounded": true,
+      "chunk_id": "cdbe9d1d-7b24-4f27-8991-b70f3d6900d9"
+     },
+     {
+      "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·\n> [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund).",
+      "doc": "dsh-kronos",
+      "grounded": false,
+      "reason": "Quote only lists both names, no sibling relation stated.",
+      "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "dsh-vibe-trading",
+    "predicate": "sibling_of",
+    "object": "dsh-TradingAgents",
+    "docs": [
+     "dsh-vibe-trading"
+    ],
+    "evidences": [
+     {
+      "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)\n> (bull/bear committee) · [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) (persona fund).",
+      "doc": "dsh-vibe-trading",
+      "grounded": true,
+      "chunk_id": "cdbe9d1d-7b24-4f27-8991-b70f3d6900d9"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "evidence ledger for DeepSeek Harness",
+    "predicate": "sibling_of",
+    "object": "dsh-super-agent",
+    "docs": [
+     "dsh-evidence-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin porting the v1.5 evidence ledger of [dsh-super-agent](https://github.com/vicfei/dsh-super-agent) into the official harness: trust is not a claim, it's a chain you can verify.",
+      "doc": "dsh-evidence-plugin",
+      "grounded": false,
+      "reason": "Quote mentions both plugins but does not state they are siblings/sister projects.",
+      "chunk_id": "7f59d6d0-f3f6-4cb1-90b0-e84705526427"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "evidence tag",
+    "predicate": "supports_claim",
+    "object": "IC-MEMO",
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "每个主张带证据标签，输出可审计的 IC-MEMO。",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "exchange",
+    "predicate": "returns_payload",
+    "object": "market_data_payload",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "when the bridge's 15-candle payload didn't cover the requested 90d range, the findings said so",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote mentions payload but not that bridge returns it as market data payload",
+      "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "guard",
+    "predicate": "guards_orders",
+    "object": "binance",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "trade.create_limit_order … → {\"guard\":\"BLOCKED\",\"reason\":\"DRY-RUN（默认）：订单未发送。\n实盘需 --live + CCXT_LIVE_TRADING=1 + 密钥三重解锁\"}",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote mentions a guard blocking an order but never names binance as the exchange.",
+      "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "investment committee",
+    "predicate": "produces_memo",
+    "object": "IC-MEMO",
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "**A multi-agent investment committee that debates in your terminal — every claim tagged, every verdict auditable.**",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote mentions auditable verdicts but never names IC-MEMO as output.",
+      "chunk_id": "fdaa952b-a35e-4d14-b18c-c991a4cbfd31"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "Lynch",
+    "predicate": "sibling_of",
+    "object": "Wood",
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": false,
+      "reason": "Quote only groups Lynch/Wood as growth wing, no sibling plugin relation stated.",
+      "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "Lynch",
+    "predicate": "sibling_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "from sister repo dsh-ai-hedge-fund;",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote names dsh-ai-hedge-fund as sister repo of dsh-tradingagents, not Lynch.",
+      "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "Munger",
+    "predicate": "sibling_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "from sister repo dsh-ai-hedge-fund;",
+      "doc": "dsh-tradingagents",
+      "grounded": false,
+      "reason": "Quote names dsh-ai-hedge-fund as sister repo, not Munger; no Munger mention.",
+      "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "OAR",
+    "predicate": "sibling_of",
+    "object": "Cordis",
+    "docs": [
+     "dsh-evidence-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "the mapping uses the same event vocabulary as the agentdiary OAR adapter, so both plugins speak identical event names across harnesses.",
+      "doc": "dsh-evidence-plugin",
+      "grounded": false,
+      "reason": "Quote mentions OAR adapter and plugins but does not state sibling relationship with Cordis.",
+      "chunk_id": "81cf02d8-27a7-45d8-b746-7fc1e8cf2580"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "PM",
+    "predicate": "has_persona",
+    "object": "Buffett",
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "PM",
+    "predicate": "has_persona",
+    "object": "Munger",
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "PM",
+    "predicate": "has_persona",
+    "object": "Lynch",
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "PM",
+    "predicate": "has_persona",
+    "object": "Wood",
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "PM",
+    "predicate": "produces_memo",
+    "object": "IC-MEMO",
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "每个主张带证据标签，输出可审计的 IC-MEMO。",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": false,
+      "reason": "Quote mentions IC-MEMO output but not PM as the emitting committee",
+      "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d"
+     }
+    ],
+    "grounding": false
+   },
+   {
+    "subject": "settled turn",
+    "predicate": "settles_as",
+    "object": "turn/end",
+    "docs": [
+     "agentdiary-dsh-plugin"
+    ],
+    "evidences": [
+     {
+      "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+      "doc": "agentdiary-dsh-plugin",
+      "grounded": true,
+      "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "trading guard",
+    "predicate": "guards_orders",
+    "object": "exchange",
+    "docs": [
+     "dsh-ccxt"
+    ],
+    "evidences": [
+     {
+      "quote": "Read-only market data flows freely; orders don't — a triple-armed guard with notional caps and a symbol whitelist, enforced in bridge code the LLM cannot bypass.",
+      "doc": "dsh-ccxt",
+      "grounded": true,
+      "chunk_id": "a5241405-bd85-4a12-9f68-e42e184aa884"
+     },
+     {
+      "quote": "| Orders | nothing stops a fat finger | n/a | **fail-closed**: dry-run default, `--live` + env key + notional cap + whitelist |",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote mentions order safeguards but not a trading guard constraining orders against an exchange.",
+      "chunk_id": "a4cc47dc-12e5-4b15-9ba6-5edf7565bceb"
+     },
+     {
+      "quote": "实盘需 --live + CCXT_LIVE_TRADING=1 + 密钥三重解锁",
+      "doc": "dsh-ccxt",
+      "grounded": false,
+      "reason": "Quote mentions live trading unlock, not a guard constraining orders against an exchange.",
+      "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "Wood",
+    "predicate": "sibling_of",
+    "object": "dsh-ai-hedge-fund",
+    "docs": [
+     "dsh-tradingagents"
+    ],
+    "evidences": [
+     {
+      "quote": "from sister repo dsh-ai-hedge-fund;",
+      "doc": "dsh-tradingagents",
+      "grounded": true,
+      "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09"
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "彼得·林奇",
+    "predicate": "records_dissent",
+    "object": "彼得·林奇",
+    "docs": [
+     "dsh-ai-hedge-fund"
+    ],
+    "evidences": [
+     {
+      "quote": "而林奇与木头姐的\n异议被完整记录在案（\"可能错过 GARP 机会\"/\"低估飞轮期权价值\"）。",
+      "doc": "dsh-ai-hedge-fund",
+      "grounded": true,
+      "chunk_id": "3da58494-36a7-4705-be17-83e07a7d793c"
+     }
+    ],
+    "grounding": true
+   }
+  ]
+ },
+ "conflicts": [],
+ "flagged_unknown_types": [],
+ "flagged_ungrounded": [],
+ "merge_log": [],
+ "certifications": {},
+ "stats": {
+  "entities": 72,
+  "relations": 55,
+  "conflicts": 0,
+  "flagged": 0,
+  "suppressed_by_certification": 0,
+  "entities_grounded": 35,
+  "entities_ungrounded": 37,
+  "relations_grounded": 23,
+  "relations_ungrounded": 32,
+  "ungrounded_type_clashes": 0
+ }
+}

@@ -1,0 +1,29 @@
+2026-11-25 18:41:49 CST
+import   /tmp/o5/e2/live/ao/round1.ndjson: +0 event(s) · 374 already present · 374 in the store
+project  Constraint 1 · Relation 177 · Term 128 — verdicts: None 1 · accept 1 · grounded 207 · ungrounded 97
+gate     coverage 1.0 · cleanliness 1.0 · diversity 0.6 · endorsed 0.3627 → total 2.9627
+run      20261125-184149 opened · proposer deepseek-chat · judge deepseek-reasoner (auto-ontology eval) · 47 ungrounded Term(s) to propose for
+propose  10 proposal(s) · 0 snapped to the term's own quote · 0 null · 37 malformed (dropped) · 47 call(s) · 46,097 in / 3,423 out tokens
+           malformed: calculation_id: output_artifact → evidence_tag — "(dsh-trustquant) **The audit trail** — every call returns a `calculati" — own quote [1] with more added
+           malformed: circuit breaker: guardrail → guardrail — "spread-skew + **circuit breaker** (5× order-amount), mean-reverting by" — the term's current type
+           malformed: coding agent: cli_agent → json_object — "None" — a type outside the TBox
+           malformed: Cordis: dsh_plugin → dsh_plugin — "(dsh-evidence-plugin) - **Cordis** (`index.ts`) — DeepSeek Harness, th" — the term's current type
+           malformed: curated command catalog: output_artifact → cli_agent — "(dsh-openbb) | Surface | full Python API — huge, unscoped | **curated " — own quote [1] with more added
+           malformed: dimensions/measures/metrics: ontology_component → json_object — "None" — a type outside the TBox
+           malformed: dsh-compaction-tool-result-pruner: dsh_plugin → harness_service — "(dsh-compaction-semantic) DSH ships the *deterministic* pruner (`dsh-c" — own quote [1] with more added
+           malformed: evaluation-gate adapter contract: guardrail → json_object — "None" — a type outside the TBox
+           … and 29 more
+judge    0 grounded · 10 not grounded · 0 judge error(s) — deepseek-reasoner
+           ✗ Claude Code: upstream_project → cli_agent — "how Claude Code (three tiers + PreCompact/function hooks) and Codex (s" (Quote only mentions Claude Code's compaction tiers; no CLI a) — The quote describes Claude Code as a command-line coding agent whose compaction implementation is compared with Codex's, matching the cli_agent definition.
+           ✗ Codex: upstream_project → cli_agent — "how Claude Code (three tiers + PreCompact/function hooks) and Codex (s" (Quote mentions Codex implementing compaction but does not st) — The quote describes Codex as a command-line coding agent with its own compaction behavior, matching the cli_agent definition.
+           ✗ diary entry: diary_entry → harness_event — "One entry per **settled turn** — when the harness emits `turn/end` wit" (Quote describes one entry per settled turn; it never states ) — The quote states the entry is written when the harness emits a turn/end event, which is a harness_event.
+           ✗ dsh-genui: dsh_plugin → output_artifact — "and `dsh-genui` renders the result inline in the conversation." (Quote says dsh-genui renders a result, not that it is a prod) — Rendering a result inline in the conversation describes producing a deliverable, matching output_artifact.
+           ✗ dsh-nautilus_trader: dsh_plugin → upstream_project — "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) (" (Quote only names dsh-nautilus_trader as an engine; no upstre) — The quote labels dsh-nautilus_trader as an '(engine)', indicating it implements the concept of the external NautilusTrader engine project, i.e. an upstream project.
+           ✗ dsh-super-agent: dsh_plugin → cli_agent — "**Admission control, observe mode & tickets for any CLI coding agent.*" (Quote mentions CLI coding agents generically; never states d) — The quote states that dsh-super-agent provides admission control, observe mode, and tickets for any CLI coding agent, which describes the cli_agent type.
+           ✗ evidence ledger: git_repository → ledger_entry — "agents earn autonomy rung by rung over a hash-chained evidence ledger" (Quote only mentions a hash-chained evidence ledger; it does ) — The quote describes the evidence ledger as hash-chained, which matches the ledger_entry definition of a hash-chained JSON row in the evidence ledger.
+           ✗ ontology_query: harness_service → dsh_plugin — "With the plugin installed, agents get `ontology_build` / `ontology_que" (Quote says ontology_query is a typed tool provided by the ds) — The quote describes ontology_query as a typed tool provided by the dsh-auto-ontology plugin, which is a DeepSeek Harness plugin in the vicfei family.
+           … and 2 more
+round    candidate 2.9627 (endorsed 0.3627) vs incumbent 2.9627 (endorsed 0.3627)
+· LOST   — no proposal survived the judge: nothing published (run 20261125-184149 is running, 1/1 round(s) used)
+exit: 0
+2026-11-25 18:41:59 CST

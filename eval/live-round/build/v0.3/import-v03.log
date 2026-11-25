@@ -1,0 +1,10 @@
+# v0.3 re-import into a FRESH evoontology workspace (2026-11-25 19:39:18 CST), evoontology ad2c16e + auto-ontology v0.3 working tree
++ 374 trajectory record(s) from /tmp/o5/e2/live/ao-v03/round1.ndjson · 0 already present (idempotent by event id) · 374 in the store
++ 2 trajectory record(s) from /tmp/o5/e2/live/ao-v03/round2.ndjson · 373 already present (idempotent by event id) · 376 in the store
+## replay of the same round2:
++ 0 trajectory record(s) from /tmp/o5/e2/live/ao-v03/round2.ndjson · 375 already present (idempotent by event id) · 376 in the store
+## dry run (no model):
+import   /tmp/o5/e2/live/ao-v03/round2.ndjson: +0 event(s) · 375 already present · 376 in the store
+project  Constraint 2 · Relation 177 · Term 128 — verdicts: None 2 · accept 1 · grounded 208 · ungrounded 96
+gate     coverage 1.0 · cleanliness 1.0 · diversity 0.6 · endorsed 0.3681 → total 2.9681
+dry run  46 ungrounded Term(s) would go to the proposer (no model called, no run opened)

@@ -13,6 +13,7 @@ and artifacts to Chinese (env `ONTOLOGY_LANG`).
 ```bash
 KIT=<this-directory>
 python3 $KIT/scripts/build_ontology.py --docs <dir-or-glob> --domain "<description>" --save
+python3 $KIT/scripts/build_ontology.py --kb <weknora-kb-id> --domain "<description>" --save [--limit N]   # chunk-level evidence
 python3 $KIT/scripts/build_ontology.py --proposals <run>.proposals.json --actor agent:<name>   # a judge's re-typing, applied
 ```
 
@@ -22,6 +23,10 @@ Outputs land in `ontologies/` (typed JSON + SVG + md digest).
 
 - Every assertion must carry its evidence quote — strip none, trust nothing
   without one; report flagged unknown types instead of hiding them.
+- From a WeKnora knowledge base (`--kb`, needs `WEKNORA_URL` /
+  `WEKNORA_API_KEY`): one chunk is one document, and every evidence carries
+  the `chunk_id` it was read from — never drop it when you quote an assertion
+  back, it is how the claim resolves into the base.
 - Grounding is judged at build time: a quote that does not support its claim
   gets one re-grounding attempt and is then flagged (`type_grounding: false` /
   `grounding: false`) — kept, queryable, certifiable, never dropped.

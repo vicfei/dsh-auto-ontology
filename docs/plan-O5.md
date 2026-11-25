@@ -70,8 +70,9 @@ The family pipeline: corpus → audited ontology → self-evolving ontology.
 
 ## O5.2 · Chunk-level evidence on WeKnora (2026-12-06 → 12-11)
 
-The differentiating surface. Today the bridge builds from a KB's documents
-with doc-level evidence; chunk-level grounding turns the ontology into
+The differentiating surface. Until this milestone the WeKnora bridge carried
+an ontology *into* a knowledge base; nothing built *from* one. `--kb` reads a
+base's parsed chunks, and chunk-level grounding turns the ontology into
 **queryable provenance over the knowledge base** (evidence points at chunk
 ids — the same addressability dsh-factor-auth and dsh-WrenAI key on).
 
@@ -107,9 +108,15 @@ tag on green CI; npm publish = owner real terminal (browser auth flow).
 - [x] #35 closed with an honest before/after on the same corpus; flagged
       assertions preserved (nothing silently dropped) — 2026-11-25, PR #48,
       `eval/` (the alias tension the measurement left open is #49)
-- [ ] `export --trajectory` documented in FORMAT.md and consumed by
-      dsh-evoontology E2 in one live two-repo round
-- [ ] chunk-id evidence verified on a real WeKnora KB
+- [x] `export --trajectory` documented in FORMAT.md and consumed by
+      dsh-evoontology E2 in one live two-repo round — 2026-11-25, PR #53
+      (`apply --proposals`), `eval/live-round/`: one Term re-typed; three
+      attempts on one stream, the seed certifications and the budget
+      extension issued by the agent that ran it (deviations below)
+- [x] chunk-id evidence verified on a real WeKnora KB — 2026-11-25,
+      `eval/kb-round/`: 248 of 248 evidence records, by the API and by SQL;
+      the chunk build's ontology is smaller and less grounded than the file
+      build's, on a different TBox (deviations below)
 - [ ] 0.3.0 on npm
 
 ## Deviations log (what shipped vs the plan above)
@@ -158,3 +165,44 @@ tag on green CI; npm publish = owner real terminal (browser auth flow).
 - **O5.1 `apply` is an agent's path** (2026-11-25): `--actor` must start with
   `agent`. The guard that protects a person's verdict keys on that prefix, so
   a mistyped actor would have locked a name against every later proposal.
+- **O5.1 the live round as it ran** (2026-11-25): planned as one round, it
+  took three attempts on one stream. The first crashed in the adapter before
+  any judge ran; the second lost (2.9627 against 2.9627); the third won after
+  a budget extension (2.9693) and re-typed one Term, `OAR` from `dsh_plugin`
+  to `upstream_project`, on the quote the build had judged against the wrong
+  type. The extension and the two seed certifications were issued by the agent
+  running the round — where dsh-EvoOntology's kernel names an extension the
+  explicit human act. Round 1's judge rows were overwritten by round 2. What
+  the round exposed in the adapter is fixed there (218ee6c, PR #27).
+- **O5.1 two scores for the won round** (2026-11-25): the published layer
+  scored 2.9693; the trip back projects **2.9681**, because the candidate
+  dsh-EvoOntology built lacked the constraint a re-typing's certification adds.
+  The candidate is fixed there; the round still wins. The published `layer_v1`
+  was not regenerated. Both numbers are kept in `eval/live-round/`.
+- **O5.1 format v0.3 re-apply** (2026-11-25): as run, the round exported the
+  re-typed assertion as `by: judge` and left the judge's name in the artifact
+  only inside the certification's `retyped_to`. v0.3 puts `judge` on an
+  externally judged evidence and names it in the stream (`by: judge:<model>`).
+  The same proposals were applied again under v0.3 at 19:38 — a re-issue: the
+  certification carries a new time, so its id and the assertion's changed. A
+  store holding both exports of that round shows the quote twice; the contract
+  tells a consumer to keep the earlier export.
+- **O5.2 what the chunk build makes of a corpus** (2026-11-25): the plan asked
+  for chunk ids verified by spot-check SQL; all 248 evidence records were
+  verified, by the API and by SQL. The same round showed the chunk build's
+  ontology to be smaller and less grounded than the file build of the same 23
+  repositories — 76 of 248 quotes grounded against 226 of 370, 15 entity types
+  against 22 — from a different TBox and one chunk at a time. No same-TBox run
+  was made, so the causes are argued from the artifacts, not isolated. The
+  README's line: when you have the files, build from the files.
+- **O5.2 the plan's premise was wrong** (2026-11-25): this section said the
+  bridge built from a knowledge base's documents. The O3 bridge carries an
+  ontology into a base; nothing had built from one before `--kb`. Corrected
+  above.
+- **O5.2 the prompt's label line** (2026-11-25): in a 12-chunk smoke the
+  model quoted the label line itself (`… · chunk 8`) instead of a sentence of
+  the chunk. The verbatim gate rejected it and it stayed as an ungrounded
+  evidence. The gate was not changed; FORMAT.md states the case.
+- **O5.2 `chunk_id` does not come back** (2026-11-25): dsh-EvoOntology's
+  projection keeps a quote's `chunk_id` on its Terms (24 of 24 in the smoke),
+  but its proposals carry none back. Tracked on that repository.
