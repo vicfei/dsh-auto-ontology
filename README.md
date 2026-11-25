@@ -38,6 +38,7 @@ auto-ontology build --docs 'docs/*.md' --domain "internal design docs" --save
 auto-ontology --query "WrenAI"                 # every assertion + its evidence spans
 auto-ontology validate ontologies/*.json       # format v0.2 conformance
 auto-ontology eval --from ontologies/x.json --n 20   # honest evidence-support precision
+auto-ontology export ontologies/x.json > trajectory.ndjson   # the artifact as events
 ```
 
 Requires `python3` (stdlib only) + a `DEEPSEEK_API_KEY`. Artifacts land in
@@ -50,8 +51,8 @@ one re-ground call per document (the 19-README showcase took 514 calls, 184 s,
 overshoots.
 
 Register the DSH skill: `ln -s "$(npm root -g)/dsh-auto-ontology/skills/dsh-auto-ontology" ~/.dsh/skills/dsh-auto-ontology`.
-With the plugin installed, agents get `ontology_build` / `ontology_query` as
-typed tools (`dsh plugin add dsh-auto-ontology`).
+With the plugin installed, agents get `ontology_build` / `ontology_query` /
+`ontology_export` as typed tools (`dsh plugin add dsh-auto-ontology`).
 
 ## The discipline (non-negotiables)
 
@@ -95,6 +96,15 @@ v0.2 adds optional grounding fields (`grounded` / `reason` on an evidence,
 `type_grounding` on an entity, `grounding` on a relation, `actor` on a
 certification); every v0.1 artifact still conforms. If other tools adopt it,
 assertions stay auditable across implementations.
+
+The artifact is a state; `auto-ontology export` is what happened — an
+`ao-trajectory/0.1` stream (newline JSON) with one event per evidence quote
+and the judge's verdict on it, plus every certification (who issued it, the
+note), merges, conflicts and the type guard's catches. It is deterministic and
+idempotent by event id: replaying it adds nothing. It is the contract
+dsh-EvoOntology's adapter
+([evoontology #9](https://github.com/vicfei/dsh-EvoOntology/issues/9)) is
+written against — see FORMAT.md, *Trajectory stream*.
 
 ## Status & roadmap
 

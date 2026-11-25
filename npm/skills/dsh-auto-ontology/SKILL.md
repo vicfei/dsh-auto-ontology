@@ -15,6 +15,7 @@ unknown types are flagged, never silently dropped.
 ```bash
 auto-ontology build --docs <dir-or-glob> --domain "<description>" --save   # typed JSON + SVG cluster graph + md digest
 auto-ontology build --docs '*.md' --domain "..." --lang zh                # Chinese prompts/artifacts
+auto-ontology export ontologies/x.json > trajectory.ndjson                  # the artifact as an event stream
 ```
 
 Requires `python3` (stdlib only) and a `DEEPSEEK_API_KEY` in `~/.bashrc`.
@@ -35,3 +36,7 @@ the shareable overview, the JSON carries every assertion with its evidence span.
   in `flagged_unknown_types`, never silently dropped.
 - Artifacts are append-only in spirit: a new run writes new files; it never
   edits a prior ontology.
+- `auto-ontology export` is the artifact as events (`ao-trajectory/0.1`, one
+  JSON event per line: every quote with the judge's verdict, every
+  certification, merges, conflicts). Use it when another tool — dsh-EvoOntology
+  first — needs what happened, not just the current state.

@@ -24,6 +24,7 @@ Usage:
   python3 scripts/build_ontology.py --docs <dir_or_glob> --domain "..." --save [--lang zh]
   python3 scripts/build_ontology.py --docs <new> --domain "..." --merge ontologies/old.json --save
   python3 scripts/build_ontology.py --query "WrenAI" [--from ontologies/x.json]
+  python3 scripts/build_ontology.py --trajectory [--from ontologies/x.json] [more.json ...] [--out traj.ndjson]
 """
 import argparse, concurrent.futures as cf, datetime as dt, glob, json, math, os, re, sys, threading, time
 from xml.sax.saxutils import escape
@@ -785,7 +786,13 @@ def main():
                          "an agent applying a verdict must name itself)")
     ap.add_argument("--jsonld", action="store_true", help="export the ontology as JSON-LD 1.1 (with --from, or the newest artifact)")
     ap.add_argument("--html", action="store_true", help="render the ontology as a single-file HTML digest (with --save, or --from standalone)")
-    ap.add_argument("--from", dest="frm", default=None, help="ontology file for --query (default: newest in outdir)")
+    ap.add_argument("--from", dest="frm", default=None,
+                    help="ontology file for --query / --jsonld / --html / --trajectory (default: newest in outdir)")
+    ap.add_argument("--trajectory", action="store_true",
+                    help="export mode: the artifact as an ao-trajectory/0.1 event stream, one JSON event per line")
+    ap.add_argument("artifacts", nargs="*",
+                    help="artifact files for --trajectory (default: --from, or the newest in outdir)")
+    ap.add_argument("--out", default=None, help="with --trajectory: write the stream here instead of stdout")
     ap.add_argument("--sample", type=int, default=4, help="docs sampled for the TBox schema pass")
     ap.add_argument("--max-calls", type=int, default=None, help="cost guard: abort beyond this many LLM calls")
     ap.add_argument("--no-ground", action="store_true",
@@ -803,6 +810,31 @@ def main():
     if args.diff:
         a, b = (json.load(open(p)) for p in args.diff)
         print(render_diff(diff_ontologies(a, b)))
+        return
+
+    if args.artifacts and not args.trajectory:
+        ap.error("artifact files are read only with --trajectory")
+    if args.trajectory:
+        import trajectory
+        if args.artifacts and args.frm:
+            ap.error("--trajectory takes artifact files or --from, not both")
+        paths = args.artifacts or ([args.frm] if args.frm else
+                                   sorted(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)[-1:])
+        if not paths:
+            sys.exit(tt(f"no ontology artifact under {OUTDIR}", f"{OUTDIR} 下没有本体文件"))
+        for p in paths:
+            if not os.path.isfile(p):
+                sys.exit(tt(f"no such ontology artifact: {p}", f"没有这个本体文件：{p}"))
+        events = [e for p in paths for e in trajectory.export_events(json.load(open(p)), os.path.basename(p))]
+        for i, e in enumerate(events):   # one stream: positions run on across artifacts
+            e["seq"] = i
+        lines = trajectory.render(events)
+        if args.out:
+            open(args.out, "w", encoding="utf-8").write("\n".join(lines) + "\n")
+            print(f"trajectory: {trajectory.tally(events)} -> {args.out}")
+        else:
+            print("\n".join(lines))
+            print(f"trajectory: {trajectory.tally(events)}", file=sys.stderr)
         return
 
     if args.certify:

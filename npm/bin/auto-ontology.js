@@ -3,6 +3,7 @@
 // (the dsh-laya sidecar precedent, proven across the family).
 //
 //   auto-ontology build --docs <dir-or-glob> --domain "..." --save [--lang zh]
+//   auto-ontology export ontologies/x.json > trajectory.ndjson   (the artifact as events)
 //   auto-ontology --docs ... (build is the default subcommand)
 import { spawnSync } from "node:child_process";
 import path from "node:path";
@@ -14,13 +15,14 @@ const [cmd, ...rest] = argv;
 
 const SUBCOMMANDS = {                // named subcommands: strip the name, route the script
   build: "build_ontology.py",
+  export: "build_ontology.py",      // auto-ontology export [files...] [--from x.json] [--out f] → --trajectory
   eval: "eval_evidence.py",          // auto-ontology eval --from x.json [--n 20] [--seed 42]
   validate: "validate_format.py",    // auto-ontology validate ontologies/*.json
 };
 let script_file = SUBCOMMANDS[cmd] || "build_ontology.py";
 let pass;
 if (SUBCOMMANDS[cmd]) {
-  pass = rest;
+  pass = cmd === "export" ? ["--trajectory", ...rest] : rest;
 } else {
   pass = argv; // bare engine args pass through verbatim (build is the default)
 }
