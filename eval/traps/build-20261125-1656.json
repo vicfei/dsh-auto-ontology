@@ -1,0 +1,422 @@
+{
+ "domain": "internal notes of a small software studio (tools, people, companies, databases, programming languages)",
+ "built_at": "2026-11-25T16:56:54",
+ "provenance": {
+  "model": "deepseek-chat",
+  "temperature": 0,
+  "elapsed_s": 16,
+  "calls": 30,
+  "tokens_in": 13305,
+  "tokens_out": 1846,
+  "docs_this_run": 5,
+  "merged_from": false,
+  "judge_model": "deepseek-chat",
+  "grounding_pass": true
+ },
+ "tbox": {
+  "entity_types": [
+   {
+    "name": "build_tool",
+    "desc": "A software tool that compiles or builds assets/pipelines."
+   },
+   {
+    "name": "company",
+    "desc": "An organization or business entity, e.g. a manufacturer that supplies the studio."
+   },
+   {
+    "name": "database",
+    "desc": "A data storage system that holds records or notes."
+   },
+   {
+    "name": "person",
+    "desc": "An individual human, e.g. a studio employee who leads a team."
+   },
+   {
+    "name": "programming_language",
+    "desc": "A programming language, such as one used for a specific authoring purpose."
+   },
+   {
+    "name": "team",
+    "desc": "A group within the studio, such as the platform team or the Wren team."
+   }
+  ],
+  "relation_types": [
+   {
+    "name": "leads",
+    "domains": "person",
+    "ranges": "team",
+    "desc": "A person leads or heads a team."
+   },
+   {
+    "name": "manufactures",
+    "domains": "company",
+    "ranges": "entity",
+    "desc": "A company manufactures or produces goods, such as sensors."
+   },
+   {
+    "name": "compiles",
+    "domains": "build_tool",
+    "ranges": "entity",
+    "desc": "A build tool compiles or builds something, such as asset pipelines."
+   },
+   {
+    "name": "stores",
+    "domains": "database",
+    "ranges": "entity",
+    "desc": "A database stores records or data, such as billing records or meeting notes."
+   },
+   {
+    "name": "uses",
+    "domains": "team",
+    "ranges": "database",
+    "desc": "A team keeps or stores its information in a database."
+   },
+   {
+    "name": "mentioned",
+    "domains": "person",
+    "ranges": "entity",
+    "desc": "A person mentioned something, such as a tool, during a discussion."
+   }
+  ]
+ },
+ "abox": {
+  "entities": [
+   {
+    "name": "LedgerDB",
+    "type": "database",
+    "aliases": [],
+    "docs": [
+     "studio-tools",
+     "studio-traps"
+    ],
+    "evidences": [
+     {
+      "quote": "LedgerDB is a database that stores the studio's billing records.",
+      "doc": "studio-tools",
+      "grounded": true
+     },
+     {
+      "quote": "The platform team keeps its meeting notes in LedgerDB, and so does the Wren team.",
+      "doc": "studio-traps",
+      "grounded": true
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "Mara",
+    "type": "person",
+    "aliases": [],
+    "docs": [
+     "studio-traps"
+    ],
+    "evidences": [
+     {
+      "quote": "Mara mentioned Rusty during standup; nobody wrote down why.",
+      "doc": "studio-traps",
+      "grounded": true
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "Mara Lindqvist",
+    "type": "person",
+    "aliases": [],
+    "docs": [
+     "studio-people"
+    ],
+    "evidences": [
+     {
+      "quote": "Mara Lindqvist is a person; she leads the platform team at the studio.",
+      "doc": "studio-people",
+      "grounded": true
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "Oakfield",
+    "type": "company",
+    "aliases": [],
+    "docs": [
+     "studio-people"
+    ],
+    "evidences": [
+     {
+      "quote": "Oakfield is a company that manufactures the sensors the studio ships.",
+      "doc": "studio-people",
+      "grounded": true
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "PicoGraph",
+    "type": "database",
+    "aliases": [],
+    "docs": [
+     "studio-traps"
+    ],
+    "evidences": [
+     {
+      "quote": "If the studio ever builds one, PicoGraph would be a database for graph queries.",
+      "doc": "studio-traps",
+      "grounded": false,
+      "reason": "Hypothetical/conditional statement, not an assertion that PicoGraph is a database."
+     }
+    ],
+    "type_grounding": false
+   },
+   {
+    "name": "platform team",
+    "type": "team",
+    "aliases": [],
+    "docs": [
+     "studio-people",
+     "studio-traps"
+    ],
+    "evidences": [
+     {
+      "quote": "Mara Lindqvist is a person; she leads the platform team at the studio.",
+      "doc": "studio-people",
+      "grounded": true
+     },
+     {
+      "quote": "The platform team keeps its meeting notes in LedgerDB, and so does the Wren team.",
+      "doc": "studio-traps",
+      "grounded": true
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "Rusty",
+    "type": "build_tool",
+    "aliases": [],
+    "docs": [
+     "studio-tools"
+    ],
+    "evidences": [
+     {
+      "quote": "Rusty is a build tool that compiles asset pipelines for the studio's web apps.",
+      "doc": "studio-tools",
+      "grounded": true
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "Wren",
+    "type": "programming_language",
+    "aliases": [],
+    "docs": [
+     "studio-languages"
+    ],
+    "evidences": [
+     {
+      "quote": "Wren is a programming language designed for shader authoring.",
+      "doc": "studio-languages",
+      "grounded": true
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "Wren team",
+    "type": "team",
+    "aliases": [],
+    "docs": [
+     "studio-traps"
+    ],
+    "evidences": [
+     {
+      "quote": "The platform team keeps its meeting notes in LedgerDB, and so does the Wren team.",
+      "doc": "studio-traps",
+      "grounded": true
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "周明",
+    "type": "person",
+    "aliases": [],
+    "docs": [
+     "studio-zh"
+    ],
+    "evidences": [
+     {
+      "quote": "周明在站会上提到了 Rusty。",
+      "doc": "studio-zh",
+      "grounded": true
+     }
+    ],
+    "type_grounding": true
+   },
+   {
+    "name": "织雀（Wren）",
+    "type": "programming_language",
+    "aliases": [],
+    "docs": [
+     "studio-zh"
+    ],
+    "evidences": [
+     {
+      "quote": "织雀（Wren）是一种面向着色器编写的编程语言。",
+      "doc": "studio-zh",
+      "grounded": true
+     }
+    ],
+    "type_grounding": true
+   }
+  ],
+  "relations": [
+   {
+    "subject": "LedgerDB",
+    "predicate": "stores",
+    "object": "billing records",
+    "docs": [
+     "studio-tools"
+    ],
+    "evidences": [
+     {
+      "quote": "LedgerDB is a database that stores the studio's billing records.",
+      "doc": "studio-tools",
+      "grounded": true
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "Mara",
+    "predicate": "mentioned",
+    "object": "Rusty",
+    "docs": [
+     "studio-traps"
+    ],
+    "evidences": [
+     {
+      "quote": "Mara mentioned Rusty during standup; nobody wrote down why.",
+      "doc": "studio-traps",
+      "grounded": true
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "Mara Lindqvist",
+    "predicate": "leads",
+    "object": "platform team",
+    "docs": [
+     "studio-people"
+    ],
+    "evidences": [
+     {
+      "quote": "Mara Lindqvist is a person; she leads the platform team at the studio.",
+      "doc": "studio-people",
+      "grounded": true
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "Oakfield",
+    "predicate": "manufactures",
+    "object": "sensors",
+    "docs": [
+     "studio-people"
+    ],
+    "evidences": [
+     {
+      "quote": "Oakfield is a company that manufactures the sensors the studio ships.",
+      "doc": "studio-people",
+      "grounded": true
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "platform team",
+    "predicate": "uses",
+    "object": "LedgerDB",
+    "docs": [
+     "studio-traps"
+    ],
+    "evidences": [
+     {
+      "quote": "The platform team keeps its meeting notes in LedgerDB, and so does the Wren team.",
+      "doc": "studio-traps",
+      "grounded": true
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "Rusty",
+    "predicate": "compiles",
+    "object": "asset pipelines",
+    "docs": [
+     "studio-tools"
+    ],
+    "evidences": [
+     {
+      "quote": "Rusty is a build tool that compiles asset pipelines for the studio's web apps.",
+      "doc": "studio-tools",
+      "grounded": true
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "Wren team",
+    "predicate": "uses",
+    "object": "LedgerDB",
+    "docs": [
+     "studio-traps"
+    ],
+    "evidences": [
+     {
+      "quote": "The platform team keeps its meeting notes in LedgerDB, and so does the Wren team.",
+      "doc": "studio-traps",
+      "grounded": true
+     }
+    ],
+    "grounding": true
+   },
+   {
+    "subject": "周明",
+    "predicate": "mentioned",
+    "object": "Rusty",
+    "docs": [
+     "studio-zh"
+    ],
+    "evidences": [
+     {
+      "quote": "周明在站会上提到了 Rusty。",
+      "doc": "studio-zh",
+      "grounded": true
+     }
+    ],
+    "grounding": true
+   }
+  ]
+ },
+ "conflicts": [],
+ "flagged_unknown_types": [],
+ "flagged_ungrounded": [],
+ "merge_log": [],
+ "certifications": {},
+ "stats": {
+  "entities": 11,
+  "relations": 8,
+  "conflicts": 0,
+  "flagged": 0,
+  "suppressed_by_certification": 0,
+  "entities_grounded": 10,
+  "entities_ungrounded": 1,
+  "relations_grounded": 8,
+  "relations_ungrounded": 0,
+  "ungrounded_type_clashes": 0
+ }
+}

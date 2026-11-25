@@ -1,0 +1,19 @@
+# adversarial set · scripts/adversarial_cases.json · 28 cases (18 must-reject, 10 must-accept)
+judge deepseek-reasoner · temp 0
+
+accuracy = 25/28 = 89%   traps rejected 18/18 · true grounding accepted 7/10
+
+MISSES
+✗ [predication-entails-type] expected grounded, judged ungrounded
+   entity: Kafka is a message_queue.  quote: "Kafka streams events between services."
+   reason: Quote says Kafka streams events, not messages; it does not establish Kafka is a message queue.
+✗ [name-with-alias] expected grounded, judged ungrounded
+   entity: DeepSeek Harness is a cli_tool.  quote: "DeepSeek Harness (DSH) is a CLI agent harness."
+   reason: Quote says 'CLI agent harness,' not that it is a command-line program; type not entailed.
+✗ [alias-label] expected grounded, judged ungrounded
+   entity: market_data_payload is a data_payload.  quote: "Every payload carries its exchange and timestamp."
+   reason: Quote mentions generic payload, not market_data_payload by name.
+
+The judge prompt is the one the build's grounding pass uses (scripts/grounding.py). The gold labels were written by hand before any judge ran (one case keeps the shape of a real failure with its names replaced); misses ship as-is.
+
+rows -> eval/before-after/adversarial-v0.3.deepseek-reasoner.jsonl

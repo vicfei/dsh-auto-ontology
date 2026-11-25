@@ -25,7 +25,8 @@ Usage:
   python3 scripts/build_ontology.py --docs <new> --domain "..." --merge ontologies/old.json --save
   python3 scripts/build_ontology.py --query "WrenAI" [--from ontologies/x.json]
 """
-import argparse, datetime as dt, glob, json, math, os, re, sys, time
+import argparse, concurrent.futures as cf, datetime as dt, glob, json, math, os, re, sys, threading, time
+from xml.sax.saxutils import escape
 
 KIT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -41,6 +42,7 @@ OUTDIR = os.environ.get("ONTOLOGY_HOME") or os.path.join(KIT, "ontologies")
 
 COST = {"calls": 0, "in": 0, "out": 0}
 MAX_CALLS = None
+_LOCK = threading.Lock()   # the judge calls run concurrently; the ledger and the guard do not race
 
 
 def _key(s):
@@ -53,20 +55,24 @@ MODEL = os.environ.get("ONTOLOGY_MODEL") or "deepseek-chat"
 JUDGE_MODEL = MODEL  # set by --judge-model / ONTOLOGY_JUDGE_MODEL in main()
 
 
-def _usage(u):
-    COST["calls"] += 1
-    COST["in"] += int(u.get("prompt_tokens") or 0)
-    COST["out"] += int(u.get("completion_tokens") or 0)
+def _reserved_usage(u):
+    """Token accounting for a call whose `calls` slot llm() reserved before it started."""
+    with _LOCK:
+        COST["in"] += int(u.get("prompt_tokens") or 0)
+        COST["out"] += int(u.get("completion_tokens") or 0)
 
 
 def llm(sysmsg, user, json_out=True, model=None):
-    """Every LLM request of a run goes through here: cost guard first, then one
-    retried call; each answered attempt lands in the ledger."""
-    if MAX_CALLS is not None and COST["calls"] >= MAX_CALLS:
-        raise SystemExit(f"cost guard: {MAX_CALLS} LLM calls reached (--max-calls)")
+    """Every LLM request of a run goes through here: cost guard first — the call is reserved
+    under the lock, so concurrent judge calls cannot overshoot the cap — then one retried
+    call; each answered attempt lands its tokens in the ledger."""
+    with _LOCK:
+        if MAX_CALLS is not None and COST["calls"] >= MAX_CALLS:
+            raise SystemExit(f"cost guard: {MAX_CALLS} LLM calls reached (--max-calls)")
+        COST["calls"] += 1
     out, _ = grounding.complete(model or MODEL, [{"role": "system", "content": sysmsg},
                                                  {"role": "user", "content": user}],
-                                json_out=json_out, account=_usage)
+                                json_out=json_out, account=_reserved_usage)
     return out
 
 
@@ -510,6 +516,8 @@ P_ABOX = {
            "EVIDENCE is a verbatim quote copied EXACTLY from the document (up to 200 chars, no paraphrase): "
            "for an entity, the sentence that states what the entity IS - it must contain the entity's name as written; "
            "for a relation, the sentence that names an endpoint and states the relation. "
+           "When a line takes its meaning from the list label, heading or table header above it, "
+           "start the quote at that label. "
            "If the document only mentions a name without saying what it is, quote the sentence that mentions it. "
            "Output JSON: "
            '{"entities":[{"name":"...","type":"...","evidence":"..."}],'
@@ -519,6 +527,7 @@ P_ABOX = {
            "evidence 必须是**逐字**复制的原文引文（不超过 200 字，不得改写）："
            "实体——说明该实体**是什么**的那句话，且必须包含实体名原文；"
            "关系——点出关系一端并陈述该关系的那句话。"
+           "当某一行的含义来自其上方的列表标签、标题或表头时，引文从该标签开始。"
            "若文档只是提及名字而未说明其为何物，则引用提及它的那句话。"
            "输出 JSON："
            '{"entities":[{"name":"...","type":"...","evidence":"..."}],'
@@ -526,30 +535,35 @@ P_ABOX = {
 }
 P_REGROUND = {
     "en": ("You repair evidence quotes for ontology assertions. For each numbered claim, find in the document the "
-           "verbatim sentence that STATES the claim and copy it exactly (up to 200 chars). An entity quote must "
-           "contain the entity's name as written and say what the entity is; a relation quote must name an endpoint "
-           "and state the relation. If the document does not state the claim, set quote to null - never paraphrase, "
-           "never stitch sentences together. "
+           "contiguous span that STATES the claim and copy it exactly (up to 200 chars). The span may start at the "
+           "list label, heading or table header that gives a line its meaning (for example \"Family: [X] - [Y]\" "
+           "before a link). An entity quote must contain the entity's name as written and say what the entity is; "
+           "a relation quote must name an endpoint and state the relation. If the document does not state the "
+           "claim, set quote to null - never paraphrase, never stitch together sentences that are not adjacent. "
            'Output JSON: {"repairs":[{"i":1,"quote":"... or null"}]} - exactly one entry per item, same numbering.'),
-    "zh": ("你为 ontology 断言修复证据引文。对每条编号断言，在文档中找到**陈述**该断言的原文句子并逐字复制"
-           "（不超过 200 字）。实体引文必须包含实体名原文并说明该实体是什么；关系引文必须点出一个端点并陈述该关系。"
-           "若文档并未陈述该断言，quote 置为 null——不得改写、不得拼接句子。"
+    "zh": ("你为 ontology 断言修复证据引文。对每条编号断言，在文档中找到**陈述**该断言的连续原文片段并逐字复制"
+           "（不超过 200 字）。片段可以从赋予该行含义的列表标签、标题或表头开始（例如链接之前的“Family: [X] · [Y]”）。"
+           "实体引文必须包含实体名原文并说明该实体是什么；关系引文必须点出一个端点并陈述该关系。"
+           "若文档并未陈述该断言，quote 置为 null——不得改写、不得拼接不相邻的句子。"
            '输出 JSON：{"repairs":[{"i":1,"quote":"... 或 null"}]}——每项恰好一条，编号一致。'),
 }
 
-JUDGE_BATCH = 25
+JUDGE_JOBS = int(os.environ.get("ONTOLOGY_JUDGE_JOBS") or 8)   # concurrent single-item judge calls
 
 
-def _reject_reason(kind, x, text):
-    """Why an extracted quote cannot ground its claim as written — None when it may be judged."""
+def _reject_reason(x, text):
+    """Why an extracted quote can never ground its claim — None when it may be judged.
+
+    The one check the judge cannot make: it sees the quote, not the document, so only a
+    verbatim span of the document is evidence. A quote that does not spell the entity's
+    name or a relation's endpoint is still JUDGED. (Until 2026-11-25 that was a
+    pre-reject; on the published before-artifact it would have turned away 30 ungrounded
+    assertions and 9 grounded ones — "payload" for market_data_payload, a plugin typed
+    from its own title line. A quote about ANOTHER instance of the type stays rejected by
+    the judge: the adversarial set pins it.)"""
     q = x.get("evidence", "")
     if not q or not grounding.is_verbatim(q, text):
         return tt("quote is not verbatim in the source document", "引文并非文档原文")
-    if kind == "entity":
-        if not grounding.name_in_quote(x["name"], q):
-            return tt("quote does not contain the name as written", "引文不含实体名原文")
-    elif not any(grounding.endpoints_in_quote(x.get("subject") or "", x.get("object") or "", q)):
-        return tt("quote names no endpoint", "引文未点出任何关系端点")
     return None
 
 
@@ -562,11 +576,21 @@ def _item(kind, x, doc, descs):
 
 
 def _judge(cands, doc, descs):
-    """-> verdicts in the same order: the shared judge, one call per batch of JUDGE_BATCH."""
-    out = []
-    for i in range(0, len(cands), JUDGE_BATCH):
-        out += grounding.judge([_item(k, x, doc, descs) for k, x in cands[i:i + JUDGE_BATCH]], JUDGE_MODEL, call=llm)
-    return out
+    """-> verdicts in the same order: the shared judge, ONE call per item — the protocol the
+    eval and the adversarial set use (a hand audit found batched verdicts less accurate).
+    The items are judged concurrently; the order of the verdicts is the order of the input."""
+    items = [_item(k, x, doc, descs) for k, x in cands]
+    if not items:
+        return []
+    with cf.ThreadPoolExecutor(max_workers=min(JUDGE_JOBS, len(items))) as ex:
+        return list(ex.map(lambda it: grounding.judge([it], JUDGE_MODEL, call=_judge_call)[0], items))
+
+
+def _judge_call(sysmsg, user):
+    """A judge call: through the cost guard AND through --judge-model. grounding.judge()
+    hands `call` no model, so a bare llm() here judged with the build model while the
+    provenance named the judge model."""
+    return llm(sysmsg, user, model=JUDGE_MODEL)
 
 
 def _reground(d, failed, descs):
@@ -588,15 +612,16 @@ def _reground(d, failed, descs):
 def ground_doc(d, out, known, descs, reground=True):
     """The grounding pass for ONE document, in place on the extracted assertions: every
     (claim, quote) leaves with `grounded` True / False, or untouched when it never had a
-    quote to judge. Order: the mechanical reject filter (no LLM), ONE batched judge call
-    for what passes, then — only if something failed — one re-ground call and one
-    re-judge. Nothing is dropped: an ungrounded assertion is folded like any other and
-    flagged. -> {entities: [grounded, ungrounded], relations: [...], regrounded}"""
+    quote to judge. Order: the verbatim gate (no LLM — a span not in the document is not
+    evidence), one judge call per verbatim quote, then — only if something failed — one
+    re-ground call and a re-judge of every repaired quote. Nothing is dropped: an
+    ungrounded assertion is folded like any other and flagged.
+    -> {entities: [grounded, ungrounded], relations: [...], regrounded}"""
     cands = [("entity", e) for e in out.get("entities", []) if e.get("name") and e.get("type") in known]
     cands += [("relation", r) for r in out.get("relations", [])]
     todo = []
     for kind, x in cands:
-        why = _reject_reason(kind, x, d["text"])
+        why = _reject_reason(x, d["text"])
         if why is None:
             todo.append((kind, x))
         else:
@@ -607,7 +632,7 @@ def ground_doc(d, out, known, descs, reground=True):
     repaired = []
     if reground and failed:
         for (kind, x), q in zip(failed, _reground(d, failed, descs)):
-            if q and _reject_reason(kind, dict(x, evidence=q), d["text"]) is None:
+            if q and _reject_reason(dict(x, evidence=q), d["text"]) is None:
                 x["evidence"], x["regrounded"] = q, True
                 repaired.append((kind, x))
         for (kind, x), v in zip(repaired, _judge(repaired, d["path"], descs)):
@@ -676,6 +701,11 @@ def build(docs, domain, base=None, sample=4, ground=True, reground=True):
     return st, new_type_descs, merged_aliases, tally
 
 
+def _text_w(s, fs):
+    """Approximate rendered width in px: a monospace cell is ~0.6 em, a CJK cell ~1 em."""
+    return fs * sum(1.0 if ord(c) > 0x2E80 else 0.6 for c in s)
+
+
 def _write_svg(path, o, domain):
     ents, rels = o["abox"]["entities"], o["abox"]["relations"]
     by_type = {}
@@ -690,8 +720,31 @@ def _write_svg(path, o, domain):
         for i, e in enumerate(es[:10]):
             a = 2 * math.pi * i / max(len(es[:10]), 1)
             nodes.append((e["name"][:14], gx + 52 * math.cos(a), gy + 40 * math.sin(a), colors[ci % 6]))
-    svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="860" height="700" font-family="monospace">',
-           f'<text x="10" y="16" font-size="13">{domain} · {len(ents)} entities / {len(rels)} relations</text>']
+    # the title takes two lines and the graph is shifted so that no label leaves the canvas:
+    # with six type clusters the outer rings used to put labels above y=0 and left of x=0
+    title = domain
+    while title and _text_w(title, 13) > 840:
+        title = title[:-1]
+    if title != domain:
+        title += "…"
+    st = o.get("stats") or {}
+    line2 = f"{len(ents)} entities / {len(rels)} relations"
+    if "entities_grounded" in st:
+        ok = st["entities_grounded"] + st["relations_grounded"]
+        line2 += f" · {ok} judged grounded · {len(ents) + len(rels) - ok} not grounded, kept and flagged"
+    TOP, PAD, W, H = 48, 8, 860, 700
+    tx = ty = 0.0
+    if nodes:
+        x0 = min(n[1] for n in nodes) - 4
+        x1 = max(n[1] + 6 + _text_w(n[0], 9) for n in nodes)
+        y0 = min(n[2] for n in nodes) - 7
+        y1 = max(n[2] for n in nodes) + 4
+        W, H = max(W, math.ceil(x1 - x0) + 2 * PAD), max(H, math.ceil(y1 - y0) + TOP + PAD)
+        tx, ty = (W - (x1 - x0)) / 2 - x0, TOP - y0
+    svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" font-family="monospace">',
+           f'<text x="10" y="16" font-size="13">{escape(title)}</text>',
+           f'<text x="10" y="33" font-size="13">{escape(line2)}</text>',
+           f'<g transform="translate({tx:.0f} {ty:.0f})">']
     nm = {n[0]: (n[1], n[2]) for n in nodes}
     for r in rels:
         if r["subject"][:14] in nm and r["object"][:14] in nm:
@@ -700,8 +753,8 @@ def _write_svg(path, o, domain):
             svg.append(f'<line x1="{x1:.0f}" y1="{y1:.0f}" x2="{x2:.0f}" y2="{y2:.0f}" stroke="#99a" stroke-width="0.7"/>')
     for name, x, y, c in nodes:
         svg.append(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="4" fill="{c}"/>'
-                   f'<text x="{x + 6:.0f}" y="{y + 3:.0f}" font-size="9" fill="#345">{name}</text>')
-    svg.append("</svg>")
+                   f'<text x="{x + 6:.0f}" y="{y + 3:.0f}" font-size="9" fill="#345">{escape(name)}</text>')
+    svg.append("</g></svg>")
     open(path, "w").write("".join(svg))
 
 

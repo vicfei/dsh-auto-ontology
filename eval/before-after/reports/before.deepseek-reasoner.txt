@@ -1,0 +1,486 @@
+# evidence-support precision · eval/before-after/before/20261125-1715.json
+sampled 232/232 evidenced assertions (whole population) · evidence: first quote
+judge deepseek-reasoner · temp 0 · jobs 8
+
+## LLM judge (strict type-grounding)
+precision = 22/232 = 9%
+
+   entity    5/91 = 5%
+   relation  17/141 = 12%
+   weakest entity types (<50%, n>=3): investor_persona 0/4 · verdict 0/4 · trading_guard 0/7 · entity 0/4 · ontology 0/6 · ic_memo 0/3
+   weakest predicates (<50%, n>=3): guards_trading 0/7 · has_persona 0/8 · produces_output 0/4 · has_evidence 0/3 · records_dissent 0/3 · sister_project_of 4/72
+
+## Mechanical (no LLM, whole artifact)
+   entities: name-in-quote 73/91 = 80%
+   relations: >=1 endpoint in quote 120/141 = 85% · both endpoints 1/141 = 1%
+   verbatim: 220/232 = 95% of 232 quotes (0 source files not resolved)
+
+## Rows
+✗ [entity] @wxg-prc-cpg/dsh-weknora is of type 'dsh_plugin'
+   quote: "WeKnora ships its own read-only DSH plugin" (dsh-weknora-ops) — Quote names WeKnora, not @wxg-prc-cpg/dsh-weknora; no type assertion about that package.  · verbatim
+✓ [entity] [R1][R2][R4] is of type 'evidence_tag'
+   quote: "argument ([R1][R2][R4]: revenue" (dsh-tradingagents) — Quote shows bracketed citations [R1][R2][R4] attached to an argument.  · verbatim
+✓ [entity] binance is of type 'exchange'
+   quote: ""exchange":"binance","symbol":"BTC/USDT"" (dsh-ccxt) — Quote labels binance as the "exchange" in a BTC/USDT payload, directly supporting it is an exchange.  · verbatim
+✗ [entity] Buffett is of type 'investor_persona'
+   quote: "沃伦·巴菲特 | PASS | 70" (dsh-ai-hedge-fund) — Quote gives translated name with PASS and score, but no investor_persona type information.  · verbatim
+✗ [entity] BUY@62 is of type 'verdict'
+   quote: "Wood BUY@62" (dsh-tradingagents) — Quote only mentions 'BUY@62'; it does not state it is a committee verdict.  · verbatim
+✗ [entity] calculation_id is of type 'evidence_tag'
+   quote: "every call returns a `calculation_id`" (dsh-trustquant) — Quote only says calls return a calculation_id; it does not describe it as an evidence tag or citation.  · verbatim
+✓ [entity] ccxt is of type 'upstream_project'
+   quote: "Built on [ccxt](https://github.com/ccxt/ccxt)" (dsh-ccxt) — Quote says plugin is built on ccxt, directly implying ccxt is an upstream project.  · verbatim
+✗ [entity] circuit breaker is of type 'trading_guard'
+   quote: "circuit breaker** (5× order-amount)" (dsh-hummingbot) — Quote only mentions circuit breaker and order amount; no code-level safeguard details or bypass claim.  · verbatim
+✗ [entity] compaction_judge is of type 'compaction_judge'
+   quote: "replaces the *decision* with a calibrated judge" (dsh-compaction-semantic) — Quote mentions a calibrated judge but not the entity name, semantic scope, context keep/drop decision, or character-count pruning replacement.  · verbatim
+✗ [entity] Constraint is of type 'entity'
+   quote: "Relation, Constraint, Evidence)" (dsh-evoontology) — Quote only lists 'Constraint' in parentheses; it does not state it is an entity.  · verbatim
+✗ [entity] dsh-ai-hedge-fund is of type 'dsh_plugin'
+   quote: "dsh-ai-hedge-fund — an AI hedge fund" (dsh-ai-hedge-fund) — Quote calls it an AI hedge fund, not a DeepSeek Harness plugin repository in the vicfei family.  · verbatim
+✗ [entity] dsh-auto-ontology is of type 'dsh_plugin'
+   quote: "dsh-auto-ontology — auto ontology construction" (dsh-auto-ontology) — Quote only names it and describes ontology construction; no plugin, repository, DeepSeek Harness, or vicfei family.  · verbatim
+✗ [entity] dsh-CCXT is of type 'dsh_plugin'
+   quote: "dsh-CCXT — 100+ crypto exchanges" (dsh-ccxt) — Quote only names dsh-CCXT with a tagline; never says it is a plugin/repository.  · verbatim
+✗ [entity] dsh-compaction-semantic is of type 'dsh_plugin'
+   quote: "dsh-compaction-semantic — semantic context" (dsh-compaction-semantic) — Quote only gives a name and tagline; it does not state it is a dsh_plugin or DeepSeek Harness plugin.  · verbatim
+✗ [entity] dsh-compaction-tool-result-pruner is of type 'dsh_plugin'
+   quote: "(`dsh-compaction-tool-result-pruner`)" (dsh-compaction-semantic) — Quote only mentions the name; it provides no type information.  · verbatim
+✗ [entity] dsh-EvoOntology is of type 'dsh_plugin'
+   quote: "dsh-EvoOntology — a self-evolving ontology layer" (dsh-evoontology) — Quote calls it an ontology layer, not a DeepSeek Harness plugin repository.  · verbatim
+✗ [entity] dsh-freqtrade is of type 'dsh_plugin'
+   quote: "dsh-freqtrade — a GPL-free strategy-bot" (dsh-freqtrade) — Quote calls it a strategy-bot, not a DeepSeek Harness plugin repository in the vicfei family.  · verbatim
+✗ [entity] dsh-genui is of type 'dsh_plugin'
+   quote: "dsh-genui renders the result inline" (dsh-uigen) — Quote only mentions dsh-genui rendering output; no plugin/type information.  · verbatim
+✗ [entity] dsh-hummingbot is of type 'dsh_plugin'
+   quote: "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot)" (dsh-freqtrade) — Quote only mentions the repository name and link; no type information.  · verbatim
+✗ [entity] dsh-jesse is of type 'dsh_plugin'
+   quote: "[dsh-jesse](https://github.com/vicfei/dsh-jesse)" (dsh-freqtrade) — Quote only gives a bare link/name, no type information about it being a plugin.  · verbatim
+✗ [entity] dsh-Kronos is of type 'dsh_plugin'
+   quote: "[dsh-Kronos](https://github.com/vicfei/dsh-Kronos)" (dsh-freqtrade) — Quote only links/mentions dsh-Kronos; no statement that it is a plugin repository.  · verbatim
+✗ [entity] dsh-Nautilus is of type 'dsh_plugin'
+   quote: "dsh-Nautilus — a professional backtesting engine" (dsh-nautilus) — Quote calls it a backtesting engine, not a DeepSeek Harness plugin repository.  · verbatim
+✗ [entity] dsh-nautilus_trader is of type 'dsh_plugin'
+   quote: "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader)" (dsh-freqtrade) — Quote only mentions dsh-nautilus_trader as a link; it gives no type information.  · verbatim
+✗ [entity] dsh-OpenBB is of type 'dsh_plugin'
+   quote: "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)" (dsh-ccxt) — Quote only mentions dsh-OpenBB as a link; no type information.  · verbatim
+✗ [entity] dsh-QuantLib is of type 'dsh_plugin'
+   quote: "[dsh-QuantLib](https://github.com/vicfei/dsh-QuantLib)" (dsh-freqtrade) — Quote only links the name dsh-QuantLib; no statement that it is a plugin.  · verbatim
+✗ [entity] dsh-quantstats is of type 'dsh_plugin'
+   quote: "[dsh-quantstats](https://github.com/vicfei/dsh-quantstats)" (dsh-freqtrade) — Quote only mentions the repository name; it gives no type or plugin information.  · verbatim
+✗ [entity] dsh-super-agent is of type 'dsh_plugin'
+   quote: "admission-control philosophy of dsh-super-agent" (dsh-weknora-ops) — Quote only mentions dsh-super-agent; no indication it is a plugin repository.  · NOT verbatim
+✗ [entity] dsh-superagent-prototype is of type 'upstream_project'
+   quote: "MIT-licensed [dsh-superagent-prototype]" (dsh-trustquant) — Quote only says MIT-licensed and names it; no upstream relation or non-affiliation stated.  · verbatim
+✗ [entity] dsh-TradingAgents is of type 'dsh_plugin'
+   quote: "Sister project of dsh-TradingAgents" (dsh-ai-hedge-fund) — Quote only mentions dsh-TradingAgents as a sister project; no plugin/repository type information.  · NOT verbatim
+✓ [entity] dsh-trustquant is of type 'dsh_plugin'
+   quote: "A DeepSeek Harness plugin (skill + `trustquant-dsh` CLI" (dsh-trustquant) — Quote directly appositively defines dsh-trustquant as a DeepSeek Harness plugin.  · NOT verbatim
+✗ [entity] dsh-ui JSON spec is of type 'evidence_tag'
+   quote: "the `dsh-ui` JSON spec" (dsh-uigen) — Quote only mentions the dsh-ui JSON spec; it does not state it is a source quote or citation.  · verbatim
+✗ [entity] dsh-uigen is of type 'dsh_plugin'
+   quote: "dsh-uigen — generate-and-render inline UI" (dsh-uigen) — Quote names dsh-uigen and its function but does not state it is a plugin repository.  · verbatim
+✗ [entity] dsh-Vibe-Trading is of type 'dsh_plugin'
+   quote: "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)" (dsh-ccxt) — Quote only names dsh-Vibe-Trading as a link; it gives no type or plugin information.  · verbatim
+✗ [entity] dsh-weknora-ops is of type 'dsh_plugin'
+   quote: "A DeepSeek Harness plugin (skill + `weknora-ops` CLI)" (dsh-weknora-ops) — Quote calls something a DeepSeek Harness plugin but does not name dsh-weknora-ops as that plugin.  · NOT verbatim
+✗ [entity] dsh-WrenAI is of type 'dsh_plugin'
+   quote: "[dsh-WrenAI](https://github.com/vicfei/dsh-WrenAI)" (dsh-auto-ontology) — Quote only links/mentions dsh-WrenAI; no statement that it is a plugin repository  · verbatim
+✗ [entity] entity is of type 'entity'
+   quote: "every entity and" (dsh-auto-ontology) — Quote only mentions 'entity' without stating it is a typed ontology node.  · verbatim
+✗ [entity] evaluation-gate adapter contract is of type 'ontology'
+   quote: "evaluation-gate adapter contract" (dsh-evoontology) — Quote only names the entity; gives no type information.  · verbatim
+✗ [entity] Evidence is of type 'evidence_tag'
+   quote: "Constraint, Evidence) inherits the family's" (dsh-evoontology) — Quote only mentions Evidence in a fragment; no type relation to evidence_tag.  · verbatim
+✗ [entity] evidence_tag is of type 'evidence_tag'
+   quote: "a verbatim quote + source doc" (dsh-auto-ontology) — Quote describes a quote plus source doc but never names or labels it evidence_tag.  · verbatim
+✗ [entity] evolution kernel is of type 'ontology'
+   quote: "E1 · evolution kernel" (dsh-evoontology) — Quote only mentions the name; it does not state that the evolution kernel is an ontology.  · verbatim
+✗ [entity] exchange is of type 'exchange'
+   quote: "cboe/sec keyless today; yfinance/fred/polygon" (dsh-openbb) — Quote lists data sources; never asserts a CCXT crypto trading venue or any entity's type.  · verbatim
+✗ [entity] fail-closed guard is of type 'trading_guard'
+   quote: "family's fail-closed guard" (dsh-nautilus) — Quote only mentions a 'fail-closed guard' without stating it is a trading_guard or code-level safeguard.  · verbatim
+✗ [entity] family fail-closed guard is of type 'trading_guard'
+   quote: "behind the family's fail-closed guard" (dsh-hummingbot) — Quote only mentions a fail-closed guard; no code-level safeguard details.  · verbatim
+✗ [entity] fast-jev-compaction is of type 'upstream_project'
+   quote: "the original `fast-jev-compaction` repository" (dsh-compaction-semantic) — Only mentions a repository; no statement it is external, open-source, or inspiration for a plugin.  · verbatim
+✗ [entity] five-record schema is of type 'ontology'
+   quote: "The five-record schema (Term, Mapping, Relation" (dsh-evoontology) — Quote only mentions the five-record schema; it does not describe it as an ontology artifact.  · verbatim
+✗ [entity] freqtrade is of type 'upstream_project'
+   quote: "Concept slot of [freqtrade]" (dsh-freqtrade) — Quote only mentions freqtrade as a concept slot; no project/type information.  · verbatim
+✗ [entity] freqtrade-strategies is of type 'upstream_project'
+   quote: "[freqtrade-strategies](https://github.com/freqtrade/freqtrade-strategies)" (dsh-freqtrade) — Quote only gives a bare link name; no statement that it is an external project or relation to plugin.  · verbatim
+✗ [entity] HKUDS/Vibe-Trading is of type 'upstream_project'
+   quote: "Inspired by [HKUDS/Vibe-Trading]" (dsh-vibe-trading) — Quote only says inspired by; it does not state open-source project nor explicitly not affiliated.  · verbatim
+✗ [entity] HOLD@55 is of type 'verdict'
+   quote: "Lynch HOLD@55" (dsh-tradingagents) — Quote only mentions HOLD@55 with no statement that it is a committee verdict.  · verbatim
+✗ [entity] Hummingbot is of type 'upstream_project'
+   quote: "Implements the core concept of [Hummingbot]" (dsh-hummingbot) — Quote only mentions Hummingbot as a concept source; it does not state it is an external open-source project or unaffiliated.  · verbatim
+✗ [entity] IC-MEMO is of type 'ic_memo'
+   quote: "[IC-MEMO](templates/IC-MEMO.md)" (dsh-ai-hedge-fund) — Quote only links a template file; no description of it as an auditable investment-committee memo.  · verbatim
+✗ [entity] Jesse is of type 'upstream_project'
+   quote: "core concept of [Jesse]" (dsh-jesse) — Quote only mentions "Jesse" as a core concept; no indication it is an external open-source project.  · verbatim
+✗ [entity] Kronos is of type 'upstream_project'
+   quote: "The concept slot of [Kronos]" (dsh-kronos) — Quote only mentions Kronos in a concept slot; no type information given.  · verbatim
+✗ [entity] Lynch is of type 'investor_persona'
+   quote: "彼得·林奇 | HOLD | 55" (dsh-ai-hedge-fund) — Quote uses Chinese translation 彼得·林奇, not the name Lynch as written; aliases/translations do not count.  · verbatim
+✗ [entity] Lynch dissent is of type 'dissent'
+   quote: "可能错过 GARP 机会" (dsh-ai-hedge-fund) — Quote only states a possible missed opportunity; it does not mention Lynch or establish a recorded dissent.  · verbatim
+✗ [entity] Magic/21st is of type 'upstream_project'
+   quote: "Magic/21st, 14k/wk — cloud-locked" (dsh-uigen) — Quote only names Magic/21st and a metric; no open-source project or dsh-plugin inspiration relation.  · verbatim
+✗ [entity] Mapping is of type 'entity'
+   quote: "(Term, Mapping, Relation, Constraint, Evidence)" (dsh-evoontology) — Quote only lists Mapping among terms; it does not state Mapping is a typed ontology node carrying a source quote.  · verbatim
+✗ [entity] market data payload is of type 'market_data_payload'
+   quote: "Every payload carries its exchange and timestamp" (dsh-ccxt) — Quote only says payload carries exchange/timestamp; it never states it is a read-only market-data record.  · verbatim
+✗ [entity] Munger is of type 'investor_persona'
+   quote: "查理·芒格 | PASS | 72" (dsh-ai-hedge-fund) — Quote only gives a Chinese name and PASS score; no type information about Munger.  · verbatim
+✗ [entity] NautilusTrader is of type 'upstream_project'
+   quote: "Built on [NautilusTrader]" (dsh-nautilus) — Quote says built on NautilusTrader but does not state it is external open-source or unaffiliated.  · verbatim
+✗ [entity] NVIDIA/auto-ontology is of type 'upstream_project'
+   quote: "Implements the concept of [NVIDIA/auto-ontology]" (dsh-auto-ontology) — Quote only says implements the concept; no open-source/upstream status or non-affiliation.  · verbatim
+✗ [entity] ontology is of type 'ontology'
+   quote: "get a typed ontology (TBox + ABox)" (dsh-auto-ontology) — Imperative 'get' is a plan; quote omits produced-by-plugin and evidence-linked artifact aspects.  · verbatim
+✗ [entity] OpenBB is of type 'upstream_project'
+   quote: "Built on [OpenBB](https://github.com/openbq-org/OpenBB)" (dsh-openbb) — Quote only says built on OpenBB; it does not state OpenBB is external/open-source or unaffiliated.  · verbatim
+✗ [entity] optimization provider gate is of type 'trading_guard'
+   quote: "the optimization provider is **never** auto-installed" (dsh-trustquant) — Quote says optimization provider is never auto-installed; it does not define a fail-closed trading_guard safeguard.  · verbatim
+✗ [entity] PASS @ 68 is of type 'verdict'
+   quote: "PM: **PASS @ 68**" (dsh-ai-hedge-fund) — Quote only mentions PM PASS @ 68; no statement it is a committee verdict or decision.  · verbatim
+✗ [entity] PASS@72 is of type 'verdict'
+   quote: "the PM rules PASS@72 naming it" (dsh-tradingagents) — Quote only mentions PASS@72; it does not state it is a verdict or committee decision.  · verbatim
+✗ [entity] portfolio manager is of type 'portfolio_manager'
+   quote: "portfolio manager ──► IC-MEMO" (dsh-ai-hedge-fund) — Quote only mentions portfolio manager in a diagram; no aggregating role definition.  · verbatim
+✗ [entity] QuantLib is of type 'upstream_project'
+   quote: "Implements the core of [QuantLib]" (dsh-quantlib) — Quote says plugin implements QuantLib's core, but does not state QuantLib is external/open-source.  · verbatim
+✗ [entity] QuantStats is of type 'upstream_project'
+   quote: "Implements the core concept of [QuantStats]" (dsh-quantstats) — Quote only says it implements QuantStats concept; no open-source project or non-affiliation information.  · verbatim
+✗ [entity] relation is of type 'relation'
+   quote: "relation carries its source quote" (dsh-auto-ontology) — Quote only says relation carries its source quote, not that it is a typed edge between entities.  · verbatim
+✗ [entity] research trail is of type 'ic_memo'
+   quote: "append-only named trails with revision" (dsh-vibe-trading) — Quote mentions append-only named trails, not research trail or ic_memo type.  · verbatim
+✗ [entity] risk officer split [G8] is of type 'dissent'
+   quote: "logs the split as guardrail [G8]" (dsh-tradingagents) — Quote only says split is logged as guardrail [G8]; no objection, persona, or never-deleted dissent stated.  · verbatim
+✗ [entity] ruc-datalab/EvoOntology is of type 'upstream_project'
+   quote: "Implements the concept of [ruc-datalab/EvoOntology]" (dsh-evoontology) — Quote only says the plugin implements EvoOntology's concept; no external open-source project or non-affiliation is stated.  · verbatim
+✗ [entity] SQLite semantic-layer seed is of type 'ontology'
+   quote: "SQLite semantic-layer seed on the README" (dsh-evoontology) — Quote only mentions the seed on README; it does not state it is a typed ontology artifact.  · verbatim
+✗ [entity] structured error taxonomy is of type 'trading_guard'
+   quote: "structured error taxonomy (`invalid_input`" (dsh-trustquant) — Quote only mentions a structured error taxonomy; no fail-closed safeguard or trading_guard relation.  · verbatim
+✗ [entity] Term is of type 'entity'
+   quote: "The five-record schema (Term, Mapping" (dsh-evoontology) — Quote only mentions Term in a schema list; it does not state it is an ontology entity.  · verbatim
+✗ [entity] terminal brief is of type 'ic_memo'
+   quote: "You get a terminal brief" (dsh-vibe-trading) — Quote only mentions a terminal brief, without stating it is an investment-committee memo.  · verbatim
+✓ [entity] tool_result is of type 'tool_result'
+   quote: "over all over-budget tool results" (dsh-compaction-semantic) — Quote references over-budget tool results, implying tool results subject to compaction decisions.  · verbatim
+✗ [entity] trading guard is of type 'trading_guard'
+   quote: "a triple-armed guard with notional caps" (dsh-ccxt) — Quote mentions a triple-armed guard with caps, but not fail-closed code-level safeguard or LLM bypass prevention.  · verbatim
+✗ [entity] TradingAgents is of type 'upstream_project'
+   quote: "Inspired by [Tauric Research's TradingAgents]" (dsh-tradingagents) — Quote says inspired by TradingAgents but not that it is external, open-source, or unaffiliated.  · verbatim
+✗ [entity] trajectory store is of type 'ontology'
+   quote: "trajectory store (append-only, evidence-linked)" (dsh-evoontology) — Quote only describes trajectory store as append-only and evidence-linked; it does not state it is an ontology artifact.  · verbatim
+✗ [entity] TrustQuant is of type 'upstream_project'
+   quote: "for [TrustQuant](https://github.com/vicfei/trustquant)" (dsh-trustquant) — Quote only links/mentions TrustQuant; no statement it is an external project a dsh plugin builds on.  · verbatim
+✗ [entity] trustquant manifest is of type 'evidence_tag'
+   quote: "`trustquant manifest` shows who computed what" (dsh-trustquant) — Quote says it shows who computed what; it does not state it is a source quote or citation.  · verbatim
+✗ [entity] trustquant provider install is of type 'trading_guard'
+   quote: "explicit, person-approved `trustquant provider install`" (dsh-trustquant) — Quote only mentions a person-approved install command; no fail-closed safeguard details.  · verbatim
+✗ [entity] trustquant replay is of type 'evidence_tag'
+   quote: "`trustquant replay` re-executes and verifies digests" (dsh-trustquant) — Quote describes replay behavior, not that it is an evidence tag.  · verbatim
+✗ [entity] type_conflict is of type 'type_conflict'
+   quote: "4 organically detected type conflicts" (dsh-auto-ontology) — Quote only mentions a count of organically detected type conflicts, not the named type or its definition.  · verbatim
+✗ [entity] virattt/ai-hedge-fund is of type 'upstream_project'
+   quote: "Inspired by virattt/ai-hedge-fund" (dsh-ai-hedge-fund) — Quote only states inspiration source; it does not say virattt/ai-hedge-fund is an external open-source, unaffiliated project.  · verbatim
+✗ [entity] WeKnora is of type 'upstream_project'
+   quote: "WeKnora, the open-source knowledge-base platform" (dsh-weknora-ops) — Quote only describes WeKnora as an open-source knowledge-base platform; no dsh plugin inspiration/affiliation relation is stated.  · NOT verbatim
+✗ [entity] Wood is of type 'investor_persona'
+   quote: "凯瑟琳·伍德 | HOLD | 58" (dsh-ai-hedge-fund) — Quote gives Chinese name 凯瑟琳·伍德, not 'Wood' as written; alias/translation doesn't count.  · verbatim
+✗ [entity] Wood dissent is of type 'dissent'
+   quote: "低估飞轮期权价值" (dsh-ai-hedge-fund) — Quote is a Chinese phrase with no mention of Wood, dissent, objection, or required PM naming.  · verbatim
+✗ [entity] WrenAI is of type 'upstream_project'
+   quote: "Implements the differentiated core of WrenAI" (dsh-wrenai) — Quote only mentions WrenAI and says a plugin implements its core; no open-source or upstream project type stated.  · NOT verbatim
+✗ [relation] [R1][R2][R4] --supports_verdict--> PASS@72
+   quote: "argument ([R1][R2][R4]: revenue" (dsh-tradingagents) — Quote only mentions tags near 'revenue'; it never states they back PASS@72.  · verbatim
+✗ [relation] circuit breaker --guards_trading--> dsh-hummingbot
+   quote: "circuit breaker** (5× order-amount)" (dsh-hummingbot) — Quote only mentions circuit breaker and order amount; no fail-closed bridge restriction.  · verbatim
+✗ [relation] compaction_judge --compacts--> tool_result
+   quote: "batches **one judgment request** over all" (dsh-compaction-semantic) — Quote mentions a judgment request but not compaction_judge or tool_result, nor deciding keep/drop.  · verbatim
+✗ [relation] dsh-ai-hedge-fund --has_persona--> Buffett
+   quote: "沃伦·巴菲特 | PASS | 70" (dsh-ai-hedge-fund) — Quote only lists Warren Buffett with PASS and score; it does not state the plugin runs that persona.  · verbatim
+✗ [relation] dsh-ai-hedge-fund --has_persona--> Munger
+   quote: "查理·芒格 | PASS | 72" (dsh-ai-hedge-fund) — Quote only lists Munger with PASS and 72; it does not state the plugin runs that persona.  · verbatim
+✗ [relation] dsh-ai-hedge-fund --has_persona--> Lynch
+   quote: "彼得·林奇 | HOLD | 55" (dsh-ai-hedge-fund) — Quote says 彼得·林奇, a translation of Lynch, not the claimed name as written; no relation stated.  · verbatim
+✗ [relation] dsh-ai-hedge-fund --has_persona--> Wood
+   quote: "凯瑟琳·伍德 | HOLD | 58" (dsh-ai-hedge-fund) — Quote gives a translated Chinese name, not "Wood", and does not state the plugin runs a persona.  · verbatim
+✓ [relation] dsh-ai-hedge-fund --inspired_by--> virattt/ai-hedge-fund
+   quote: "Inspired by virattt/ai-hedge-fund" (dsh-ai-hedge-fund) — Quote explicitly states the source plugin is inspired by virattt/ai-hedge-fund.  · verbatim
+✗ [relation] dsh-ai-hedge-fund --produces_output--> IC-MEMO
+   quote: "[IC-MEMO](templates/IC-MEMO.md)" (dsh-ai-hedge-fund) — Quote only lists a template file link; it does not state the plugin emits it as output.  · verbatim
+✓ [relation] dsh-ai-hedge-fund --sister_project_of--> dsh-TradingAgents
+   quote: "Sister project of dsh-TradingAgents" (dsh-ai-hedge-fund) — Quote directly states dsh-ai-hedge-fund is sister project of dsh-TradingAgents.  · NOT verbatim
+✓ [relation] dsh-auto-ontology --constructs_ontology--> ontology
+   quote: "get a typed ontology (TBox + ABox)" (dsh-auto-ontology) — Quote states the plugin yields a typed ontology, directly implying it constructs one.  · verbatim
+✓ [relation] dsh-auto-ontology --inspired_by--> NVIDIA/auto-ontology
+   quote: "Implements the concept of [NVIDIA/auto-ontology]" (dsh-auto-ontology) — Quote says dsh-auto-ontology implements the concept of NVIDIA/auto-ontology, implying derivation.  · verbatim
+✗ [relation] dsh-auto-ontology --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-auto-ontology) — Quote only lists a family name; it does not state the vicfei family or mutual cross-reference relation.  · verbatim
+✗ [relation] dsh-auto-ontology --sister_project_of--> dsh-WrenAI
+   quote: "[dsh-WrenAI](https://github.com/vicfei/dsh-WrenAI)" (dsh-auto-ontology) — Quote only mentions dsh-WrenAI as a link; no stated family membership or mutual cross-reference relation.  · verbatim
+✗ [relation] dsh-CCXT --bridges_exchange--> binance
+   quote: ""exchange":"binance","symbol":"BTC/USDT"" (dsh-ccxt) — Quote only mentions exchange binance in data; it does not state the plugin exposes exchanges as DSH tools.  · verbatim
+✗ [relation] dsh-CCXT --inspired_by--> ccxt
+   quote: "Built on [ccxt](https://github.com/ccxt/ccxt)" (dsh-ccxt) — 'Built on ccxt' indicates dependency/use, not modeled-on inspiration without sharing code.  · verbatim
+✗ [relation] dsh-CCXT --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-ccxt) — Quote only lists a family member; it does not state mutual cross-reference or both family membership.  · verbatim
+✗ [relation] dsh-CCXT --sister_project_of--> dsh-ai-hedge-fund
+   quote: "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)" (dsh-ccxt) — Only a link to the other repo; does not state same vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-CCXT --sister_project_of--> dsh-Vibe-Trading
+   quote: "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)" (dsh-ccxt) — Quote only links to dsh-Vibe-Trading; no mutual cross-reference or plugin-family evidence.  · verbatim
+✗ [relation] dsh-CCXT --sister_project_of--> dsh-OpenBB
+   quote: "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)" (dsh-ccxt) — Only links to dsh-OpenBB; no evidence dsh-CCXT is same family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-compaction-semantic --inspired_by--> fast-jev-compaction
+   quote: "the original `fast-jev-compaction` repository" (dsh-compaction-semantic) — Quote only mentions the original repository; it does not state inspiration or derivation from it.  · verbatim
+✗ [relation] dsh-compaction-semantic --sister_project_of--> dsh-compaction-tool-result-pruner
+   quote: "DSH ships the *deterministic* pruner" (dsh-compaction-semantic) — Quote only mentions a deterministic pruner, not the named semantic plugin or any cross-reference relation.  · verbatim
+✗ [relation] dsh-EvoOntology --constructs_ontology--> evolution kernel
+   quote: "E1 · evolution kernel" (dsh-evoontology) — Quote only says 'evolution kernel'; it does not mention dsh-EvoOntology or any ontology-building relation.  · verbatim
+✗ [relation] dsh-EvoOntology --constructs_ontology--> five-record schema
+   quote: "The five-record schema (Term, Mapping, Relation" (dsh-evoontology) — Quote only mentions a five-record schema; it does not state dsh-EvoOntology builds a typed ontology.  · verbatim
+✗ [relation] dsh-EvoOntology --constructs_ontology--> trajectory store
+   quote: "trajectory store (append-only, evidence-linked)" (dsh-evoontology) — Quote only mentions a trajectory store; it does not say the plugin constructs a typed ontology.  · verbatim
+✗ [relation] dsh-EvoOntology --constructs_ontology--> evaluation-gate adapter contract
+   quote: "evaluation-gate adapter contract" (dsh-evoontology) — Quote only mentions an evaluation-gate adapter contract; it does not state dsh-EvoOntology builds an ontology.  · verbatim
+✗ [relation] dsh-EvoOntology --constructs_ontology--> SQLite semantic-layer seed
+   quote: "SQLite semantic-layer seed on the README" (dsh-evoontology) — Quote only mentions a SQLite semantic-layer seed on the README; it does not state dsh-EvoOntology constructs an ontology.  · verbatim
+✓ [relation] dsh-EvoOntology --inspired_by--> ruc-datalab/EvoOntology
+   quote: "Implements the concept of [ruc-datalab/EvoOntology]" (dsh-evoontology) — Quote states the plugin implements the concept of the named upstream project, implying derivation.  · verbatim
+✗ [relation] dsh-EvoOntology --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-evoontology) — Quote only indicates same family; no cross-reference between the plugins is stated.  · verbatim
+✗ [relation] dsh-EvoOntology --sister_project_of--> dsh-auto-ontology
+   quote: "[dsh-auto-ontology](https://github.com/vicfei/dsh-auto-ontology)" (dsh-evoontology) — Quote only links to dsh-auto-ontology; it does not state same family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-EvoOntology --sister_project_of--> dsh-WrenAI
+   quote: "[dsh-WrenAI](https://github.com/vicfei/dsh-WrenAI)" (dsh-evoontology) — Quote only links to dsh-WrenAI; it does not state same family and mutual cross-reference.  · verbatim
+✗ [relation] dsh-freqtrade --inspired_by--> freqtrade
+   quote: "Concept slot of [freqtrade]" (dsh-freqtrade) — Quote only says 'Concept slot of freqtrade'; it does not state modeling/derivation without shared code.  · verbatim
+✗ [relation] dsh-freqtrade --inspired_by--> freqtrade-strategies
+   quote: "[freqtrade-strategies](https://github.com/freqtrade/freqtrade-strategies)" (dsh-freqtrade) — Quote only names freqtrade-strategies as a link; no modeling or derivation relation is stated.  · verbatim
+✗ [relation] dsh-freqtrade --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-freqtrade) — Quote only gives a family label, not that both are plugins or cross-reference each other.  · verbatim
+✗ [relation] dsh-freqtrade --sister_project_of--> dsh-OpenBB
+   quote: "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)" (dsh-freqtrade) — Quote only links to dsh-OpenBB; it does not state same vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-freqtrade --sister_project_of--> dsh-CCXT
+   quote: "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)" (dsh-freqtrade) — Quote only links to dsh-CCXT; it does not state same family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-freqtrade --sister_project_of--> dsh-nautilus_trader
+   quote: "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader)" (dsh-freqtrade) — Quote only links one direction; it does not establish mutual cross-reference or that both are same-family plugins.  · verbatim
+✗ [relation] dsh-freqtrade --sister_project_of--> dsh-jesse
+   quote: "[dsh-jesse](https://github.com/vicfei/dsh-jesse)" (dsh-freqtrade) — Quote only links to dsh-jesse; it does not state same family or cross-reference relation.  · verbatim
+✗ [relation] dsh-freqtrade --sister_project_of--> dsh-hummingbot
+   quote: "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot)" (dsh-freqtrade) — Quote only links to dsh-hummingbot; it does not state dsh-freqtrade is same family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-freqtrade --sister_project_of--> dsh-Kronos
+   quote: "[dsh-Kronos](https://github.com/vicfei/dsh-Kronos)" (dsh-freqtrade) — Quote only links to dsh-Kronos; it does not state dsh-freqtrade is vicfei-family or that they cross-reference each other.  · verbatim
+✗ [relation] dsh-freqtrade --sister_project_of--> dsh-quantstats
+   quote: "[dsh-quantstats](https://github.com/vicfei/dsh-quantstats)" (dsh-freqtrade) — Quote only links to dsh-quantstats; it does not state same vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-freqtrade --sister_project_of--> dsh-QuantLib
+   quote: "[dsh-QuantLib](https://github.com/vicfei/dsh-QuantLib)" (dsh-freqtrade) — Quote only links dsh-QuantLib; it states no sister-project or reciprocal cross-reference relation.  · verbatim
+✗ [relation] dsh-freqtrade --sister_project_of--> dsh-Vibe-Trading
+   quote: "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)" (dsh-freqtrade) — Quote only links to dsh-Vibe-Trading; it does not state shared vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-freqtrade --sister_project_of--> dsh-ai-hedge-fund
+   quote: "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)" (dsh-freqtrade) — Quote only links to dsh-ai-hedge-fund; it doesn't state same vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-hummingbot --bridges_exchange--> binance
+   quote: "binance BTC/USDT 500×1m via relay" (dsh-hummingbot) — Quote only mentions binance symbol data, not that dsh-hummingbot exposes it via CCXT as a DSH tool.  · verbatim
+✓ [relation] dsh-hummingbot --inspired_by--> Hummingbot
+   quote: "Implements the core concept of [Hummingbot]" (dsh-hummingbot) — Quote says dsh-hummingbot implements Hummingbot's core concept, implying derivation/modeling.  · verbatim
+✗ [relation] dsh-hummingbot --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-hummingbot) — Quote only lists a family name; it does not state mutual same-family membership or cross-referencing.  · verbatim
+✗ [relation] dsh-hummingbot --sister_project_of--> dsh-ai-hedge-fund
+   quote: "[dsh-ai-hedge-fund](https://github.com/vicfei" (dsh-hummingbot) — Quote only links to dsh-ai-hedge-fund; it does not state same vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-hummingbot --sister_project_of--> dsh-Vibe-Trading
+   quote: "[dsh-Vibe-Trading](https://github.com/vicfei" (dsh-hummingbot) — Link only mentions dsh-Vibe-Trading; no stated family membership or mutual cross-reference relation.  · verbatim
+✗ [relation] dsh-hummingbot --sister_project_of--> dsh-OpenBB
+   quote: "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)" (dsh-hummingbot) — Quote only links to dsh-OpenBB; it does not state same family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-hummingbot --sister_project_of--> dsh-CCXT
+   quote: "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)" (dsh-hummingbot) — Quote only links to dsh-CCXT; it does not state same vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-hummingbot --sister_project_of--> dsh-nautilus_trader
+   quote: "[dsh-nautilus_trader](https://github.com/vicfei" (dsh-hummingbot) — Quote shows only one link to dsh-nautilus_trader; no mutual cross-reference stated.  · verbatim
+✓ [relation] dsh-jesse --inspired_by--> Jesse
+   quote: "Implements the core concept of [Jesse]" (dsh-jesse) — Quote states dsh-jesse implements Jesse's core concept, implying concept derivation.  · verbatim
+✓ [relation] dsh-jesse --sister_project_of--> dsh-nautilus_trader
+   quote: "dsh-nautilus_trader (sibling)" (dsh-jesse) — Quote from dsh-jesse names dsh-nautilus_trader as a sibling, directly implying the sister-project relation.  · verbatim
+✗ [relation] dsh-jesse --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-jesse) — Quote mentions a family but does not state same vicfei family or cross-reference.  · verbatim
+✗ [relation] dsh-jesse --sister_project_of--> dsh-hummingbot
+   quote: "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot)" (dsh-jesse) — Quote only links dsh-hummingbot; no same-family or mutual cross-reference stated.  · verbatim
+✗ [relation] dsh-jesse --sister_project_of--> dsh-OpenBB
+   quote: "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)" (dsh-jesse) — Quote only links from dsh-jesse to dsh-OpenBB; no evidence of mutual cross-reference.  · verbatim
+✗ [relation] dsh-jesse --sister_project_of--> dsh-CCXT
+   quote: "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)" (dsh-jesse) — Bare link mentioning dsh-CCXT; no statement that dsh-jesse is a vicfei-family plugin or that they cross-reference.  · verbatim
+✗ [relation] dsh-jesse --sister_project_of--> dsh-Vibe-Trading
+   quote: "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)" (dsh-jesse) — Quote only links to dsh-Vibe-Trading; no statement that both are vicfei family or mutually cross-reference.  · verbatim
+✗ [relation] dsh-Kronos --inspired_by--> Kronos
+   quote: "The concept slot of [Kronos]" (dsh-kronos) — Fragment only mentions Kronos and a 'concept slot'; states no modeling/derivation relation.  · verbatim
+✗ [relation] dsh-Kronos --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-kronos) — Quote only lists a family name; it does not establish same vicfei family and cross-referencing.  · verbatim
+✗ [relation] dsh-Kronos --sister_project_of--> dsh-OpenBB
+   quote: "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)" (dsh-kronos) — Quote only links to dsh-OpenBB; it does not state reciprocal cross-reference or same family.  · verbatim
+✗ [relation] dsh-Kronos --sister_project_of--> dsh-CCXT
+   quote: "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)" (dsh-kronos) — Bare link merely mentions dsh-CCXT; it does not state same family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-Kronos --sister_project_of--> dsh-nautilus_trader
+   quote: "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader)" (dsh-kronos) — Only a one-way link; no statement of mutual cross-reference or sister-project relationship.  · verbatim
+✗ [relation] dsh-Kronos --sister_project_of--> dsh-jesse
+   quote: "[dsh-jesse](https://github.com/vicfei/dsh-jesse)" (dsh-kronos) — Quote only links to dsh-jesse; it does not state same family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-Kronos --sister_project_of--> dsh-quantstats
+   quote: "[dsh-quantstats](https://github.com/vicfei/dsh-quantstats)" (dsh-kronos) — Only a link to dsh-quantstats; no shared-family or reciprocal cross-reference statement.  · verbatim
+✗ [relation] dsh-Kronos --sister_project_of--> dsh-QuantLib
+   quote: "[dsh-QuantLib](https://github.com/vicfei/dsh-QuantLib)" (dsh-kronos) — Quote only links to dsh-QuantLib; it does not state sister-project or mutual cross-reference relation.  · verbatim
+✗ [relation] dsh-Kronos --sister_project_of--> dsh-hummingbot
+   quote: "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot)" (dsh-kronos) — Quote only links to dsh-hummingbot; it does not state same vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-Kronos --sister_project_of--> dsh-Vibe-Trading
+   quote: "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)" (dsh-kronos) — Quote only links to dsh-Vibe-Trading; it does not show mutual cross-reference or both being plugins.  · verbatim
+✗ [relation] dsh-Kronos --sister_project_of--> dsh-ai-hedge-fund
+   quote: "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)" (dsh-kronos) — Quote only links to dsh-ai-hedge-fund; no evidence of mutual cross-reference or dsh-kronos in vicfei family.  · verbatim
+✗ [relation] dsh-Nautilus --inspired_by--> NautilusTrader
+   quote: "Built on [NautilusTrader]" (dsh-nautilus) — Quote says 'Built on', which is a different relation and does not specify concept derivation without code sharing.  · verbatim
+✗ [relation] dsh-Nautilus --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-nautilus) — Quote only lists a family name; it does not state mutual cross-referencing required by sister_project_of.  · verbatim
+✗ [relation] dsh-Nautilus --sister_project_of--> dsh-ai-hedge-fund
+   quote: "[dsh-ai-hedge-fund]" (dsh-nautilus) — Quote only mentions dsh-ai-hedge-fund; it states no sister-project relationship or cross-reference.  · verbatim
+✗ [relation] dsh-Nautilus --sister_project_of--> dsh-Vibe-Trading
+   quote: "[dsh-Vibe-Trading]" (dsh-nautilus) — Quote only mentions dsh-Vibe-Trading; no named subject or stated relation.  · verbatim
+✗ [relation] dsh-Nautilus --sister_project_of--> dsh-OpenBB
+   quote: "[dsh-OpenBB]" (dsh-nautilus) — Quote only mentions dsh-OpenBB; no statement that it belongs to the same family or cross-references dsh-Nautilus.  · verbatim
+✗ [relation] dsh-Nautilus --sister_project_of--> dsh-CCXT
+   quote: "[dsh-CCXT]" (dsh-nautilus) — Quote only mentions dsh-CCXT; it states no sister-project relation or vicfei-family cross-reference.  · verbatim
+✓ [relation] dsh-OpenBB --inspired_by--> OpenBB
+   quote: "Built on [OpenBB] — independent community" (dsh-openbb) — Quote says dsh-openbb is built on OpenBB as an independent community, implying derivation.  · NOT verbatim
+✗ [relation] dsh-OpenBB --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-openbb) — Quote states same family but does not state the plugins cross-reference each other.  · verbatim
+✗ [relation] dsh-OpenBB --sister_project_of--> dsh-ai-hedge-fund
+   quote: "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)" (dsh-openbb) — Quote only links to dsh-ai-hedge-fund; it does not show mutual cross-reference or both same vicfei family.  · verbatim
+✗ [relation] dsh-OpenBB --sister_project_of--> dsh-Vibe-Trading
+   quote: "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)" (dsh-openbb) — Quote only links dsh-Vibe-Trading; it does not state same vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-QuantLib --inspired_by--> QuantLib
+   quote: "concept inspired by BSD-licensed upstream" (dsh-quantlib) — Quote says inspired by an unnamed upstream, not QuantLib specifically.  · verbatim
+✗ [relation] dsh-QuantLib --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-quantlib) — Quote states a family link but not that both plugins cross-reference each other as required.  · verbatim
+✗ [relation] dsh-QuantLib --sister_project_of--> dsh-ai-hedge-fund
+   quote: "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)" (dsh-quantlib) — Quote only links to dsh-ai-hedge-fund; it does not state same family or reciprocal cross-reference.  · verbatim
+✓ [relation] dsh-QuantLib --sister_project_of--> dsh-Vibe-Trading
+   quote: "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading)" (dsh-quantlib) — dsh-quantlib doc links to vicfei/dsh-Vibe-Trading, evidencing cross-reference within same vicfei family.  · verbatim
+✗ [relation] dsh-QuantLib --sister_project_of--> dsh-OpenBB
+   quote: "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)" (dsh-quantlib) — Quote only links to dsh-OpenBB; it does not state mutual cross-reference or same vicfei family.  · verbatim
+✗ [relation] dsh-QuantLib --sister_project_of--> dsh-CCXT
+   quote: "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)" (dsh-quantlib) — Quote only links to dsh-CCXT; it does not state same vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-QuantLib --sister_project_of--> dsh-nautilus_trader
+   quote: "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader)" (dsh-quantlib) — Quote only links to dsh-nautilus_trader; it does not state same family or cross-reference relation.  · verbatim
+✗ [relation] dsh-QuantLib --sister_project_of--> dsh-hummingbot
+   quote: "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot)" (dsh-quantlib) — Quote only links to dsh-hummingbot; it does not state same vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-QuantLib --sister_project_of--> dsh-jesse
+   quote: "[dsh-jesse](https://github.com/vicfei/dsh-jesse)" (dsh-quantlib) — Quote only links to dsh-jesse; no statement of shared vicfei family or mutual cross-reference.  · verbatim
+✗ [relation] dsh-QuantLib --sister_project_of--> dsh-quantstats
+   quote: "[dsh-quantstats](https://github.com/vicfei/dsh-quantstats)" (dsh-quantlib) — Quote only links to dsh-quantstats; no mutual cross-reference or same-family claim.  · verbatim
+✓ [relation] dsh-quantstats --inspired_by--> QuantStats
+   quote: "Implements the core concept of [QuantStats]" (dsh-quantstats) — Quote states it implements QuantStats' core concept, implying concept derivation.  · verbatim
+✗ [relation] dsh-quantstats --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-quantstats) — Quote only lists a family name; it does not state mutual cross-reference or that both are plugins.  · verbatim
+✓ [relation] dsh-quantstats --sister_project_of--> dsh-ai-hedge-fund
+   quote: "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)" (dsh-quantstats) — Quote, in dsh-quantstats repo, links to vicfei/dsh-ai-hedge-fund, showing same vicfei family cross-reference.  · verbatim
+✗ [relation] dsh-quantstats --sister_project_of--> dsh-CCXT
+   quote: "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT)" (dsh-quantstats) — Quote only links to dsh-CCXT; no stated sister-project or mutual cross-reference relation.  · verbatim
+✗ [relation] dsh-tradingagents --has_persona--> Buffett
+   quote: "Buffett/Munger PASS@72" (dsh-tradingagents) — Quote only mentions Buffett/Munger PASS@72; it does not state the plugin runs Buffett as a persona.  · verbatim
+✗ [relation] dsh-tradingagents --has_persona--> Munger
+   quote: "Buffett/Munger PASS@72" (dsh-tradingagents) — Quote only mentions Munger; no statement that it is run as a persona.  · verbatim
+✗ [relation] dsh-tradingagents --has_persona--> Lynch
+   quote: "Lynch HOLD@55" (dsh-tradingagents) — Quote only mentions 'Lynch HOLD@55' and does not state the plugin runs Lynch as a persona.  · verbatim
+✗ [relation] dsh-tradingagents --has_persona--> Wood
+   quote: "Wood BUY@62" (dsh-tradingagents) — Quote only mentions 'Wood BUY@62'; it does not state the plugin runs Wood as a persona.  · verbatim
+✓ [relation] dsh-tradingagents --inspired_by--> TradingAgents
+   quote: "Inspired by [Tauric Research's TradingAgents]" (dsh-tradingagents) — Quote directly states the plugin is inspired by TradingAgents; source document identifies dsh-tradingagents.  · verbatim
+✗ [relation] dsh-tradingagents --inspired_by--> virattt/ai-hedge-fund
+   quote: "virattt/ai-hedge-fund" (dsh-tradingagents) — Quote only names the upstream repo; no statement that dsh-tradingagents is modeled on it.  · verbatim
+✗ [relation] dsh-tradingagents --produces_output--> IC-MEMO
+   quote: "[IC-MEMO](templates/IC-MEMO.md)" (dsh-tradingagents) — Quote only links an IC-MEMO template file; no statement that the plugin emits it as output.  · verbatim
+✗ [relation] dsh-trustquant --inspired_by--> TrustQuant
+   quote: "for [TrustQuant](https://github.com/vicfei/trustquant)" (dsh-trustquant) — Quote only mentions a link to TrustQuant; it does not state derivation or inspiration.  · verbatim
+✗ [relation] dsh-trustquant --inspired_by--> dsh-superagent-prototype
+   quote: "Bundle format follows the MIT-licensed" (dsh-trustquant) — Quote mentions bundle format following MIT-licensed, but not dsh-superagent-prototype or inspiration relation.  · verbatim
+✗ [relation] dsh-uigen --inspired_by--> Magic/21st
+   quote: "describe→component (Magic/21st, 14k/wk" (dsh-uigen) — Only mentions Magic/21st parenthetically; no statement that the plugin derives from it.  · verbatim
+✗ [relation] dsh-uigen --sister_project_of--> dsh-genui
+   quote: "dsh-genui renders the result inline" (dsh-uigen) — Quote only says dsh-genui renders result inline; it does not mention same vicfei family or cross-reference.  · verbatim
+✓ [relation] dsh-vibe-trading --inspired_by--> HKUDS/Vibe-Trading
+   quote: "Inspired by [HKUDS/Vibe-Trading]" (dsh-vibe-trading) — Quote states dsh-vibe-trading is inspired by HKUDS/Vibe-Trading, matching the inspired_by relation.  · verbatim
+✗ [relation] dsh-vibe-trading --produces_output--> terminal brief
+   quote: "You get a terminal brief" (dsh-vibe-trading) — Quote mentions a terminal brief, not the IC-MEMO output defined for produces_output.  · verbatim
+✗ [relation] dsh-vibe-trading --produces_output--> research trail
+   quote: "append-only named trails with revision" (dsh-vibe-trading) — Quote mentions named trails with revisions, not that dsh-vibe-trading emits an IC-MEMO or produces a research trail.  · verbatim
+✗ [relation] dsh-vibe-trading --sister_project_of--> dsh-TradingAgents
+   quote: "Family: [dsh-TradingAgents]" (dsh-vibe-trading) — Quote only lists a family member; it does not state cross-reference or a vicfei family.  · verbatim
+✗ [relation] dsh-vibe-trading --sister_project_of--> dsh-ai-hedge-fund
+   quote: "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund)" (dsh-vibe-trading) — Only a one-way link to the target; no mutual cross-reference or source family membership stated.  · verbatim
+✗ [relation] dsh-weknora-ops --inspired_by--> WeKnora
+   quote: "for WeKnora, the open-source knowledge-base platform" (dsh-weknora-ops) — Quote only describes WeKnora as a platform; no inspired-by/derivation relation stated.  · NOT verbatim
+✗ [relation] dsh-weknora-ops --inspired_by--> dsh-superagent-prototype
+   quote: "Bundle format follows the MIT-licensed dsh-superagent-prototype" (dsh-weknora-ops) — Quote only says bundle format follows prototype; it does not state plugin is modeled on or derives concept.  · NOT verbatim
+✗ [relation] dsh-weknora-ops --sister_project_of--> dsh-super-agent
+   quote: "mirrors the admission-control philosophy of dsh-super-agent" (dsh-weknora-ops) — Quote only says it mirrors another's philosophy; no vicfei family or mutual cross-reference stated.  · NOT verbatim
+✗ [relation] dsh-weknora-ops --sister_project_of--> @wxg-prc-cpg/dsh-weknora
+   quote: "Both can be installed side by side" (dsh-weknora-ops) — Quote only mentions side-by-side installation; no same-family or cross-reference relation stated.  · verbatim
+✗ [relation] dsh-WrenAI --inspired_by--> WrenAI
+   quote: "Implements the differentiated core of WrenAI" (dsh-wrenai) — Only says it implements WrenAI’s core; does not state modeled-on/derived-concept without code sharing.  · NOT verbatim
+✗ [relation] dsh-WrenAI --sister_project_of--> dsh-TradingAgents
+   quote: "Family: the 12-repo quant stack" (dsh-wrenai) — Quote mentions a family but not both named plugins or any cross-reference relation.  · verbatim
+✗ [relation] dsh-WrenAI --sister_project_of--> dsh-CCXT
+   quote: "Family: the 12-repo quant stack" (dsh-wrenai) — Quote only mentions a family; it does not name dsh-CCXT or state cross-reference.  · verbatim
+✗ [relation] dsh-WrenAI --sister_project_of--> dsh-OpenBB
+   quote: "Family: the 12-repo quant stack" (dsh-wrenai) — Quote only mentions a 12-repo family; it does not name dsh-OpenBB or state cross-referencing.  · verbatim
+✗ [relation] entity --has_evidence--> evidence_tag
+   quote: "every entity and" (dsh-auto-ontology) — Quote only mentions 'entity' and is incomplete; no evidence_tag or relation stated.  · verbatim
+✗ [relation] fail-closed guard --guards_trading--> dsh-Nautilus
+   quote: "live trading behind the family's fail-closed guard" (dsh-nautilus) — Quote mentions a fail-closed guard behind live trading, but not dsh-Nautilus as guard enforcing bridge-code order restrictions.  · verbatim
+✗ [relation] family fail-closed guard --guards_trading--> dsh-hummingbot
+   quote: "behind the family's fail-closed guard" (dsh-hummingbot) — Quote only mentions a fail-closed guard, not order restrictions in bridge code.  · verbatim
+✓ [relation] five-record schema --contains_entity--> Term
+   quote: "The five-record schema (Term, Mapping" (dsh-evoontology) — Quote lists Term as part of the five-record schema, directly implying containment.  · verbatim
+✓ [relation] five-record schema --contains_entity--> Mapping
+   quote: "(Term, Mapping, Relation, Constraint, Evidence)" (dsh-evoontology) — Quote lists Mapping as one of the five schema records.  · verbatim
+✗ [relation] five-record schema --contains_entity--> Constraint
+   quote: "Relation, Constraint, Evidence)" (dsh-evoontology) — Quote only lists 'Constraint'; it does not mention the five-record schema or state containment.  · verbatim
+✗ [relation] five-record schema --contains_relation--> Relation
+   quote: "(Term, Mapping, Relation, Constraint, Evidence)" (dsh-evoontology) — The quote merely lists 'Relation' among five labels, not that the schema includes typed relations between entities.  · verbatim
+✗ [relation] five-record schema --has_evidence--> Evidence
+   quote: "Constraint, Evidence) inherits the family's" (dsh-evoontology) — Quote is a fragment mentioning Evidence but does not state five-record schema has_evidence Evidence.  · verbatim
+✗ [relation] market data payload --carries_provenance--> binance
+   quote: "Every payload carries its exchange and timestamp" (dsh-ccxt) — Quote says payloads carry exchange and timestamp but never names Binance.  · verbatim
+✗ [relation] market_data_payload --carries_provenance--> exchange
+   quote: "provider + fetched_at on every payload" (dsh-openbb) — Quote mentions provider and fetched_at, not exchange; provider is not stated to be an exchange.  · verbatim
+✗ [relation] ontology --contains_entity--> entity
+   quote: "every entity and" (dsh-auto-ontology) — Quote fragment only mentions 'entity'; it does not state an ontology includes typed entities.  · verbatim
+✗ [relation] ontology --contains_relation--> relation
+   quote: "relation carries its source quote" (dsh-auto-ontology) — Quote only says a relation carries its source quote; it does not state ontology includes typed relations.  · verbatim
+✓ [relation] ontology --flags_conflict--> type_conflict
+   quote: "4 organically detected type conflicts" (dsh-auto-ontology) — Quote reports detected type conflicts (counted), implying ontology surfaces them rather than dropping.  · verbatim
+✗ [relation] optimization provider gate --guards_trading--> dsh-trustquant
+   quote: "the optimization provider is **never** auto-installed" (dsh-trustquant) — Quote only says optimization provider is never auto-installed; no guard, trading, or bridge order restrictions.  · verbatim
+✗ [relation] portfolio manager --aggregates_verdicts--> PASS @ 68
+   quote: "PM: **PASS @ 68**" (dsh-ai-hedge-fund) — Quote only states PM gave PASS @ 68; it does not say PM combines persona valuations.  · verbatim
+✗ [relation] portfolio manager --aggregates_verdicts--> PASS@72
+   quote: "the PM rules PASS@72 naming it" (dsh-tradingagents) — Quote says PM rules PASS@72 but does not state PM combines persona valuations into committee verdict.  · verbatim
+✗ [relation] portfolio manager --records_dissent--> Lynch dissent
+   quote: "异议被完整记录在案" (dsh-ai-hedge-fund) — Quote only says objections were fully recorded; it names neither the portfolio manager nor Lynch.  · verbatim
+✗ [relation] portfolio manager --records_dissent--> Wood dissent
+   quote: "异议被完整记录在案" (dsh-ai-hedge-fund) — Quote only says objections were recorded; it names neither the portfolio manager nor Wood.  · verbatim
+✗ [relation] portfolio manager --records_dissent--> risk officer split [G8]
+   quote: "logs the split as guardrail [G8]" (dsh-tradingagents) — Quote only says a split is logged as guardrail; no PM, risk officer, or objection-recording relation.  · verbatim
+✗ [relation] relation --has_evidence--> evidence_tag
+   quote: "relation carries its source quote" (dsh-auto-ontology) — Quote mentions relation and source quote but not evidence_tag or the named has_evidence relation.  · verbatim
+✗ [relation] structured error taxonomy --guards_trading--> dsh-trustquant
+   quote: "structured error taxonomy (`invalid_input`" (dsh-trustquant) — Quote only mentions a structured error taxonomy; no guard or fail-closed order restrictions.  · verbatim
+✗ [relation] trading guard --guards_trading--> dsh-CCXT
+   quote: "enforced in bridge code the LLM cannot bypass" (dsh-ccxt) — Quote mentions bridge-code enforcement but no guard, order restrictions, or fail-closed trading.  · verbatim
+✗ [relation] trustquant provider install --guards_trading--> dsh-trustquant
+   quote: "explicit, person-approved `trustquant provider install`" (dsh-trustquant) — Quote mentions a person-approved install command but not a guard enforcing fail-closed order restrictions.  · verbatim
+
+rerun: same artifact + same seed → same sample (judge temperature is 0). This measures quote-support of the file you point at — not a leaderboard; the number ships as measured.
+
+rows -> /tmp/o5/eval/pub19/reports/before.deepseek-reasoner.jsonl

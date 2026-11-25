@@ -11,11 +11,13 @@ flagged, never silently dropped.**
 > zero upstream code. Not affiliated. [中文文档](README.zh-CN.md)
 > Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) · [dsh-WrenAI](https://github.com/vicfei/dsh-WrenAI)
 
-![showcase](ontologies/20261118-1441.svg)
+![showcase](ontologies/20261125-1718.svg)
 
-*A real run over 19 family READMEs: 88 entities / 121 relations / 4 organically
-detected type conflicts, every assertion carrying its evidence quote
-(`ontologies/20261118-1441.*`).*
+*A real run over the 19 public READMEs of the vicfei dsh family
+(2026-11-25): 109 entities / 166 relations, every assertion carrying its
+evidence quote. The build judged 189 of them grounded ✓ and kept 86 flagged ⚠
+— `ontologies/20261125-1718.*`. An earlier run with 4 organically detected
+type conflicts is kept as `ontologies/20261118-1441.*`.*
 
 ## Why (ontology plugins exist — none does LLM auto-construction with evidence)
 
@@ -42,6 +44,11 @@ Requires `python3` (stdlib only) + a `DEEPSEEK_API_KEY`. Artifacts land in
 `./ontologies/`: typed JSON (every assertion + evidence), zero-dep SVG cluster
 graph, markdown digest, single-file HTML report, JSON-LD export.
 
+The grounding pass is the expensive part: one judge call per assertion plus
+one re-ground call per document (the 19-README showcase took 514 calls, 184 s,
+360k tokens). `--no-ground` skips it; `--max-calls N` stops a run before it
+overshoots.
+
 Register the DSH skill: `ln -s "$(npm root -g)/dsh-auto-ontology/skills/dsh-auto-ontology" ~/.dsh/skills/dsh-auto-ontology`.
 With the plugin installed, agents get `ontology_build` / `ontology_query` as
 typed tools (`dsh plugin add dsh-auto-ontology`).
@@ -52,12 +59,15 @@ typed tools (`dsh plugin add dsh-auto-ontology`).
 - **Type guard**: instance types must come from the extracted TBox; unknown
   types are flagged, never silently dropped;
 - **Grounding is judged, flagged, never dropped**: after extraction, every
-  type and relation claim is checked against its own quote — verbatim in the
-  source, naming the claim, then a strict judge call (batched per document,
-  temperature 0, `--max-calls` respected). A failing quote gets one re-grounding
-  attempt; if it still fails, the assertion stays in the ABox with
-  `type_grounding: false` / `grounding: false` — queryable, certifiable, never
-  silently lost. `--query` marks each ✓ or ⚠;
+  type and relation claim is checked against its own quote. The only
+  mechanical reject is the verbatim check — a span not in the document is not
+  evidence. Every verbatim quote then gets one strict judge call (temperature
+  0, `--judge-model` to pick another model, `--max-calls` respected); the
+  judge sees the quote, not the document. A quote that fails gets one
+  re-grounding attempt and a re-judge of the repaired quote; if it still
+  fails, the assertion stays in the ABox with `type_grounding: false` /
+  `grounding: false` — queryable, certifiable, never silently lost. `--query`
+  marks each ✓ or ⚠;
 - **Append-only**: merges never edit or drop prior evidence; removals happen
   only via `--certify reject` and are recorded with the original evidence and
   the actor who issued the verdict (`--actor`);
@@ -65,11 +75,15 @@ typed tools (`dsh plugin add dsh-auto-ontology`).
   conflict entry holding BOTH evidences, awaiting review;
 - **Honest metrics**: `auto-ontology eval` measures whether quotes actually
   support their assertions (seeded, rerunnable; `--n 0` scores the whole
-  population, `--adversarial` runs 20 trap-and-true cases against the same
-  judge). Our
-  first artifacts scored **10%** — reported as-is; the build-time grounding
-  pass that answers it ships with its own before/after on the same corpus
-  (#35). A metric you can rerun beats a number you can't;
+  population, `--adversarial` runs 28 trap-and-true cases through the same
+  judge). Our first artifacts scored **10%** — reported as-is. The build-time
+  grounding pass answers it. On the same frozen 19-README corpus
+  (2026-11-25) strict-judge precision went **25% → 67%** under deepseek-chat
+  and **9% → 50%** under deepseek-reasoner; among assertions the pass
+  flags ✓, 96% and 71% hold up. Every table, every judged row and the
+  blind audit are in [eval/](eval/README.md). A ✓ is one verdict at build
+  time — a re-judge moves a few percent. A metric you can rerun beats a
+  number you can't;
 - Every artifact carries **provenance** (model / judge model / temperature /
   calls / tokens / elapsed).
 
@@ -87,7 +101,8 @@ assertions stay auditable across implementations.
 O1–O4 complete (see [ROADMAP](ROADMAP.md)): English-first engine, npm
 distribution vehicle + typed tools, incremental merge & coreference & conflicts,
 JSON-LD / HTML / WeKnora bridge, certification fold-back, run-layer diff, the
-honest eval, format v0.2. In flight: the grounding before/after that closes #35.
+honest eval, format v0.2. O5.0 landed 2026-11-25: the grounding pass and its
+before/after (#35).
 
 ## License
 

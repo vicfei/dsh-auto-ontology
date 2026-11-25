@@ -5,3 +5,4 @@ ontologies/*
 npm/scripts/
 npm/LICENSE
 npm/*.tgz
+!ontologies/20261125-1718.*

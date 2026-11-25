@@ -130,6 +130,11 @@ jobs:
           assert not G.name_in_quote("WrenAI", "the Wren layer") and G.name_in_quote("腾讯", "关于腾讯的说明")
           assert G.is_verbatim("a `code` span\n\nwith *marks*", "x a code span with marks y")
           assert not G.is_verbatim("", "x") and not G.is_verbatim("paraphrased", "verbatim only")
+          # a quote may span blockquote lines (a list that starts at its label); '>' is markup, not text
+          bq = "> Family: [A](u) ·\n> [B](v) · [C](w)\n\n- elsewhere"
+          assert G.is_verbatim("Family: [A](u) · [B](v) · [C](w)", bq) and G.is_verbatim("> Family: [A](u) ·\n> [B](v)", bq)
+          assert not G.is_verbatim("Family: [C](w)", bq)            # the lines between are not optional
+          assert not G.is_verbatim("[A](u) [C](w)", bq)
           assert G.endpoints_in_quote("A", "B", "A -> C") == (True, False)
           v = G.parse_verdicts('```json\n{"verdicts":[{"i":2,"grounded":true,"reason":"ok"}]}\n```', 3)
           assert v == [{"grounded": False, "reason": "no verdict returned"},
@@ -137,20 +142,26 @@ jobs:
                        {"grounded": False, "reason": "no verdict returned"}], v
           assert not any(x["grounded"] for x in G.parse_verdicts("not json", 2))
           assert not any(x["grounded"] for x in G.parse_verdicts('{"verdicts":[{"i":9,"grounded":true}]}', 2))
+          # strict booleans: "false", 1, null, "maybe" never pass as truthy
+          sv = G.parse_verdicts('{"verdicts":[{"i":1,"grounded":"false"},{"i":2,"grounded":"true"},'
+                                '{"i":3,"grounded":1},{"i":4,"grounded":null},{"i":5,"grounded":"maybe"}]}', 5)
+          assert [x["grounded"] for x in sv] == [False, True, False, False, False], sv
           msg = G.judge_user_message([
               {"kind": "entity", "type_name": "t", "type_desc": "a thing", "claim": "X is a t.", "quote": "q", "doc": "d"},
               {"kind": "relation", "type_name": "p", "type_desc": "", "claim": "X p Y.", "quote": "r", "doc": "e"}])
           assert "Type definitions:\n- t: a thing" in msg and "1. CLAIM: X is a t. (a thing)" in msg
           assert '2. CLAIM: X p Y.\n   QUOTE [e]: "r"' in msg
-          # adversarial gold: both labels present, and nothing labelled grounded lacks the name it grounds
+          # adversarial gold: both labels present, and the relaxed name rule pinned from both sides —
+          # a grounded case whose quote does NOT spell the name, and a quote about ANOTHER
+          # instance of the type that must still be rejected
           cases = EV.load_cases()
           assert len(cases) >= 20 and any(c["grounded"] for c in cases) and any(not c["grounded"] for c in cases)
           for c in cases:
               assert {"id", "grounded", "kind", "quote", "why"} <= set(c), c
-              m = EV.case_mechanical(c)
-              absent = ((c["kind"] == "entity" and not m["name_in_quote"])
-                        or (c["kind"] == "relation" and not m["one_endpoint"]))
-              assert not (c["grounded"] and absent), c["id"]
+          byid = {c["id"]: c for c in cases}
+          assert not EV.case_mechanical(byid["alias-label"])["name_in_quote"] and byid["alias-label"]["grounded"]
+          assert not EV.case_mechanical(byid["substituted-instance"])["name_in_quote"]
+          assert not byid["substituted-instance"]["grounded"]
           # eval v2: whole population, build-time flags carried onto the sampled row, no-LLM rates
           assert len(EV.sample_assertions(eo, 0, 1)[0]) == 11
           flagged = {"abox": {"entities": [dict(E("F", "q"), type_grounding=False)], "relations": []}}
@@ -206,37 +217,46 @@ jobs:
           assert M._flag(stg["entities"]["w"]["evidences"]) is True and len(stg["flagged_ungrounded"]) == 1
           ow = {"abox": {"entities": [dict(E("F", "q"), type_grounding=False)], "relations": []}}
           assert M._flag(M.load_store(ow)["entities"]["f"]["evidences"]) is False
-          # the mechanical reject filter (no LLM)
-          doc = {"path": "d1", "text": "WrenAI is a semantic layer.\nIt mentions X in passing.\nWrenAI runs on WeKnora."}
+          # the verbatim gate (no LLM): the ONE hard reject — the judge never sees the document.
+          # A missing name or endpoint is the judge's call, not a pre-reject.
+          doc = {"path": "d1", "text": "WrenAI is a semantic layer.\nIt mentions X in passing.\nWrenAI runs on WeKnora.\n"
+                                        "Zed is a tool for exports."}
           out = {"entities": [{"name": "WrenAI", "type": "t", "evidence": "WrenAI is a semantic layer."},
                               {"name": "X", "type": "t", "evidence": "It mentions X in passing."},
                               {"name": "Y", "type": "t", "evidence": "It mentions X in passing."},
-                              {"name": "Ghost", "type": "t", "evidence": "Ghost is a hallucinated tool."}],
+                              {"name": "Ghost", "type": "t", "evidence": "Ghost is a hallucinated tool."},
+                              {"name": "Zed", "type": "t", "evidence": "Zed is a tool for exports."}],
                  "relations": [{"subject": "WrenAI", "predicate": "runs_on", "object": "WeKnora",
                                 "evidence": "WrenAI runs on WeKnora."}]}
-          assert M._reject_reason("entity", out["entities"][0], doc["text"]) is None
-          assert M._reject_reason("entity", out["entities"][1], doc["text"]) is None   # the name IS in the quote: judged, not pre-rejected
-          assert "name as written" in M._reject_reason("entity", out["entities"][2], doc["text"])
-          assert "not verbatim" in M._reject_reason("entity", out["entities"][3], doc["text"])
-          assert M._reject_reason("relation", out["relations"][0], doc["text"]) is None
-          # the pass itself, judge stubbed (no network): one batched judge, one re-ground, no re-judge without a repair
+          assert M._reject_reason(out["entities"][0], doc["text"]) is None
+          assert M._reject_reason(out["entities"][1], doc["text"]) is None   # the name IS in the quote
+          assert M._reject_reason(out["entities"][2], doc["text"]) is None   # the name is absent: judged anyway
+          assert "not verbatim" in M._reject_reason(out["entities"][3], doc["text"])
+          assert M._reject_reason(out["entities"][4], doc["text"]) is None
+          assert M._reject_reason(out["relations"][0], doc["text"]) is None
+          # the pass itself, judge stubbed (no network): ONE judge call per assertion — the eval's
+          # protocol, run concurrently — plus one re-ground; no re-judge without a repair
           import re as _re
           calls = []
           def stub(sysmsg, user, json_out=True, model=None):
-              calls.append(sysmsg[:40])
+              calls.append(("reground" if "repairs" in sysmsg else "judge", user, model))
               if "repairs" in sysmsg:
                   return {"repairs": [{"i": 1, "quote": None}]}
-              qs = _re.findall(r"QUOTE \[[^\]]*\]: (.*)", user)
-              return {"verdicts": [{"i": i + 1, "grounded": " is a " in q or " runs on " in q, "reason": "stub"}
-                                   for i, q in enumerate(qs)]}
-          M.llm, M.JUDGE_MODEL = stub, "stub"
+              q = _re.search(r"QUOTE \[[^\]]*\]: (.*)", user).group(1)
+              return {"verdicts": [{"i": 1, "grounded": " is a " in q or " runs on " in q, "reason": "stub"}]}
+          M.llm, M.JUDGE_MODEL = stub, "judge-x"
           g = M.ground_doc(doc, out, {"t"}, {"t": "a thing"})
-          assert [e["grounded"] for e in out["entities"]] == [True, False, False, False], out
+          assert [e["grounded"] for e in out["entities"]] == [True, False, False, False, True], out
           assert out["entities"][1]["judge_reason"] == "stub"            # judged: mention-only is the judge's call
-          assert "name as written" in out["entities"][2]["judge_reason"]  # rejected before any judge call
+          assert out["entities"][2]["judge_reason"] == "stub"            # no name rule: the judge rejected it
           assert "not verbatim" in out["entities"][3]["judge_reason"]
           assert out["relations"][0]["grounded"] is True
-          assert g == {"entities": [1, 3], "relations": [1, 0], "regrounded": 0} and len(calls) == 2, (g, calls)
+          judged = [u for kind, u, _m in calls if kind == "judge"]
+          assert all(u.count("CLAIM:") == 1 for u in judged) and len(judged) == 5, judged   # never a batch
+          assert g == {"entities": [2, 3], "relations": [1, 0], "regrounded": 0} and len(calls) == 6, (g, calls)
+          # --judge-model reaches the judge calls (and only them): the provenance never names a judge that did not judge
+          assert [m for kind, _u, m in calls if kind == "judge"] == ["judge-x"] * 5, calls
+          assert [m for kind, _u, m in calls if kind == "reground"] == [None], calls
           def stub2(sysmsg, user, json_out=True, model=None):
               if "repairs" in sysmsg:
                   return {"repairs": [{"i": 1, "quote": "Y is a tool for X."}]}
@@ -250,6 +270,26 @@ jobs:
           out3 = {"entities": [{"name": "Y", "type": "tool", "evidence": "Y is mentioned."}], "relations": []}
           M.ground_doc({"path": "d3", "text": "Y is mentioned."}, out3, {"tool"}, {"tool": "a thing"}, reground=False)
           assert out3["entities"][0]["grounded"] is False
+          # the cost guard is exact under concurrency: 10 concurrent judge calls under a cap of 3
+          # reserve exactly 3 — the 4th..10th never reach the API (fresh module: real llm, stubbed API)
+          specb = importlib.util.spec_from_file_location("bo2", "scripts/build_ontology.py")
+          B2 = importlib.util.module_from_spec(specb); specb.loader.exec_module(B2)
+          B2.MAX_CALLS, B2.COST["calls"] = 3, 0
+          _real_complete = G.complete
+          B2.grounding.complete = lambda model, messages, json_out=True, account=None: (
+              {"verdicts": [{"i": 1, "grounded": True, "reason": "stub"}]}, {})
+          many = [("entity", {"name": f"e{i}", "type": "tool", "evidence": f"e{i} is mentioned."}) for i in range(10)]
+          try:
+              B2._judge(many, "d", {"tool": "a thing"})
+              raise AssertionError("the cost guard did not trip")
+          except SystemExit:
+              pass
+          assert B2.COST["calls"] == 3, B2.COST
+          # under the cap the same ten run: one call each, verdicts in the input order, every call counted
+          B2.MAX_CALLS, B2.COST["calls"] = None, 0
+          vs10 = B2._judge(many, "d", {"tool": "a thing"})
+          assert [v["grounded"] for v in vs10] == [True] * 10 and B2.COST["calls"] == 10
+          G.complete = _real_complete                      # B2 shares the module: unstub it for whatever runs next
           # the v0.2 validator: the artifact passes, and it bites on a flag its evidences contradict
           spec5 = importlib.util.spec_from_file_location("vf", "scripts/validate_format.py")
           VF = importlib.util.module_from_spec(spec5); spec5.loader.exec_module(VF)
@@ -265,10 +305,34 @@ jobs:
           EOF
       - name: committed artifacts conform to the format
         run: python3 scripts/validate_format.py ontologies/*.json
+      - name: committed SVGs keep the title and every label on the canvas
+        run: |
+          python3 - <<'EOF'
+          import glob, re, sys, xml.etree.ElementTree as ET
+          sys.path.insert(0, "scripts")
+          import build_ontology as M
+          ns = "{http://www.w3.org/2000/svg}"
+          for p in sorted(glob.glob("ontologies/*.svg")):
+              root = ET.parse(p).getroot()
+              W, H = float(root.get("width")), float(root.get("height"))
+              checked = 0
+              for el in root:
+                  m = re.search(r"translate\(([-\d.]+)[ ,]+([-\d.]+)\)", el.get("transform") or "")
+                  dx, dy = (float(m.group(1)), float(m.group(2))) if m else (0.0, 0.0)
+                  for t in ([el] if el.tag == ns + "text" else el.iter(ns + "text")):
+                      x, y, fs = float(t.get("x")) + dx, float(t.get("y")) + dy, float(t.get("font-size", 9))
+                      right = x + M._text_w(t.text or "", fs)
+                      assert 0 <= x and right <= W and 0 <= y - fs and y <= H, (p, t.text, x, y, right, W, H)
+                      checked += 1
+              assert checked >= 2, p          # the title is two lines even for an empty graph
+          print("committed SVGs: title and labels on the canvas")
+          EOF
       - name: bin entry syntax (node --check)
         run: node --check npm/bin/auto-ontology.js
+      # --dry-run lists the bundle and writes no tarball — nothing to clean up, and a wildcard rm
+      # inside the package directory would delete any tarball kept there
       - name: npm bundle packs clean
-        run: cd npm && npm pack --dry-run && rm -f *.tgz
+        run: cd npm && npm pack --dry-run
       # LLM build smoke goes manual dispatch (needs DEEPSEEK_API_KEY secret)
       - name: build smoke (needs secret, dispatch only)
         if: github.event_name == 'workflow_dispatch' && env.DEEPSEEK_API_KEY != ''

@@ -1,0 +1,140 @@
+[
+ {
+  "id": "mention-only",
+  "expected": false,
+  "got": false,
+  "reason": "Quote only mentions Northwind using ToolX; it does not state Northwind is a company."
+ },
+ {
+  "id": "wrong-type-mention",
+  "expected": false,
+  "got": false,
+  "reason": "Quote only mentions ToolX as used for backups; no company or for-profit type information."
+ },
+ {
+  "id": "name-absent",
+  "expected": false,
+  "got": false,
+  "reason": "Quote mentions only 'The CLI', not @acme/widget, and does not state the named entity is a CLI tool."
+ },
+ {
+  "id": "role-reversal",
+  "expected": false,
+  "got": false,
+  "reason": "Quote says DeepBlue queries a database, not that DeepBlue itself is a database."
+ },
+ {
+  "id": "negation",
+  "expected": false,
+  "got": false,
+  "reason": "Quote says Project Falcon is not yet deployed, contradicting that it is a deployed service."
+ },
+ {
+  "id": "hypothetical",
+  "expected": false,
+  "got": false,
+  "reason": "Hypothetical conditional; does not state Orion is a partner."
+ },
+ {
+  "id": "type-word-other-sense",
+  "expected": false,
+  "got": false,
+  "reason": "Quote uses 'Gateway' as a building name, not a network device."
+ },
+ {
+  "id": "alias-instead-of-name",
+  "expected": false,
+  "got": false,
+  "reason": "Quote names DSH, not DeepSeek Harness; no link to claimed entity."
+ },
+ {
+  "id": "outside-knowledge",
+  "expected": false,
+  "got": false,
+  "reason": "Quote only says PostgreSQL stores the catalog; no open-source licensing info."
+ },
+ {
+  "id": "cjk-mention-only",
+  "expected": false,
+  "got": false,
+  "reason": "Quote only says 星河科技 queries a database, not that it is one."
+ },
+ {
+  "id": "table-row-names-only",
+  "expected": false,
+  "got": false,
+  "reason": "Quote only lists package name, registry, and version; it does not state it is a DSH plugin package."
+ },
+ {
+  "id": "relation-not-stated",
+  "expected": false,
+  "got": false,
+  "reason": "Quote says Northwind uses ToolX, not that it creates and maintains it."
+ },
+ {
+  "id": "relation-reversed",
+  "expected": false,
+  "got": false,
+  "reason": "Quote states the reverse relation: app server depends on Redis."
+ },
+ {
+  "id": "relation-mentions-both-only",
+  "expected": false,
+  "got": false,
+  "reason": "Quote only says both will attend; it does not state Northwind creates or maintains ToolX."
+ },
+ {
+  "id": "roadmap-item",
+  "expected": false,
+  "got": false,
+  "reason": "Quote says ToolX is planned for next quarter, not running in production."
+ },
+ {
+  "id": "copula-definition",
+  "expected": true,
+  "got": true,
+  "reason": "Quote directly defines ToolX as a command-line tool, matching cli_tool."
+ },
+ {
+  "id": "apposition",
+  "expected": true,
+  "got": true,
+  "reason": "Quote directly calls Redis an in-memory database, entailing it is a database."
+ },
+ {
+  "id": "predication-entails-type",
+  "expected": true,
+  "got": false,
+  "reason": "Quote says Kafka streams events, not messages; event-to-message link is not stated."
+ },
+ {
+  "id": "cjk-definition",
+  "expected": true,
+  "got": true,
+  "reason": "Quote directly states 星河科技 is a distributed database."
+ },
+ {
+  "id": "relation-stated",
+  "expected": true,
+  "got": true,
+  "reason": "Quote directly states Northwind develops ToolX, matching creates and maintains."
+ },
+ {
+  "id": "relation-implicit-subject",
+  "expected": true,
+  "got": true,
+  "reason": "Quote directly states the handbook is published by Acme Corp."
+ },
+ {
+  "id": "relation-implicit-object",
+  "expected": true,
+  "got": true,
+  "reason": "Quote states acme-backup backs up the workspace nightly, implying it runs nightly backup."
+ },
+ {
+  "id": "name-with-alias",
+  "expected": true,
+  "got": true,
+  "reason": "Quote states DSH is a CLI agent harness, directly implying a command-line program."
+ }
+]
