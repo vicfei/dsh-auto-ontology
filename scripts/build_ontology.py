@@ -25,6 +25,7 @@ Usage:
   python3 scripts/build_ontology.py --docs <new> --domain "..." --merge ontologies/old.json --save
   python3 scripts/build_ontology.py --query "WrenAI" [--from ontologies/x.json]
   python3 scripts/build_ontology.py --trajectory [--from ontologies/x.json] [more.json ...] [--out traj.ndjson]
+  python3 scripts/build_ontology.py --proposals run.proposals.json --actor agent:NAME [--from ontologies/x.json]
 """
 import argparse, concurrent.futures as cf, datetime as dt, glob, json, math, os, re, sys, threading, time
 from xml.sax.saxutils import escape
@@ -40,6 +41,15 @@ def tt(en, zh):
 
 # npm CLI form lands artifacts in the caller's cwd via ONTOLOGY_HOME (repo default unchanged)
 OUTDIR = os.environ.get("ONTOLOGY_HOME") or os.path.join(KIT, "ontologies")
+
+
+def newest_artifact():
+    """The newest artifact in OUTDIR — a plain message when there is none, not a traceback."""
+    files = sorted(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+    if not files:
+        sys.exit(tt(f"no ontology artifact in {OUTDIR} — pass --from, or build one first",
+                    f"{OUTDIR} 里没有本体工件——请用 --from 指定，或先构建"))
+    return files[-1]
 
 COST = {"calls": 0, "in": 0, "out": 0}
 MAX_CALLS = None
@@ -149,10 +159,90 @@ def certify(o, name, verdict, note="", actor=None):
         del st["entities"][k]
         st["relations"] = {rk: r for rk, r in st["relations"].items()
                            if _key(r["subject"]) != k and _key(r["object"]) != k}
-        o["abox"] = _abox(st)
-        o["stats"]["entities"] = len(st["entities"])
-        o["stats"]["relations"] = len(st["relations"])
+        _refresh(o, st)
     return o
+
+
+def apply_proposals(o, doc, actor=None):
+    """Re-type entities from a judge's grounded proposals — the trip back from
+    dsh-EvoOntology's adapter. `doc` is its runs/<run>.proposals.json ({run_id,
+    judge_model, proposals: [...]}) or a bare proposal list. Recorded, never a
+    silent edit:
+      • only a proposal marked grounded is applied; the rest are counted;
+      • a stale one (entity gone, typed differently since) is skipped and counted;
+      • a type outside the TBox is never asserted — skipped and counted;
+      • an entity whose latest certification was not issued by an agent is not
+        touched — a human verdict is not overwritten by a machine's;
+      • applied = a reject certification on the OLD typing (actor, note, and
+        `retyped_to` naming the new type and the quote) + a NEW assertion of the
+        new type carrying the one quote the judge grounded; the entity's other
+        quotes follow unjudged (their verdicts were about the old typing); every
+        relation it endpoints is folded back exactly as it was;
+      • a name re-typed a second time keeps rejecting its first typing too
+        (`also_rejects`): one certification per name would otherwise let that
+        typing back in on the next fold.
+    -> (o, report)"""
+    st = load_store(o)
+    meta = doc if isinstance(doc, dict) else {}
+    props = (doc.get("proposals") or []) if isinstance(doc, dict) else doc
+    rep = {"applied": [], "stale": [], "human_certified": [], "off_tbox": [], "not_grounded": 0}
+    for p in props:
+        if p.get("grounded") is not True:
+            rep["not_grounded"] += 1
+            continue
+        k = _key(p.get("name"))
+        e = st["entities"].get(k)
+        if e is None or e["type"] != p.get("from_type") or not p.get("quote"):
+            rep["stale"].append(p.get("name"))
+            continue
+        if p.get("to_type") not in st["tbox_types"]:
+            rep["off_tbox"].append(e["name"])
+            continue
+        cert = st.get("certifications", {}).get(k)
+        if cert and not str(cert.get("actor", "")).startswith("agent"):
+            rep["human_certified"].append(e["name"])
+            continue
+        old_type, to = e["type"], p["to_type"]
+        # a second re-typing: the certification being replaced rejected the typing the name has now
+        chain = ([cert["type"], *cert.get("also_rejects", [])]
+                 if cert and cert.get("verdict") == "reject" and (cert.get("retyped_to") or {}).get("type") == old_type
+                 else [])
+        olds = [dict(x) for x in e["evidences"]]
+        aliases, docs = list(e.get("aliases", [])), list(e.get("docs", []))
+        rels = [(r["subject"], r["predicate"], r["object"], [dict(x) for x in r["evidences"]], list(r.get("docs", [])))
+                for rk, r in st["relations"].items() if k in (rk[0], rk[2])]
+        judge = p.get("judge") or meta.get("judge_model") or "?"
+        judge_reason = p.get("judge_reason") or p.get("reason")
+        rec = {
+            "name": e["name"], "type": old_type, "verdict": "reject",
+            "at": dt.datetime.now().isoformat(timespec="seconds"),
+            "note": f"re-typed as {to}: judge {judge} grounded another quote",
+            "evidence": dict(_strongest(olds)[0]) if olds else {},
+            **({"actor": actor} if actor else {}),
+            "retyped_to": {"type": to, "quote": p["quote"], "doc": p.get("doc", "?"), "judge": judge,
+                           **({"run": meta["run_id"]} if meta.get("run_id") else {}),
+                           **({"reason": judge_reason} if judge_reason else {})},
+            **({"also_rejects": chain} if chain else {})}
+        st["certifications"][k] = o.setdefault("certifications", {})[k] = rec   # the artifact carries the verdict
+        for rk in [rk for rk in st["relations"] if k in (rk[0], rk[2])]:
+            del st["relations"][rk]
+        del st["entities"][k]
+        fold_entity(st, e["name"], to, p["quote"], p.get("doc", "?"), grounded=True)
+        new = st["entities"][k]
+        for x in olds:
+            if x["quote"] != p["quote"]:
+                _fold_ev(new["evidences"], {"quote": x["quote"], "doc": x["doc"]})
+        new["aliases"], new["docs"] = aliases, sorted(set(docs) | set(new["docs"]))
+        for sub, pred, obj, evs, rdocs in rels:
+            for x in evs:
+                fold_relation(st, sub, pred, obj, x["quote"], x["doc"],
+                              **{a: x[a] for a in ("grounded", "reason") if a in x})
+            st["relations"][_key(sub), pred, _key(obj)]["docs"] = rdocs
+        rep["applied"].append({"name": e["name"], "from_type": old_type, "to_type": to,
+                               "quote": p["quote"], "relations": len(rels)})
+    if rep["applied"]:
+        _refresh(o, st)
+    return o, rep
 
 
 def _fold_ev(evs, ev):
@@ -206,13 +296,14 @@ def _ev(quote, doc, grounded=None, reason=None):
 def fold_entity(st, name, etype, quote, doc, grounded=None, reason=None):
     """Append-only entity fold; the same name under a different type => conflict
     holding BOTH evidences — recorded, never silently resolved. A rejected
-    certification suppresses the (name, type) pair — counted, never re-asserted.
+    certification suppresses the (name, type) pair — counted, never re-asserted,
+    and a re-typed name's earlier typings with it (`also_rejects`).
     `grounded` is the build's verdict on this quote (None = never judged)."""
     k = _key(name)
     if not k:
         return
     cert = st.get("certifications", {}).get(k)
-    if cert and cert.get("verdict") == "reject" and cert.get("type") == etype:
+    if cert and cert.get("verdict") == "reject" and (cert.get("type") == etype or etype in (cert.get("also_rejects") or [])):
         st["suppressed"] = st.get("suppressed", 0) + 1
         return
     cur = st["entities"].get(k)
@@ -462,6 +553,21 @@ def _abox(st):
         f = _flag(r["evidences"])
         rels.append(dict(r, evidences=_strongest(r["evidences"]), **({"grounding": f} if f is not None else {})))
     return {"entities": ents, "relations": rels}
+
+
+def _refresh(o, st):
+    """Rebuild the ABox and every count the stats block derives from it — the one
+    place a certification or a re-typing leaves an artifact consistent (a reject
+    used to lower the entity count and leave the grounded/ungrounded counts stale)."""
+    abox = _abox(st)
+    o["abox"] = abox
+    n = lambda kind, key, f: sum(1 for x in abox[kind] if x.get(key) is f)
+    o.setdefault("stats", {}).update({
+        "entities": len(abox["entities"]), "relations": len(abox["relations"]),
+        "entities_grounded": n("entities", "type_grounding", True),
+        "entities_ungrounded": n("entities", "type_grounding", False),
+        "relations_grounded": n("relations", "grounding", True),
+        "relations_ungrounded": n("relations", "grounding", False)})
 
 
 def store_to_ontology(st, new_type_descs, provenance):
@@ -784,6 +890,9 @@ def main():
     ap.add_argument("--actor", default=None,
                     help="who issues a --certify verdict, recorded with it (env ONTOLOGY_ACTOR; "
                          "an agent applying a verdict must name itself)")
+    ap.add_argument("--proposals", default=None, metavar="FILE",
+                    help="apply mode: re-type entities from a judge's grounded proposals "
+                         "(a dsh-EvoOntology runs/<run>.proposals.json); requires --actor")
     ap.add_argument("--jsonld", action="store_true", help="export the ontology as JSON-LD 1.1 (with --from, or the newest artifact)")
     ap.add_argument("--html", action="store_true", help="render the ontology as a single-file HTML digest (with --save, or --from standalone)")
     ap.add_argument("--from", dest="frm", default=None,
@@ -833,38 +942,78 @@ def main():
             open(args.out, "w", encoding="utf-8").write("\n".join(lines) + "\n")
             print(f"trajectory: {trajectory.tally(events)} -> {args.out}")
         else:
-            print("\n".join(lines))
+            try:
+                print("\n".join(lines))
+            except BrokenPipeError:      # the reader went away (| head): a closed pipe, not a failure
+                os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+                return
             print(f"trajectory: {trajectory.tally(events)}", file=sys.stderr)
         return
 
     if args.certify:
         if not args.verdict:
             sys.exit("--certify needs --verdict accept|reject")
-        path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+        path = args.frm or newest_artifact()
         actor = args.actor or os.environ.get("ONTOLOGY_ACTOR") or "unspecified"
         o = certify(json.load(open(path)), args.certify, args.verdict, note=args.note, actor=actor)
+        os.makedirs(OUTDIR, exist_ok=True)      # --from may point at an artifact outside OUTDIR
         out = os.path.join(OUTDIR, dt.datetime.now().strftime("%Y%m%d-%H%M%S") + "-certified.json")
         json.dump(o, open(out, "w"), ensure_ascii=False, indent=1)
         print(f"{args.certify} {args.verdict} -> {out}")
         return
 
+    if args.proposals:
+        actor = args.actor or os.environ.get("ONTOLOGY_ACTOR")
+        if not actor:
+            sys.exit(tt("--proposals needs --actor: an agent applying a verdict must name itself",
+                        "--proposals 需要 --actor：agent 应用裁决必须署名"))
+        if not actor.startswith("agent"):
+            sys.exit(tt("--proposals: --actor must start with 'agent' (agent:<name>) — this path applies a "
+                        "machine's proposals; a person's verdict is --certify",
+                        "--proposals：--actor 须以 'agent' 开头（agent:<名字>）——此路径应用的是机器的提议；"
+                        "人工裁决请用 --certify"))
+        if not os.path.isfile(args.proposals):
+            sys.exit(tt(f"no such proposals file: {args.proposals}", f"没有这个提议文件：{args.proposals}"))
+        path = args.frm or newest_artifact()
+        if not os.path.isfile(path):
+            sys.exit(tt(f"no such ontology artifact: {path}", f"没有这个本体文件：{path}"))
+        o, rep = apply_proposals(json.load(open(path)), json.load(open(args.proposals)), actor=actor)
+        for a in rep["applied"]:
+            print(f"  - {a['name']}: {a['from_type']} → {a['to_type']} — \"{a['quote'][:70]}\" · "
+                  f"{a['relations']} relation(s) kept")
+        print(tt(f"re-typed {len(rep['applied'])} entit(y/ies) from {args.proposals} · {rep['not_grounded']} not grounded "
+                 f"(skipped) · {len(rep['stale'])} stale · {len(rep['human_certified'])} human-certified (not touched) · "
+                 f"{len(rep['off_tbox'])} outside the TBox",
+                 f"改型 {len(rep['applied'])} 个实体，来自 {args.proposals} · {rep['not_grounded']} 条未过判官（跳过）· "
+                 f"{len(rep['stale'])} 条已过期 · {len(rep['human_certified'])} 条人工认证（未动）· "
+                 f"{len(rep['off_tbox'])} 条类型不在 TBox"))
+        for key in ("stale", "human_certified", "off_tbox"):
+            if rep[key]:
+                print(f"  · {key.replace('_', ' ')}: {', '.join(map(str, rep[key]))}")
+        if rep["applied"]:
+            os.makedirs(OUTDIR, exist_ok=True)  # --from may point at an artifact outside OUTDIR
+            out = os.path.join(OUTDIR, dt.datetime.now().strftime("%Y%m%d-%H%M%S") + "-retyped.json")
+            json.dump(o, open(out, "w"), ensure_ascii=False, indent=1)
+            print(f"-> {out}")
+        return
+
     if args.html and not args.docs:
         import render_html
-        path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+        path = args.frm or newest_artifact()
         out = os.path.splitext(path)[0] + ".html"
         open(out, "w", encoding="utf-8").write(render_html.render(to_markdown(json.load(open(path)))))
         print(f"html -> {out}")
         return
 
     if args.jsonld:
-        path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+        path = args.frm or newest_artifact()
         out = os.path.splitext(path)[0] + ".jsonld"
         json.dump(to_jsonld(json.load(open(path))), open(out, "w"), ensure_ascii=False, indent=1)
         print(f"jsonld -> {out}")
         return
 
     if args.query:
-        path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+        path = args.frm or newest_artifact()
         o = json.load(open(path))
         hits = query_ontology(o, args.query)
         print(f"# {args.query} — {path}")

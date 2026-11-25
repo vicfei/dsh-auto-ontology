@@ -39,6 +39,7 @@ auto-ontology --query "WrenAI"                 # every assertion + its evidence 
 auto-ontology validate ontologies/*.json       # format v0.2 conformance
 auto-ontology eval --from ontologies/x.json --n 20   # honest evidence-support precision
 auto-ontology export ontologies/x.json > trajectory.ndjson   # the artifact as events
+auto-ontology apply --proposals run.proposals.json --actor agent:<name>   # a judge's re-typing, applied as a certification
 ```
 
 Requires `python3` (stdlib only) + a `DEEPSEEK_API_KEY`. Artifacts land in
@@ -105,6 +106,18 @@ idempotent by event id: replaying it adds nothing. It is the contract
 dsh-EvoOntology's adapter
 ([evoontology #9](https://github.com/vicfei/dsh-EvoOntology/issues/9)) is
 written against — see FORMAT.md, *Trajectory stream*.
+
+The stream is also how a proposal comes back. dsh-EvoOntology's adapter
+imports it, projects the layer (one Term per typing, every quote with its
+verdict), asks a model for a better typing of each ungrounded Term, has a
+judge check each proposal against one of the Term's own quotes, and publishes
+a new layer only when its gate improves.
+`auto-ontology apply --proposals <run>.proposals.json --actor agent:<name>`
+then applies every judge-grounded proposal as a **certification** — a reject
+on the old typing, with `retyped_to` naming the new type and the quote — plus
+a new assertion whose first evidence is that quote. Nothing is edited: a
+person's verdict on the name stops it, a stale proposal is reported, a replay
+writes nothing. See FORMAT.md, *The trip back*.
 
 ## Status & roadmap
 

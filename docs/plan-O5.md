@@ -55,7 +55,13 @@ The family pipeline: corpus → audited ontology → self-evolving ontology.
 - **Stable export surface**: `auto-ontology export --trajectory` emits the
   append-only event stream (builds, folds, certifications — verdict, note,
   evidence included) as newline JSON; FORMAT.md documents it as THE contract
-  evoontology consumes (their #9 adapter reads this, not our internals).
+  evoontology consumes (their #9 adapter reads this, not our internals). The
+  build event carries the TBox definitions, so a consumer never opens the
+  artifact to judge or propose.
+- **The trip back**: `auto-ontology apply --proposals` applies a
+  judge-grounded re-typing as a certification on the old typing (`retyped_to`)
+  plus a new assertion — never an edit. A person's verdict on the name stops
+  it, a stale proposal is reported, a replay writes nothing.
 - **One live co-verification round with dsh-evoontology E2**: family corpus
   v2 → one certification (accept + reject with notes) → fold → export → the
   evolution kernel runs a hypothesis round → any gated proposal re-enters
@@ -144,3 +150,11 @@ tag on green CI; npm publish = owner real terminal (browser auth flow).
   follows the gold (4 of 4 adversarial runs), deepseek-reasoner the clause (4
   of 4). The prompt was not reworded after the measurements — that would be
   tuning on the test set — so deepseek-reasoner's 25/28 carries that miss.
+- **O5.1 one certification per name** (2026-11-25): a name re-typed twice
+  would have lost its first rejection — the next fold would have let the old
+  typing back in as a conflict (reproduced on a scratch store before the fix).
+  A re-typing reject now lists the typings it replaces in `also_rejects`; the
+  fold and dsh-EvoOntology's projection both honor it.
+- **O5.1 `apply` is an agent's path** (2026-11-25): `--actor` must start with
+  `agent`. The guard that protects a person's verdict keys on that prefix, so
+  a mistyped actor would have locked a name against every later proposal.

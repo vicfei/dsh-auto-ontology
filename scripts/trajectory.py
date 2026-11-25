@@ -75,7 +75,9 @@ def export_events(o, source=None):
                        f"{prov.get('calls', '?')} call(s) · " + (f"judge {prov['judge_model']}" if judged else "no grounding pass"),
             "provenance": prov, "stats": st,
             "tbox": {"entity_types": [t.get("name") for t in o.get("tbox", {}).get("entity_types", [])],
-                     "relation_types": [r.get("name") for r in o.get("tbox", {}).get("relation_types", [])]}}]
+                     "relation_types": [r.get("name") for r in o.get("tbox", {}).get("relation_types", [])],
+                     "entity_type_descs": {t.get("name"): t.get("desc", "") for t in o.get("tbox", {}).get("entity_types", [])},
+                     "relation_type_descs": {r.get("name"): r.get("desc", "") for r in o.get("tbox", {}).get("relation_types", [])}}}]
     for m in o.get("merge_log") or []:
         merges = [{"canonical": c.get("canonical"), "alias": c.get("alias")} for c in m.get("coref_merges") or []]
         if m.get("merged_into"):
@@ -101,7 +103,9 @@ def export_events(o, source=None):
                     "summary": f"[certification · {c.get('verdict')}] {claim} by {actor}" + (f" — {note}" if note else ""),
                     "claim": claim, "subject": {"name": c.get("name"), "type": c.get("type")},
                     "evidence": _quote(c.get("evidence"), "grounded", "reason"), "verdict": c.get("verdict"),
-                    "by": actor, "note": note, "endorsed": c.get("verdict") == "accept"})
+                    "by": actor, "note": note, "endorsed": c.get("verdict") == "accept",
+                    **({"retyped_to": c["retyped_to"]} if c.get("retyped_to") else {}),
+                    **({"also_rejects": c["also_rejects"]} if c.get("also_rejects") else {})})
     for c in o.get("conflicts") or []:
         types = c.get("types") or {}
         evs.append({"kind": "conflict", "at": None, "agent": agent,

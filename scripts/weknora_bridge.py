@@ -78,7 +78,8 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
-    path = args.frm or max(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+    newest = sorted(glob.glob(os.path.join(OUTDIR, "*.json")), key=os.path.getmtime)
+    path = args.frm or (newest[-1] if newest else sys.exit(f"no ontology artifact in {OUTDIR} — pass --from"))
     o = json.load(open(path))
     docs = entity_docs(o, limit=args.limit)
     print(f"{path} → kb {args.kb}: {len(docs)} entity doc(s)" + (" (dry run)" if args.dry_run else ""))
