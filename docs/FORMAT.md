@@ -50,6 +50,65 @@ valid v0.2 artifact.
 10. **Legacy v1** artifacts (single `evidence` string) are readable but not
    valid — convert by folding into a v2 build.
 
+## Trajectory stream — `ao-trajectory/0.1`
+
+An artifact is a *state*: what is asserted now. A consumer that evolves a layer
+— dsh-EvoOntology's adapter is the first — needs *what happened*: which claims
+were made, which quote came with each, what the judge said, what a human or an
+agent decided. `auto-ontology export` turns an artifact into that stream. It
+reads the artifact and calls no model.
+
+**Contract (normative).**
+
+1. **Encoding** — newline JSON (NDJSON), UTF-8, one event per line, nothing
+   else. `auto-ontology export a.json b.json` concatenates the streams in the
+   order given, with `seq` running on across them.
+2. **Envelope (every line)** — required: `schema` (exactly `ao-trajectory/0.1`),
+   `id`, `seq` (the line's position, from 0), `kind`, `at` (ISO-8601, or
+   `null` when the artifact does not record the time), `agent` (who did the
+   work), `summary` (one line, human-readable), `domain`,
+   `artifact {built_at, source, model, judge}`, and `endorsed` — `true`,
+   `false` or `null`.
+3. **Kinds**, in this order within one artifact:
+   - `build` — the run that wrote the artifact: `provenance`, `stats`,
+     `tbox {entity_types, relation_types}`.
+   - `fold` — one per `merge_log` entry: `merge` (the entry without its alias
+     list) and `alias_merges [{canonical, alias}]`.
+   - `assertion` — **one per evidence quote**, the append-only unit: `claim`,
+     `subject` (`{name, type}` for an entity, `{subject, predicate, object}`
+     for a relation), `evidence {quote, doc}`, `verdict` (`grounded` |
+     `ungrounded` | `null` = never judged), `by`, and `reason` on an
+     ungrounded quote.
+   - `certification` — `claim`, `subject {name, type}`, `evidence` (the
+     strongest quote, as the verdict cites it), `verdict` (`accept` | `reject`),
+     `by` (the actor), `note`.
+   - `conflict` — `subject {name, types: {type → evidence}}`: both sides, as
+     kept.
+   - `unknown_type` — `claim`, `subject {name, type}`, `evidence`: the type
+     guard's catch.
+   - `ungrounded_clash` — `subject {name, existing_type, asserted_type}`,
+     `evidence`.
+4. **`endorsed`** — `true`: a quote the judge grounded, or an accepted
+   certification. `false`: a quote the judge rejected, or a rejected
+   certification. `null`: never judged, or a kind that asserts nothing (build,
+   fold, conflict, unknown type, clash).
+5. **`id`** — `aot_` + the first 16 hex digits of the SHA-1 over the event's
+   kind and what it says (for an `assertion`: claim, evidence, verdict, by) —
+   never its position, its file name or the artifact it was read from. The
+   same quote judged the same way in two artifacts is one event. **A consumer
+   that replays a stream MUST key on `id`**: that is what makes a replay add
+   nothing.
+6. **Determinism** — the same artifact exports to the same events in the same
+   order; nothing depends on the clock.
+7. **What the artifact does not know** — when one quote was folded (`at` is
+   `null` on an `assertion`) and which judge model judged it (`by` is `judge`;
+   the `build` event names the judge of its own run, and only when a grounding
+   pass ran).
+
+`validate_format.py` does not check streams. CI checks the exporter against
+the committed artifact: same bytes twice, ids independent of file names, one
+event per quote, verdicts and certification actors carried.
+
 ## Validation
 
 `python3 scripts/validate_format.py ontologies/*.json` (or

@@ -25,6 +25,7 @@ npm i -g dsh-auto-ontology
 auto-ontology build --docs 'docs/*.md' --domain "内部设计文档" --save
 auto-ontology --query "WrenAI"                 # 该实体的全部断言+证据跨度
 auto-ontology validate ontologies/*.json       # 格式 v0.2 合规校验
+auto-ontology export ontologies/x.json > trajectory.ndjson   # 工件转事件流
 ```
 
 仅需 `python3`（stdlib）+ DeepSeek key。产物落 `./ontologies/`：带证据的
@@ -34,6 +35,9 @@ JSON、零依赖 SVG 分簇图、markdown 摘要、单文件 HTML、JSON-LD 导�
 机械否决，其余每条引文一次判官严判），不支撑者标记保留（实体 `type_grounding: false`、关系
 `grounding: false`），可查可认证，绝不静默丢弃；append-only；冲突双证据；每产物带
 溯源（模型/判官模型/调用/token/耗时）。规范见 docs/FORMAT.md（evidence-linked
-ontology v0.2 开放格式，v0.1 工件仍合规）。
+ontology v0.2 开放格式，v0.1 工件仍合规）。工件是状态，`auto-ontology export` 是
+过程：`ao-trajectory/0.1` 事件流（按行 JSON），每条引文一个事件并带判官裁定，外加
+认证（谁签发、备注）、合并、冲突与类型守卫拦截；确定性、按事件 id 幂等——重放不新增。
+这是 dsh-EvoOntology 适配器（evoontology #9）对接的契约。
 
 **不是企业建议。**

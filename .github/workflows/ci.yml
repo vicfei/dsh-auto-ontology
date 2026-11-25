@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "22" }
       - name: engine syntax
-        run: python3 -m py_compile scripts/build_ontology.py scripts/grounding.py scripts/eval_evidence.py scripts/validate_format.py scripts/render_html.py scripts/weknora_bridge.py
+        run: python3 -m py_compile scripts/build_ontology.py scripts/grounding.py scripts/eval_evidence.py scripts/validate_format.py scripts/render_html.py scripts/weknora_bridge.py scripts/trajectory.py
       - name: engine contract + fold semantics (pure, no network)
         run: |
           python3 - <<'EOF'
@@ -302,6 +302,66 @@ jobs:
               mutate(bad)
               assert VF.validate(bad), mutate
           print("grounding pass (flag never drop) + format v0.2: PASS")
+          # the trajectory export (O5.1a, #50): an artifact as an event stream — deterministic, one event per quote
+          spec6 = importlib.util.spec_from_file_location("tj", "scripts/trajectory.py")
+          TJ = importlib.util.module_from_spec(spec6); spec6.loader.exec_module(TJ)
+          art = json.load(open("ontologies/20261125-1718.json"))
+          t1 = TJ.export_events(art, "a.json")
+          assert TJ.render(t1) == TJ.render(TJ.export_events(json.loads(json.dumps(art)), "a.json"))   # same bytes twice
+          t2 = TJ.export_events(art, "renamed.json")
+          assert [e["id"] for e in t1] == [e["id"] for e in t2] and TJ.render(t1) != TJ.render(t2)     # ids ignore the file name
+          assert [e["seq"] for e in t1] == list(range(len(t1))) and len({e["id"] for e in t1}) == len(t1)
+          ENV = {"schema", "id", "seq", "kind", "at", "agent", "summary", "domain", "artifact", "endorsed"}
+          assert all(ENV <= set(e) and e["schema"] == "ao-trajectory/0.1" and e["agent"] and e["summary"] for e in t1)
+          order = [e["kind"] for e in t1]
+          assert order == sorted(order, key=TJ.KINDS.index) and order[0] == "build"
+          quotes = [q for k in ("entities", "relations") for x in art["abox"][k] for q in x["evidences"]]
+          asserts_ = [e for e in t1 if e["kind"] == "assertion"]
+          assert len(asserts_) == len(quotes) == 337 and sum(e["kind"] == "build" for e in t1) == 1
+          for e in asserts_:                        # claim + quote + doc + verdict travel together, endorsed = the verdict
+              assert e["claim"] and e["evidence"]["quote"] and e["evidence"]["doc"], e
+              assert e["endorsed"] == {"grounded": True, "ungrounded": False, None: None}[e["verdict"]]
+          gr = sum(1 for q in quotes if q.get("grounded") is True)
+          assert sum(e["endorsed"] is True for e in asserts_) == gr == 206
+          assert sum(e["endorsed"] is False for e in asserts_) == 131
+          assert all(e["reason"] for e in asserts_ if e["endorsed"] is False)
+          # a certification keeps its actor, note and evidence; the rejected entity's quotes leave the stream
+          byname = {e["name"]: e for e in art["abox"]["entities"]}
+          flagged = next(e for e in asserts_ if e["endorsed"] is False and byname[e["subject"]["name"]]["type_grounding"] is False)
+          target = flagged["subject"]["name"]
+          t3 = TJ.export_events(M.certify(json.loads(json.dumps(art)), target, "reject", note="not what the quote says",
+                                           actor="agent:x"), "a.json")
+          c = [e for e in t3 if e["kind"] == "certification"]
+          assert len(c) == 1 and (c[0]["by"], c[0]["agent"], c[0]["verdict"], c[0]["note"]) == \
+              ("agent:x", "agent:x", "reject", "not what the quote says")
+          assert c[0]["evidence"]["quote"] and c[0]["at"] and c[0]["endorsed"] is False
+          assert not any(e["kind"] == "assertion" and e["subject"].get("name") == target for e in t3)
+          def touches(e, n):                       # the entity's own quotes and every relation it endpoints
+              s = e["subject"]
+              return n in (s.get("name"), s.get("subject"), s.get("object"))
+          assert [e["id"] for e in asserts_ if not touches(e, target)] == \
+                 [e["id"] for e in t3 if e["kind"] == "assertion"]           # untouched events keep their ids
+          ok = next(e for e in asserts_ if e["endorsed"] is True and "name" in e["subject"])
+          t4 = TJ.export_events(M.certify(json.loads(json.dumps(art)), ok["subject"]["name"], "accept", actor="human:v"), "a.json")
+          assert [(e["verdict"], e["endorsed"], e["by"]) for e in t4 if e["kind"] == "certification"] == [("accept", True, "human:v")]
+          # an artifact with merges, conflicts and the guards exports every record kind, in the documented order
+          rich = {"domain": "d", "built_at": "2026-11-25T00:00:00", "provenance": {"model": "m"}, "stats": {},
+                  "tbox": {"entity_types": [{"name": "tool"}], "relation_types": [{"name": "uses"}]},
+                  "abox": {"entities": [dict(E("A", "A is a tool."), type="tool")], "relations": []},
+                  "merge_log": [{"ran_at": "2026-11-25T00:00:00", "coref_merges": [{"canonical": "A", "alias": "a"}]},
+                                {"merged_into": "old.json", "added_docs": 2, "entities_before": 3, "entities_after": 4}],
+                  "certifications": {"a": {"name": "A", "type": "tool", "verdict": "accept", "at": "t", "note": ""}},
+                  "conflicts": [{"entity": "A", "types": {"tool": {"quote": "q1", "doc": "d"}, "company": {"quote": "q2", "doc": "d"}}}],
+                  "flagged_unknown_types": [{"name": "Z", "type": "widget", "evidence": "Z is a widget.", "doc": "d"}],
+                  "flagged_ungrounded": [{"entity": "A", "existing_type": "tool", "asserted_type": "company",
+                                          "evidence": {"quote": "q2", "doc": "d"}}]}
+          t5 = TJ.export_events(rich, "r.json")
+          assert [e["kind"] for e in t5] == ["build", "fold", "fold", "assertion", "certification", "conflict",
+                                             "unknown_type", "ungrounded_clash"], [e["kind"] for e in t5]
+          assert [e["endorsed"] for e in t5] == [None, None, None, None, True, None, None, None]
+          assert t5[2]["merge"]["merged_into"] == "old.json" and t5[1]["alias_merges"] == [{"canonical": "A", "alias": "a"}]
+          assert t5[0]["artifact"]["judge"] is None and "no grounding pass" in t5[0]["summary"]
+          print("trajectory export: PASS")
           EOF
       - name: committed artifacts conform to the format
         run: python3 scripts/validate_format.py ontologies/*.json

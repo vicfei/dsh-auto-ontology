@@ -18,6 +18,8 @@ auto-ontology build --docs ~/my-corpus/*.md --domain "internal design docs" --sa
   quote; an ungrounded one is flagged (`type_grounding: false`), never dropped.
 - Outputs: typed JSON (every assertion + evidence), zero-dep SVG cluster graph,
   markdown digest.
+- `auto-ontology export x.json`: the artifact as an event stream
+  (`ao-trajectory/0.1`, newline JSON) — what dsh-EvoOntology's adapter consumes.
 - Register the DSH skill:
   `ln -s "$(npm root -g)/dsh-auto-ontology/skills/dsh-auto-ontology" ~/.dsh/skills/dsh-auto-ontology`
 

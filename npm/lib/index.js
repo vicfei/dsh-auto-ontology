@@ -1,15 +1,18 @@
 /**
  * dsh-auto-ontology host plugin (0.2.0, issue #11): the ontology engine as typed tools.
  *
- * Registers two agent tools on `ctx.tools` via @deepseek-ai/dsh-tools:
+ * Registers three agent tools on `ctx.tools` via @deepseek-ai/dsh-tools:
  *   ontology_build  — two-pass build over a document corpus (evidence on every
  *                     assertion, type guard, coref, append-only merge)
  *   ontology_query  — every assertion about a term, with its evidence spans
+ *   ontology_export — the artifact as an ao-trajectory/0.1 event stream (the
+ *                     record format dsh-EvoOntology's adapter consumes)
  *
  * The tools spawn the bundled Python engine; artifacts land under the calling
  * process's cwd (./ontologies/), exactly like the CLI.
  */
 import { spawnSync } from "node:child_process";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineTool } from "@deepseek-ai/dsh-tools";
@@ -30,6 +33,14 @@ function run(args, timeoutMs = 600_000) {
 }
 
 const LANG = { type: "string", enum: ["en", "zh"], description: "Output language (default en)." };
+
+function newest() {   // the engine's own default: the newest artifact under ./ontologies/
+  const dir = path.join(process.cwd(), "ontologies");
+  const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith(".json")) : [];
+  if (!files.length) throw new Error(`no ontology artifact under ${dir} — ontology_build writes one`);
+  const byAge = (a, b) => statSync(path.join(dir, b)).mtimeMs - statSync(path.join(dir, a)).mtimeMs;
+  return path.join(dir, files.sort(byAge)[0]);
+}
 
 export async function apply(ctx) {
   ctx.tools.register(defineTool({
@@ -82,6 +93,33 @@ export async function apply(ctx) {
     },
     execute(args) {
       return { result: run(["--query", args.term, ...(args.from ? ["--from", args.from] : [])], 60_000) };
+    },
+  }));
+
+  ctx.tools.register(defineTool({
+    name: "ontology_export",
+    description:
+      "Export an ontology artifact as its event stream (ao-trajectory/0.1, newline JSON): one event per evidence " +
+      "quote with the judge's verdict, every certification (who issued it, the note, the evidence), the build, " +
+      "merges, conflicts and the type guard's catches. Deterministic and idempotent by event id — the record " +
+      "format dsh-EvoOntology's adapter consumes. Writes a .ndjson file and returns the tally plus the first events.",
+    parameters: {
+      from: { type: "string", description: "Ontology JSON path (default: newest under ./ontologies/)." },
+      out: { type: "string", description: "Output path (default: <artifact>.trajectory.ndjson)." },
+      limit: { type: "number", description: "Events returned inline after the tally (default 5)." },
+    },
+    output: {
+      schema: { type: "object", additionalProperties: false,
+                properties: { summary: { type: "string", required: true } } },
+      render: (_args, value) => [{ type: "text", text: value.summary }],
+    },
+    execute(args) {
+      const from = args.from || newest();
+      const out = args.out || from.replace(/\.json$/i, "") + ".trajectory.ndjson";
+      const head = run(["--trajectory", "--from", from, "--out", out], 120_000);
+      const lines = readFileSync(out, "utf8").split("\n").filter(Boolean);
+      const n = Math.max(0, Math.min(args.limit ?? 5, lines.length));
+      return { summary: [head, ...lines.slice(0, n)].join("\n") };
     },
   }));
 }
