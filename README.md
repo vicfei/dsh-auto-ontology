@@ -4,7 +4,7 @@
 relation carries its source quote. No evidence, no assertion; unknown types are
 flagged, never silently dropped.**
 
-[![DeepSeek Harness](https://img.shields.io/badge/DSH-plugin-4E6DD4)](https://github.com/deepseek-ai) [![License: MIT](https://img.shields.io/badge/license-MIT-3da639)](LICENSE) [![npm](https://img.shields.io/npm/v/dsh-auto-ontology)](https://www.npmjs.com/package/dsh-auto-ontology) [![ci](https://github.com/vicfei/dsh-auto-ontology/actions/workflows/ci.yml/badge.svg)](../../actions/workflows/ci.yml) [![format](https://img.shields.io/badge/format-evidence--linked%20ontology%20v0.2-ff6b35)](docs/FORMAT.md)
+[![DeepSeek Harness](https://img.shields.io/badge/DSH-plugin-4E6DD4)](https://github.com/deepseek-ai) [![License: MIT](https://img.shields.io/badge/license-MIT-3da639)](LICENSE) [![npm](https://img.shields.io/npm/v/dsh-auto-ontology)](https://www.npmjs.com/package/dsh-auto-ontology) [![ci](https://github.com/vicfei/dsh-auto-ontology/actions/workflows/ci.yml/badge.svg)](../../actions/workflows/ci.yml) [![format](https://img.shields.io/badge/format-evidence--linked%20ontology%20v0.3-ff6b35)](docs/FORMAT.md)
 
 > Implements the concept of [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology)
 > (13.3k★) natively for DSH, with the family's evidence discipline. Clean-room,
@@ -35,8 +35,9 @@ type conflicts is kept as `ontologies/20261118-1441.*`.*
 ```bash
 npm i -g dsh-auto-ontology
 auto-ontology build --docs 'docs/*.md' --domain "internal design docs" --save
+auto-ontology build --kb <knowledge-base-id> --domain "..." --save   # from a WeKnora knowledge base: every quote names its chunk
 auto-ontology --query "WrenAI"                 # every assertion + its evidence spans
-auto-ontology validate ontologies/*.json       # format v0.2 conformance
+auto-ontology validate ontologies/*.json       # format v0.3 conformance
 auto-ontology eval --from ontologies/x.json --n 20   # honest evidence-support precision
 auto-ontology export ontologies/x.json > trajectory.ndjson   # the artifact as events
 auto-ontology apply --proposals run.proposals.json --actor agent:<name>   # a judge's re-typing, applied as a certification
@@ -54,6 +55,25 @@ overshoots.
 Register the DSH skill: `ln -s "$(npm root -g)/dsh-auto-ontology/skills/dsh-auto-ontology" ~/.dsh/skills/dsh-auto-ontology`.
 With the plugin installed, agents get `ontology_build` / `ontology_query` /
 `ontology_export` as typed tools (`dsh plugin add dsh-auto-ontology`).
+
+### From a WeKnora knowledge base — evidence that names its chunk
+
+```bash
+export WEKNORA_URL=http://127.0.0.1:8080
+export WEKNORA_API_KEY=<key>          # and WEKNORA_TENANT_ID when your key needs one
+auto-ontology build --kb <knowledge-base-id> --domain "..." --save [--limit N]
+```
+
+The base's parsed chunks are the corpus — one chunk is one document, read
+whole, in a fixed reading order — and **every evidence carries the `chunk_id`
+it was read from**, so each assertion resolves back to a place in the base
+(`GET /api/v1/chunks/by-id/{id}`). Only documents whose parse completed are
+read; `--query` prints the chunk beside every quote; `provenance.kb` records
+what was read and what was skipped. The build only reads the base. The typed
+tool takes `kb` + `limit` (40 chunks unless told otherwise). Same family stack
+as [dsh-WrenAI](https://github.com/vicfei/dsh-WrenAI), with no overlap: WrenAI
+answers *from* a model over your data, we audit *what the knowledge base
+claims*. Details: FORMAT.md, *Building from a knowledge base*.
 
 ## The discipline (non-negotiables)
 
@@ -89,14 +109,16 @@ With the plugin installed, agents get `ontology_build` / `ontology_query` /
 - Every artifact carries **provenance** (model / judge model / temperature /
   calls / tokens / elapsed).
 
-## Format: evidence-linked ontology v0.2
+## Format: evidence-linked ontology v0.3
 
 The artifact shape is a versioned open format — [docs/FORMAT.md](docs/FORMAT.md) —
 with a stdlib conformance validator, enforced by CI on the committed showcase.
 v0.2 adds optional grounding fields (`grounded` / `reason` on an evidence,
 `type_grounding` on an entity, `grounding` on a relation, `actor` on a
-certification); every v0.1 artifact still conforms. If other tools adopt it,
-assertions stay auditable across implementations.
+certification); v0.3 adds `chunk_id` on an evidence (a knowledge-base build)
+and `judge` on a quote an outside judge grounded (`apply --proposals`), plus
+`provenance.kb`. Every earlier artifact still conforms. If other tools adopt
+it, assertions stay auditable across implementations.
 
 The artifact is a state; `auto-ontology export` is what happened — an
 `ao-trajectory/0.1` stream (newline JSON) with one event per evidence quote
@@ -115,7 +137,8 @@ a new layer only when its gate improves.
 `auto-ontology apply --proposals <run>.proposals.json --actor agent:<name>`
 then applies every judge-grounded proposal as a **certification** — a reject
 on the old typing, with `retyped_to` naming the new type and the quote — plus
-a new assertion whose first evidence is that quote. Nothing is edited: a
+a new assertion whose first evidence is that quote, carrying the judge's name
+and its reason. Nothing is edited: a
 person's verdict on the name stops it, a stale proposal is reported, a replay
 writes nothing. See FORMAT.md, *The trip back*.
 
@@ -125,7 +148,12 @@ O1–O4 complete (see [ROADMAP](ROADMAP.md)): English-first engine, npm
 distribution vehicle + typed tools, incremental merge & coreference & conflicts,
 JSON-LD / HTML / WeKnora bridge, certification fold-back, run-layer diff, the
 honest eval, format v0.2. O5.0 landed 2026-11-25: the grounding pass and its
-before/after (#35).
+before/after (#35). O5.1 and O5.2 landed the same day, format v0.3: the
+trajectory stream that dsh-EvoOntology reads and the trip back that applies
+its judge's re-typing, closed in [one live round across the two
+repositories](eval/live-round/README.md); and `build --kb`, with every chunk id
+of [a real knowledge base round](eval/kb-round/README.md) verified. The
+release train for 0.3.0 is O5.4.
 
 ## License
 

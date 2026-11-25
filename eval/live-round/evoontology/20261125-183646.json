@@ -1,0 +1,19 @@
+{
+ "run_id": "20261125-183646",
+ "hypothesis": "For terms whose typing no carried quote grounds, one of the TBox's own types is stated by a quote the build judged against the wrong type; re-typing them raises the layer's endorsed share and changes nothing else.",
+ "parent_version": 0,
+ "budget": {
+  "max_rounds": 1,
+  "rounds_used": 0
+ },
+ "status": "aborted",
+ "rounds": [],
+ "accepted_version": null,
+ "started_at": "2026-11-25T18:36:46",
+ "incomplete_reason": "KeyError: 'from_type' — the adapter crashed printing a malformed proposal, before any judge ran (fixed in the next commit)",
+ "stream": {
+  "source": "round1.ndjson",
+  "events": 374,
+  "sha": "562b0df7b64a"
+ }
+}

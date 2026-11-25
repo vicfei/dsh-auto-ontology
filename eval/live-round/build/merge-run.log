@@ -1,0 +1,20 @@
+corpus: 4 doc(s) · domain: the vicfei dsh plugin family: multi-agent investment committees, quant research plugins, semantic layers, ontology construction for DeepSeek Harness
+merging into /tmp/o5/e2/live/ao/ontologies/20261125-1718.json (append-only)
+
+→ /tmp/o5/e2/live/ao/ontologies/20261125-1832.json / .svg / .md
+
+## Ontology build · the vicfei dsh plugin family: multi-agent investment committees, quant research plugins, semantic layers, ontology construction for DeepSeek Harness
+
+- Entity types 22 · entities 129 · relations 178 · conflicts 0 · unknown types flagged 0
+- type grounding (judge deepseek-chat): entities 81 grounded · 48 ungrounded; relations 128 grounded · 50 ungrounded; 6 quote(s) re-grounded · 0 ungrounded type clash(es) kept out of conflicts
+- provenance: 53 calls · 38,166 in / 4,741 out tokens · 29s
+  - R: (agentdiary) -[installs_into]-> (web profile) | ev: dsh plugin --profile web add dsh-agentdi
+  - R: (agentdiary) -[produces]-> (diary entry) | ev: A [DeepSeek Harness](https://github.com/
+  - R: (agentdiary) -[subscribes_to]-> (session/event) | ev: A [DeepSeek Harness](https://github.com/
+  - R: (agentdiary) -[writes_entry_to]-> (diary git repo) | ev: A [DeepSeek Harness](https://github.com/
+  - R: (calibrated judge) -[makes]-> (keep/drop decision) | ev: This plugin replaces the *decision* with
+  - R: (diary entry) -[triggered_by]-> (turn/end) | ev: One entry per **settled turn** — when th
+  - R: (dsh-ai-hedge-fund) -[enforces]-> (risk guardrails) | ev: risk guardrails (constraints only)
+  - R: (dsh-ai-hedge-fund) -[has_persona]-> (Buffett) | ev: **Buffett, Munger, Lynch and Wood value 
+  - R: (dsh-ai-hedge-fund) -[has_persona]-> (Munger) | ev: **Buffett, Munger, Lynch and Wood value 
+  - R: (dsh-ai-hedge-fund) -[has_persona]-> (Lynch) | ev: **Buffett, Munger, Lynch and Wood value 

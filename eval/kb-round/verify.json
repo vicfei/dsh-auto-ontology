@@ -1,0 +1,6215 @@
+{
+ "artifact": "/tmp/o5/e2/kb/ontologies/20261125-1945.json",
+ "kb": {
+  "id": "035be669-f79c-458f-b119-f295d1e65859",
+  "limit": null,
+  "skipped_documents": {},
+  "documents": 23,
+  "chunks": 369
+ },
+ "evidence_records": 248,
+ "distinct_chunk_ids": 112,
+ "failed": 0,
+ "findings": [
+  {
+   "where": "entity:agentdiary",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:agentdiary",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": false,
+   "quote": "Sibling of the `agentdiary` CLI (personal agent diary across machines) and `dsh-super-agent` (admission control & trust ladder for any CLI agent).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:agentdiary-dsh-plugin",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "8aaa9dbc-c9a2-4e9b-84e7-4252fe7266ca",
+   "grounded": false,
+   "quote": "2. ~~Live smoke~~ **PASSED 2026-11-18 with 0.1.3** (win11, real web turn): the day file gains a `turn N completed` entry with the event mix, `commitEveryEntry` commits land on the chain, zero warnings.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:binance",
+   "doc": "dsh-ccxt",
+   "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4",
+   "grounded": false,
+   "quote": "python3 scripts/ccxt_bridge.py --run market.fetch_ticker --params '{\"exchange\":\"binance\",\"symbol\":\"BTC/USDT\"}'",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:binance",
+   "doc": "dsh-hummingbot",
+   "chunk_id": "28dbd7bd-153d-4f3a-8c85-36dec305d3c0",
+   "grounded": false,
+   "quote": "Real smoke (2026-11-16, binance BTC/USDT 500×1m via relay): **48 buys / 48 sells,",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:Buffett",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:Buffett",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239",
+   "grounded": true,
+   "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:Buffett",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319",
+   "grounded": true,
+   "quote": "the four guest seats split three ways — Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:Buffett",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09",
+   "grounded": false,
+   "quote": "Buffett / Munger / Lynch / Wood",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:ccxt_bridge.py",
+   "doc": "dsh-ccxt",
+   "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4",
+   "grounded": false,
+   "quote": "python3 scripts/ccxt_bridge.py --run market.fetch_ticker --params '{\"exchange\":\"binance\",\"symbol\":\"BTC/USDT\"}'",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:ccxt_research.py",
+   "doc": "dsh-ccxt",
+   "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4",
+   "grounded": false,
+   "quote": "python3 scripts/ccxt_research.py --question \"BTC 近 90 日量价结构？\" --save",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:Cordis",
+   "doc": "dsh-evidence-plugin",
+   "chunk_id": "81cf02d8-27a7-45d8-b746-7fc1e8cf2580",
+   "grounded": false,
+   "quote": "- **Cordis** (`index.ts`) — DeepSeek Harness, the original.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:deepseek-ai/dsh-superagent-prototype",
+   "doc": "dsh-weknora-ops",
+   "chunk_id": "a12a7122-9a20-4c7c-a71b-57e88abf3ba5",
+   "grounded": false,
+   "quote": "- [deepseek-ai/dsh-superagent-prototype](https://github.com/deepseek-ai/dsh-superagent-prototype) (MIT) — the observed bundle format this repo follows.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:deepseek-bot",
+   "doc": "dsh-super-agent",
+   "chunk_id": "a9de54b0-8a06-4d82-8ef5-8528490b45f3",
+   "grounded": false,
+   "quote": "[deepseek-bot](https://github.com/vicfei/deepseek-bot) — a personal agent runtime guarded end-to-end by a hash-chained ledger and a constitution layer: this project guards coding agents at the gate, that one guards a personal agent over months of runtime",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:deepseek-chat",
+   "doc": "dsh-evoontology",
+   "chunk_id": "87c881ff-bba9-4689-8a93-0b3a8289975a",
+   "grounded": false,
+   "quote": "Proposer `deepseek-chat`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:deepseek-harness",
+   "doc": "dsh-super-agent",
+   "chunk_id": "84c65ce5-124f-4d7f-9038-f85e40287859",
+   "grounded": false,
+   "quote": "- [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:diary",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "72745891-0a7e-4f1a-bad6-091a1360396a",
+   "grounded": false,
+   "quote": "The diary is the counterweight — an append-only, git-native record of what was done and said, re-readable after the context is gone.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:diary entry",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-agentdiary-plugin",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "b958f2e7-a934-49d8-9a09-2fedada6f4c8",
+   "grounded": false,
+   "quote": "dsh plugin --profile web add dsh-agentdiary-plugin",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-ai-hedge-fund",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "e525f22d-a132-4c26-8c37-88bc4db34aae",
+   "grounded": true,
+   "quote": "Inspired by [virattt/ai-hedge-fund](https://github.com/virattt/ai-hedge-fund) —\n> restructured as a native DeepSeek Harness experience.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-ai-hedge-fund",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": false,
+   "quote": "# dsh-ai-hedge-fund — an AI hedge fund of investor legends, on DeepSeek Harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-ai-hedge-fund",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "93581b58-27d6-4f03-8801-8a5eb2070339",
+   "grounded": false,
+   "quote": "| | ai-hedge-fund | **dsh-ai-hedge-fund** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-ai-hedge-fund",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "a864fcc5-db22-4ab2-a3f9-ab26c62e1d4b",
+   "grounded": false,
+   "quote": "git clone https://github.com/vicfei/dsh-ai-hedge-fund && cd dsh-ai-hedge-fund",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-ai-hedge-fund",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "2cc3760b-1b20-456d-ad8c-0d69491a9a45",
+   "grounded": false,
+   "quote": "v0 engine smoke-tested (see `memos/`). Real-data adapters (US & A-share, zero keys, CN-cloud friendly ladder) inherited from the sister project.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-ai-hedge-fund",
+   "doc": "dsh-ccxt",
+   "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193",
+   "grounded": false,
+   "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-ai-hedge-fund",
+   "doc": "dsh-kronos",
+   "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907",
+   "grounded": false,
+   "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-ai-hedge-fund",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09",
+   "grounded": false,
+   "quote": "from sister repo dsh-ai-hedge-fund;",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-ai-hedge-fund",
+   "doc": "dsh-vibe-trading",
+   "chunk_id": "cdbe9d1d-7b24-4f27-8991-b70f3d6900d9",
+   "grounded": false,
+   "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) (persona fund).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-auto-ontology",
+   "doc": "dsh-auto-ontology",
+   "chunk_id": "ea32d0ec-d751-47c5-8247-bdc08c0b6d10",
+   "grounded": true,
+   "quote": "# dsh-auto-ontology — auto ontology construction with evidence, for DeepSeek Harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-auto-ontology",
+   "doc": "dsh-auto-ontology",
+   "chunk_id": "df423ea1-87ca-4e7a-a277-c2fad7b7ad17",
+   "grounded": true,
+   "quote": "With the plugin installed, agents get `ontology_build` / `ontology_query` /\n`ontology_export` as typed tools (`dsh plugin add dsh-auto-ontology`).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-auto-ontology",
+   "doc": "dsh-evoontology",
+   "chunk_id": "599e1e08-391e-438d-85a6-af514c01ab00",
+   "grounded": true,
+   "quote": "**E2, the first adapter** — the family's own [dsh-auto-ontology](https://github.com/vicfei/dsh-auto-ontology)\nplugs in: its `ao-trajectory/0.1`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-auto-ontology",
+   "doc": "dsh-auto-ontology",
+   "chunk_id": "b1cc7f3f-db49-48f3-a4d0-3348a94c8d9e",
+   "grounded": false,
+   "quote": "Implements the concept of [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology)\n> (13.3k★) natively for DSH, with the family's evidence discipline.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-auto-ontology",
+   "doc": "dsh-auto-ontology",
+   "chunk_id": "7e5a53c4-1b72-4001-bfc3-07935eb0cbc6",
+   "grounded": false,
+   "quote": "| | NVIDIA auto-ontology (upstream) | ontology viewers/bridges | **dsh-auto-ontology** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-auto-ontology",
+   "doc": "dsh-evoontology",
+   "chunk_id": "0a9a4a30-8b43-49f3-a3f5-97eeb1f506a0",
+   "grounded": false,
+   "quote": "dsh-auto-ontology builds a typed layer from documents and keeps the judge's verdict on every quote.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-auto-ontology",
+   "doc": "dsh-evoontology",
+   "chunk_id": "87c881ff-bba9-4689-8a93-0b3a8289975a",
+   "grounded": false,
+   "quote": "A dsh-auto-ontology build over the 23 public READMEs of the plugin family, folded once and certified twice",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-CCXT",
+   "doc": "dsh-ccxt",
+   "chunk_id": "a5241405-bd85-4a12-9f68-e42e184aa884",
+   "grounded": true,
+   "quote": "# dsh-CCXT — 100+ crypto exchanges as DeepSeek Harness tools, fail-closed by design",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-CCXT",
+   "doc": "dsh-ccxt",
+   "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193",
+   "grounded": false,
+   "quote": "Built on [ccxt](https://github.com/ccxt/ccxt) (44.9k★, MIT) — independent community bridge, not affiliated.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-CCXT",
+   "doc": "dsh-ccxt",
+   "chunk_id": "0b07ecb3-3038-4f40-a21d-eaac0d068296",
+   "grounded": false,
+   "quote": "This is the **standalone, agent-first bridge** — and the only one with a trading guard:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-CCXT",
+   "doc": "dsh-ccxt",
+   "chunk_id": "a4cc47dc-12e5-4b15-9ba6-5edf7565bceb",
+   "grounded": false,
+   "quote": "| | raw ccxt via bash | invest-app ccxt providers | **dsh-CCXT** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-CCXT",
+   "doc": "dsh-ccxt",
+   "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4",
+   "grounded": false,
+   "quote": "git clone https://github.com/vicfei/dsh-CCXT && cd dsh-CCXT",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-CCXT",
+   "doc": "dsh-ccxt",
+   "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361",
+   "grounded": false,
+   "quote": "v0 bridge + guard + research engine smoke-tested on live data.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-CCXT",
+   "doc": "dsh-ccxt",
+   "chunk_id": "76f1e6cb-c0cb-4b1e-9142-dae03442e80b",
+   "grounded": false,
+   "quote": "M2 **native TypeScript cordis plugin** (ccxt is JS-first — this family member goes\npure-TS naturally).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-CCXT",
+   "doc": "dsh-freqtrade",
+   "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-compaction-semantic",
+   "doc": "dsh-compaction-semantic",
+   "chunk_id": "f500fd31-8918-403a-8f67-d1fb5ca39975",
+   "grounded": true,
+   "quote": "# dsh-compaction-semantic — semantic context compaction for DeepSeek Harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-compaction-semantic",
+   "doc": "dsh-compaction-semantic",
+   "chunk_id": "f7f0d231-ffd7-42f9-9381-6cc82caa8e22",
+   "grounded": false,
+   "quote": "That slot is this repo.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-compaction-semantic",
+   "doc": "dsh-compaction-semantic",
+   "chunk_id": "0b9b8b0e-1c33-4a8a-9567-d0d54977f3b0",
+   "grounded": false,
+   "quote": "Install dsh-compaction-semantic from https://github.com/vicfei/dsh-compaction-semantic into this profile: run `dsh plugin --profile <name> add dsh-compaction-semantic`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": false,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": false,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-evidence-plugin",
+   "doc": "dsh-evidence-plugin",
+   "chunk_id": "54d62040-9a4b-4016-aad7-ab43507e092d",
+   "grounded": false,
+   "quote": "From the plugin market, or `dsh plugin --profile web add dsh-evidence-plugin`.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-EvoOntology",
+   "doc": "dsh-auto-ontology",
+   "chunk_id": "794c75e1-b83b-4811-98e3-549a48be2d56",
+   "grounded": false,
+   "quote": "dsh-EvoOntology's adapter imports it, projects the layer (one Term per typing, every quote with its verdict), asks a model for a better typing of each ungrounded Term",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-EvoOntology",
+   "doc": "dsh-evoontology",
+   "chunk_id": "e5c2c701-3836-451d-8eaa-0935256a392b",
+   "grounded": false,
+   "quote": "# dsh-EvoOntology — a self-evolving ontology layer for DeepSeek Harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-EvoOntology",
+   "doc": "dsh-evoontology",
+   "chunk_id": "599e1e08-391e-438d-85a6-af514c01ab00",
+   "grounded": false,
+   "quote": "**Phase E1 complete** — the zero-LLM kernel ships:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-freqtrade",
+   "doc": "dsh-freqtrade",
+   "chunk_id": "b24a2918-1a13-4117-88c1-559ce5cccb89",
+   "grounded": false,
+   "quote": "# dsh-freqtrade — a GPL-free strategy-bot toolkit for DeepSeek Harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-freqtrade",
+   "doc": "dsh-freqtrade",
+   "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2",
+   "grounded": false,
+   "quote": "Concept slot of [freqtrade](https://github.com/freqtrade/freqtrade) (57k★) +\n> [freqtrade-strategies](https://github.com/freqtrade/freqtrade-strategies) (5.7k★),\n> **rebuilt clean-room for DSH** — see the license posture below.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-freqtrade",
+   "doc": "dsh-freqtrade",
+   "chunk_id": "86f93c72-3802-4691-8a72-5c32dc12425f",
+   "grounded": false,
+   "quote": "git clone https://github.com/vicfei/dsh-freqtrade && cd dsh-freqtrade",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-genui",
+   "doc": "dsh-uigen",
+   "chunk_id": "e3875939-45f0-436f-a129-f2b968d3f774",
+   "grounded": false,
+   "quote": "and `dsh-genui` renders the result inline in the conversation.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-hummingbot",
+   "doc": "dsh-hummingbot",
+   "chunk_id": "0a79f867-c354-4261-896a-3b545c974eda",
+   "grounded": false,
+   "quote": "# dsh-hummingbot — market making, natively on DeepSeek Harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-hummingbot",
+   "doc": "dsh-hummingbot",
+   "chunk_id": "22fb9b71-03eb-4b36-a042-86ea77f110b8",
+   "grounded": false,
+   "quote": "Implements the core concept of [Hummingbot](https://github.com/hummingbot/hummingbot)\n> (21.2k★) — pure market making — as a native DSH engine; the heavy upstream app\n> (Docker) joins in M2 as the live executor behind the family's fail-closed guard.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-hummingbot",
+   "doc": "dsh-hummingbot",
+   "chunk_id": "e85d93de-c0a5-4204-8e5b-28f46d4f9134",
+   "grounded": false,
+   "quote": "| | Hummingbot app (Docker) | **dsh-hummingbot** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-hummingbot",
+   "doc": "dsh-jesse",
+   "chunk_id": "516a6230-b74e-453b-a193-4ce0a8353756",
+   "grounded": false,
+   "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) (MM) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-hummingbot",
+   "doc": "dsh-kronos",
+   "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907",
+   "grounded": false,
+   "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-hummingbot",
+   "doc": "dsh-quantstats",
+   "chunk_id": "2020e77a-329b-4501-9cbd-6b139eb3fd6c",
+   "grounded": false,
+   "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-jesse](https://github.com/vicfei/dsh-jesse).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-jesse",
+   "doc": "dsh-jesse",
+   "chunk_id": "05150703-f95b-45ef-b9c7-6fa5de8bffae",
+   "grounded": false,
+   "quote": "# dsh-jesse — strategy optimization for DeepSeek Harness, with the overfit meter on",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-jesse",
+   "doc": "dsh-jesse",
+   "chunk_id": "edcbcab2-19c3-4452-8174-b78c0dea78d9",
+   "grounded": false,
+   "quote": "Implements the core concept of [Jesse](https://github.com/jesse-ai/jesse) (8.8k★) — the optimization loop — natively for DSH, with anti-overfit discipline borrowed from the factor-research world.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-jesse",
+   "doc": "dsh-jesse",
+   "chunk_id": "caa58631-78b1-49ca-a311-91601744066a",
+   "grounded": false,
+   "quote": "dsh-jesse is the **zero-dependency auditable lightweight** for the DSH session: stdlib-only, honest-by-construction reports, family artifact interop.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-jesse",
+   "doc": "dsh-jesse",
+   "chunk_id": "416d4a23-f641-4146-bd0e-abd936a88c89",
+   "grounded": false,
+   "quote": "| | upstream jesse (complement) | dsh-nautilus_trader (sibling) | **dsh-jesse** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-jesse",
+   "doc": "dsh-jesse",
+   "chunk_id": "76a43333-8313-46fe-8ea2-ac3d2c22b837",
+   "grounded": false,
+   "quote": "git clone https://github.com/vicfei/dsh-jesse && cd dsh-jesse",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-jesse",
+   "doc": "dsh-quantstats",
+   "chunk_id": "2020e77a-329b-4501-9cbd-6b139eb3fd6c",
+   "grounded": false,
+   "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-jesse](https://github.com/vicfei/dsh-jesse).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Kronos",
+   "doc": "dsh-kronos",
+   "chunk_id": "3ed78cf9-f96d-4c11-ac70-ae27174a9650",
+   "grounded": false,
+   "quote": "# dsh-Kronos — K-line scenario forecasting for DeepSeek Harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Kronos",
+   "doc": "dsh-kronos",
+   "chunk_id": "53ec6148-2f1e-466d-a837-c5cab9bf922b",
+   "grounded": false,
+   "quote": "npm i -g dsh-kronos             # or: dsh plugin add dsh-kronos",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Kronos",
+   "doc": "dsh-kronos",
+   "chunk_id": "1a6046c8-9563-422f-8d37-23e2c2895415",
+   "grounded": false,
+   "quote": "git clone https://github.com/vicfei/dsh-Kronos && cd dsh-kronos",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Kronos v0",
+   "doc": "dsh-kronos",
+   "chunk_id": "53ec6148-2f1e-466d-a837-c5cab9bf922b",
+   "grounded": false,
+   "quote": "| Role | learned conditional structure | **the anchor any learned model must beat** — and the honest fallback when weights/network aren't there |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Kronos v0 (baseline)",
+   "doc": "dsh-kronos",
+   "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907",
+   "grounded": false,
+   "quote": "| | Kronos (neural FM) | **dsh-Kronos v0 (baseline)** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Nautilus",
+   "doc": "dsh-nautilus",
+   "chunk_id": "5bbca2b2-5015-4149-8c56-db8ac05d0187",
+   "grounded": true,
+   "quote": "# dsh-Nautilus — a professional backtesting engine as DeepSeek Harness tools",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Nautilus",
+   "doc": "dsh-nautilus",
+   "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914",
+   "grounded": false,
+   "quote": "Built on [NautilusTrader](https://github.com/nautechsystems/nautilus_trader) (31.6k★) — independent community bridge, not affiliated.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-Nautilus",
+   "doc": "dsh-nautilus",
+   "chunk_id": "e6db34ff-fdd0-430f-b4d8-07889b60d15e",
+   "grounded": false,
+   "quote": "| | toy SMA cross in dsh-Vibe-Trading | **dsh-Nautilus** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-nautilus_trader",
+   "doc": "dsh-freqtrade",
+   "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2",
+   "grounded": false,
+   "quote": "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-nautilus_trader",
+   "doc": "dsh-jesse",
+   "chunk_id": "416d4a23-f641-4146-bd0e-abd936a88c89",
+   "grounded": false,
+   "quote": "| | upstream jesse (complement) | dsh-nautilus_trader (sibling) | **dsh-jesse** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-OpenBB",
+   "doc": "dsh-openbb",
+   "chunk_id": "d07245c1-b908-4609-b42e-7d4ff302759d",
+   "grounded": true,
+   "quote": "# dsh-OpenBB — the OpenBB data platform as DeepSeek Harness tools",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-OpenBB",
+   "doc": "dsh-ccxt",
+   "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-OpenBB",
+   "doc": "dsh-ccxt",
+   "chunk_id": "0b07ecb3-3038-4f40-a21d-eaac0d068296",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-OpenBB",
+   "doc": "dsh-freqtrade",
+   "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-OpenBB",
+   "doc": "dsh-nautilus",
+   "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-OpenBB",
+   "doc": "dsh-openbb",
+   "chunk_id": "53998508-7049-428c-9241-57b53f39dcb4",
+   "grounded": false,
+   "quote": "Built on [OpenBB](https://github.com/openbq-org/OpenBB) — independent community bridge, not affiliated. Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) · [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) · [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-OpenBB",
+   "doc": "dsh-openbb",
+   "chunk_id": "35911607-dfb2-4121-826a-5a42f69ad2c3",
+   "grounded": false,
+   "quote": "| | raw `pip install openbb` in DSH | **dsh-OpenBB** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-OpenBB",
+   "doc": "dsh-openbb",
+   "chunk_id": "78a23d67-667f-4209-85cf-9323d08a32a1",
+   "grounded": false,
+   "quote": "MIT bridge over Apache-2.0 upstream — no upstream code vendored; install via pip.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-plugin-atlas",
+   "doc": "dsh-super-agent",
+   "chunk_id": "03d7dea1-677c-43de-954c-446192aa4a10",
+   "grounded": true,
+   "quote": "[dsh-plugin-atlas](https://github.com/vicfei/dsh-plugin-atlas) — a live, daily-refreshed map of the whole DSH plugin ecosystem",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-QuantLib",
+   "doc": "dsh-quantlib",
+   "chunk_id": "9c4cf0ec-9335-4294-bd77-c9aba8508155",
+   "grounded": true,
+   "quote": "# dsh-QuantLib — derivatives pricing as DeepSeek Harness tools",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-QuantLib",
+   "doc": "dsh-quantlib",
+   "chunk_id": "cb7e537e-f88a-4d06-baea-0af1f473ea77",
+   "grounded": false,
+   "quote": "Implements the core of [QuantLib](https://github.com/lballabio/QuantLib) —\n> the standard open-source quant finance library — natively for DSH.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-QuantLib",
+   "doc": "dsh-quantlib",
+   "chunk_id": "e399fc7c-4f0d-48dc-acdf-b03497192c93",
+   "grounded": false,
+   "quote": "| | QuantLib (C++/SWIG) | **dsh-QuantLib** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-quantstats",
+   "doc": "dsh-quantstats",
+   "chunk_id": "5486f42c-16c2-48b3-a1e9-50b551bf3f33",
+   "grounded": true,
+   "quote": "| Form | Python library for notebooks | **DSH plugin** — agent asks, report out |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-quantstats",
+   "doc": "dsh-quantlib",
+   "chunk_id": "e399fc7c-4f0d-48dc-acdf-b03497192c93",
+   "grounded": false,
+   "quote": "[dsh-quantstats](https://github.com/vicfei/dsh-quantstats).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-quantstats",
+   "doc": "dsh-quantstats",
+   "chunk_id": "e3fef65b-3b13-4991-b0fc-06f87c1648c8",
+   "grounded": false,
+   "quote": "# dsh-quantstats — performance tearsheets for DeepSeek Harness, honesty included",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-quantstats",
+   "doc": "dsh-quantstats",
+   "chunk_id": "3ef70155-7d10-4ac6-97d1-fa42d950622d",
+   "grounded": false,
+   "quote": "Implements the core concept of [QuantStats](https://github.com/ranaroussi/quantstats) (7.9k★, by the yfinance author) natively for DSH.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-quantstats",
+   "doc": "dsh-quantstats",
+   "chunk_id": "a16503d5-1c58-4b68-bc54-526c343fffab",
+   "grounded": false,
+   "quote": "dsh-quantstats is the **DSH-session report layer**: zero-dependency, every metric rides with its caliber (period-based, disclosed), inline-SVG tearsheets, family-artifact consumption (committee ledgers, engine series).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-quantstats",
+   "doc": "dsh-quantstats",
+   "chunk_id": "53702145-0aba-4c4f-9d4b-1e5b4fc8d522",
+   "grounded": false,
+   "quote": "| | upstream quantstats (complement) | **dsh-quantstats** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-quantstats",
+   "doc": "dsh-quantstats",
+   "chunk_id": "f9e4f5e0-545c-4dde-8a11-4c50238b8d75",
+   "grounded": false,
+   "quote": "| | QuantStats library | **dsh-quantstats** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-quantstats",
+   "doc": "dsh-quantstats",
+   "chunk_id": "e99ef79d-a964-401a-a541-fb7bd16f992d",
+   "grounded": false,
+   "quote": "git clone https://github.com/vicfei/dsh-quantstats && cd dsh-quantstats",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-super-agent",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": false,
+   "quote": "Sibling of the `agentdiary` CLI (personal agent diary across machines) and `dsh-super-agent` (admission control & trust ladder for any CLI agent).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-super-agent",
+   "doc": "dsh-evidence-plugin",
+   "chunk_id": "7f59d6d0-f3f6-4cb1-90b0-e84705526427",
+   "grounded": false,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin porting the v1.5 evidence ledger of [dsh-super-agent](https://github.com/vicfei/dsh-super-agent) into the official harness: trust is not a claim, it's a chain you can verify.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-super-agent",
+   "doc": "dsh-super-agent",
+   "chunk_id": "00b43630-6a23-49f9-bf3f-063ff63a27cd",
+   "grounded": false,
+   "quote": "# dsh-super-agent",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-super-agent",
+   "doc": "dsh-super-agent",
+   "chunk_id": "ea27ba84-2799-4392-b02e-a9821d92ba7b",
+   "grounded": false,
+   "quote": "orchestration design — the part every other orchestrator skipped: **who is allowed to start work, and how you learn to trust it.**",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-super-agent",
+   "doc": "dsh-super-agent",
+   "chunk_id": "90197e20-2bb2-4bc7-aad3-535f9d6fbd6d",
+   "grounded": false,
+   "quote": "git clone https://github.com/vicfei/dsh-super-agent && cd dsh-super-agent",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-super-agent",
+   "doc": "dsh-weknora-ops",
+   "chunk_id": "d31197f6-9a25-4b8b-8538-0ed719a32d8d",
+   "grounded": false,
+   "quote": "This mirrors the admission-control philosophy of [dsh-super-agent](https://github.com/vicfei/dsh-super-agent): trust is structural, not persuaded.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-superagent-prototype",
+   "doc": "dsh-super-agent",
+   "chunk_id": "84c65ce5-124f-4d7f-9038-f85e40287859",
+   "grounded": false,
+   "quote": "- [dsh-superagent-prototype](https://github.com/deepseek-ai/dsh-superagent-prototype) (MIT) — docs 000–008 are the specification this project follows; the admission-table semantics, observe mode and ticket stages are adapted from docs 002 and 003 with gratitude.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-TradingAgents",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "d8f2b756-0446-458b-9aa8-ec056b0edc2c",
+   "grounded": true,
+   "quote": "Install as a plugin (npm 0.1.0, ships the engine + skill):",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-TradingAgents",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "e525f22d-a132-4c26-8c37-88bc4db34aae",
+   "grounded": false,
+   "quote": "Sister project of [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)\n> (the bull/bear debate committee).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-TradingAgents",
+   "doc": "dsh-ccxt",
+   "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193",
+   "grounded": false,
+   "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-TradingAgents",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "fdaa952b-a35e-4d14-b18c-c991a4cbfd31",
+   "grounded": false,
+   "quote": "# dsh-tradingagents — TradingAgents, natively on DeepSeek Harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-TradingAgents",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "dde84593-20c6-47f4-a350-524f9d463e37",
+   "grounded": false,
+   "quote": "Inspired by [Tauric Research's TradingAgents](https://github.com/TauricResearch/TradingAgents) and\n> [virattt/ai-hedge-fund](https://github.com/virattt/ai-hedge-fund) — restructured as a\n> native DeepSeek Harness experience.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-TradingAgents",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "53497b14-dd8c-4177-a966-177e6ccb517b",
+   "grounded": false,
+   "quote": "| | TradingAgents | ai-hedge-fund | **dsh-tradingagents** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-TradingAgents",
+   "doc": "dsh-vibe-trading",
+   "chunk_id": "cdbe9d1d-7b24-4f27-8991-b70f3d6900d9",
+   "grounded": false,
+   "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)\n> (bull/bear committee)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-trustquant",
+   "doc": "dsh-trustquant",
+   "chunk_id": "422dce00-00d5-4b8d-91e8-36aa716b35cf",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://www.deepseek.com/en/harness/) plugin (skill + `trustquant-dsh` CLI passthrough) for [TrustQuant](https://github.com/vicfei/trustquant) — the open, local-first, agent-facing financial tool layer (Apache-2.0).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-trustquant",
+   "doc": "dsh-trustquant",
+   "chunk_id": "6671ae55-e13e-4f1d-a964-570c63b912f4",
+   "grounded": true,
+   "quote": "This plugin makes the honest path the easy path: **compute, don't recall** — and when the tool refuses (american option, >10y swap, missing provider), the answer is the structured error, never an approximation.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-trustquant",
+   "doc": "dsh-trustquant",
+   "chunk_id": "9fcf4f6d-fa11-4768-a1e8-5581288a6012",
+   "grounded": false,
+   "quote": "npm i -g vicfei/dsh-trustquant          # exposes trustquant-dsh",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-uigen",
+   "doc": "dsh-uigen",
+   "chunk_id": "cb061aee-5b81-4a5e-8147-6eedd1c14f95",
+   "grounded": true,
+   "quote": "`Install dsh-uigen from https://github.com/vicfei/dsh-uigen into this profile: run \\`dsh plugin --profile <name> add dsh-uigen\\` AND add \"dsh-uigen\" to the profile's dsh.profile.bundles list, then verify the ui_compose tool answers.`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-uigen",
+   "doc": "dsh-uigen",
+   "chunk_id": "08961c9b-e035-473d-828e-1a8beed03d65",
+   "grounded": false,
+   "quote": "# dsh-uigen — generate-and-render inline UI components for DeepSeek Harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-uigen",
+   "doc": "dsh-uigen",
+   "chunk_id": "e3875939-45f0-436f-a129-f2b968d3f774",
+   "grounded": false,
+   "quote": "dsh-uigen completes the loop with the generation quality neither has.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:dsh-Vibe-Trading",
+   "doc": "dsh-vibe-trading",
+   "chunk_id": "a56eef8c-5879-4196-9336-bb0ccd77ca73",
+   "grounded": true,
+   "quote": "npm i -g dsh-vibe-trading          # or: dsh plugin add dsh-vibe-trading",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Vibe-Trading",
+   "doc": "dsh-ccxt",
+   "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193",
+   "grounded": false,
+   "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Vibe-Trading",
+   "doc": "dsh-jesse",
+   "chunk_id": "516a6230-b74e-453b-a193-4ce0a8353756",
+   "grounded": false,
+   "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Vibe-Trading",
+   "doc": "dsh-kronos",
+   "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907",
+   "grounded": false,
+   "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Vibe-Trading",
+   "doc": "dsh-vibe-trading",
+   "chunk_id": "9fd00821-1908-4829-8211-b12967ccd55c",
+   "grounded": false,
+   "quote": "# dsh-vibe-trading — interactive trading research, natively on DeepSeek Harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Vibe-Trading",
+   "doc": "dsh-vibe-trading",
+   "chunk_id": "cdbe9d1d-7b24-4f27-8991-b70f3d6900d9",
+   "grounded": false,
+   "quote": "Inspired by [HKUDS/Vibe-Trading](https://github.com/HKUDS/Vibe-Trading) —\n> restructured as a native DeepSeek Harness experience.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Vibe-Trading",
+   "doc": "dsh-vibe-trading",
+   "chunk_id": "931499cc-a8c3-455e-8be6-1e3b7d8335bb",
+   "grounded": false,
+   "quote": "| | raw Vibe-Trading MCP in DSH | **dsh-vibe-trading** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-Vibe-Trading",
+   "doc": "dsh-vibe-trading",
+   "chunk_id": "6fe74990-50c7-40dc-9dd2-1256009c06b4",
+   "grounded": false,
+   "quote": "git clone https://github.com/vicfei/dsh-Vibe-Trading && cd dsh-vibe-trading",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-weknora-ops",
+   "doc": "dsh-weknora-ops",
+   "chunk_id": "5789b745-c70c-4a7b-9730-a2f8f8f0c00b",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://www.deepseek.com/en/harness/) plugin (skill + `weknora-ops` CLI) for [WeKnora](https://github.com/Tencent/WeKnora)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-weknora-ops",
+   "doc": "dsh-super-agent",
+   "chunk_id": "03d7dea1-677c-43de-954c-446192aa4a10",
+   "grounded": false,
+   "quote": "[dsh-weknora-ops](https://github.com/vicfei/dsh-weknora-ops) — the WeKnora write path with the same philosophy: trust is structural, not persuaded",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-weknora-ops",
+   "doc": "dsh-weknora-ops",
+   "chunk_id": "f009c015-7091-490a-88d1-6a6236e5e26c",
+   "grounded": false,
+   "quote": "npm i -g dsh-weknora-ops        # exposes the weknora-ops CLI",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-weknora-ops",
+   "doc": "dsh-weknora-ops",
+   "chunk_id": "62a0d68e-d228-4f5a-8f41-f7a1a985bc60",
+   "grounded": false,
+   "quote": "with cited hits; the run also caught and fixed two real integration bugs (env scrubbing → config file; `query_text`/`match_count` on v0.8.0-line servers).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-WrenAI",
+   "doc": "dsh-wrenai",
+   "chunk_id": "47ce5b01-e608-464e-8c4f-3ca539c9d1e9",
+   "grounded": true,
+   "quote": "Implements the differentiated core of [WrenAI](https://github.com/Canner/WrenAI)\n> (18.3k★ — GenBI / governed text-to-SQL) natively for\n> [DeepSeek Harness](https://github.com/deepseek-ai): the **self-hosted\n> semantic layer**.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-WrenAI",
+   "doc": "dsh-wrenai",
+   "chunk_id": "47d446a6-ed40-488f-9c8f-33e50dc0b517",
+   "grounded": true,
+   "quote": "the npm package is a thin launcher plus the DSH plugin manifest and skill",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-WrenAI",
+   "doc": "dsh-wrenai",
+   "chunk_id": "244a9c5d-7da0-4eeb-9901-f3fed5b1ed65",
+   "grounded": false,
+   "quote": "# dsh-WrenAI — a self-hosted semantic layer for DeepSeek Harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-WrenAI",
+   "doc": "dsh-wrenai",
+   "chunk_id": "448ec792-d33f-41ba-ab74-8ff0df977961",
+   "grounded": false,
+   "quote": "| | raw NL2SQL plugins | **dsh-WrenAI** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-WrenAI",
+   "doc": "dsh-wrenai",
+   "chunk_id": "e04f607e-6c4a-4a7e-809b-8581012f9211",
+   "grounded": false,
+   "quote": "git clone https://github.com/vicfei/dsh-WrenAI && cd dsh-wrenai",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:evidence ledger for DeepSeek Harness",
+   "doc": "dsh-evidence-plugin",
+   "chunk_id": "7f59d6d0-f3f6-4cb1-90b0-e84705526427",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin porting the v1.5 evidence ledger of [dsh-super-agent](https://github.com/vicfei/dsh-super-agent) into the official harness",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:evidence tag",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "**Every claim carries an evidence tag.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:exchange",
+   "doc": "dsh-ccxt",
+   "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361",
+   "grounded": false,
+   "quote": "Real smoke (2026-11-17, binance via relay, 8s, temperature=0): BTC −16.2% over the visible window with **volume expanding into the breakdown**",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:fast-jev-compaction",
+   "doc": "dsh-compaction-semantic",
+   "chunk_id": "dfb6ab20-a878-4dc3-8247-0633078fea75",
+   "grounded": false,
+   "quote": "The strongest pain signal in the entire cross-harness dataset: the original `fast-jev-compaction`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:format-anything",
+   "doc": "format-anything",
+   "chunk_id": "7ac1fc4f-ab25-4813-bce2-d28880e18feb",
+   "grounded": false,
+   "quote": "`Install format-anything from https://github.com/vicfei/format-anything (npm i -g format-anything), then run \\`format-anything analyze <file>\\` on my mystery file and show me the FORMAT.md it produces.`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:guard",
+   "doc": "dsh-ccxt",
+   "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4",
+   "grounded": false,
+   "quote": "The guard, demonstrated:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:IC-MEMO",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "每个主张带证据标签，输出可审计的 IC-MEMO。",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:IC-MEMO",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "93581b58-27d6-4f03-8801-8a5eb2070339",
+   "grounded": true,
+   "quote": "| Output | trade tables | **[IC-MEMO](templates/IC-MEMO.md)** — auditable open format |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:IC-MEMO",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239",
+   "grounded": true,
+   "quote": "portfolio manager ──► IC-MEMO\n                    (names its influences; dissent recorded)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:IC-MEMO",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "53497b14-dd8c-4177-a966-177e6ccb517b",
+   "grounded": true,
+   "quote": "| Output | text logs | trades table | **[IC-MEMO](templates/IC-MEMO.md)** — open, auditable memo format |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:IC-MEMO",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "5e07ad13-a63a-42fb-84e9-decda68f0a4a",
+   "grounded": true,
+   "quote": "Every session emits an [IC-MEMO](templates/IC-MEMO.md): decision yaml head, tagged\nfact layer, full debate, guardrails, and a verdict that must name its influences.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:IC-MEMO",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "fdaa952b-a35e-4d14-b18c-c991a4cbfd31",
+   "grounded": false,
+   "quote": "![IC-MEMO](resource://8uw-SNRKFHgQoXXfJr3AoA)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:IC-MEMO",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319",
+   "grounded": false,
+   "quote": "The same session as a map — parsed from the archived IC-MEMO (`scripts/render_session_svg.py`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:IC-MEMO",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09",
+   "grounded": false,
+   "quote": "risk (guardrails only) ──► portfolio manager ──► IC-MEMO",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:investment committee",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "fdaa952b-a35e-4d14-b18c-c991a4cbfd31",
+   "grounded": true,
+   "quote": "**A multi-agent investment committee that debates in your terminal — every claim tagged, every verdict auditable.**",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:Kronos",
+   "doc": "dsh-kronos",
+   "chunk_id": "e826056e-58fe-4c87-937b-b2777e7575c6",
+   "grounded": false,
+   "quote": "The concept slot of [Kronos](https://github.com/shiyu-coder/Kronos) — the 47.9k★ \"foundation model for the language of financial markets\" — natively in DSH.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:Lynch",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:Lynch",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239",
+   "grounded": true,
+   "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:Lynch",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319",
+   "grounded": true,
+   "quote": "the four guest seats split three ways — Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:Lynch",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09",
+   "grounded": false,
+   "quote": "Buffett / Munger / Lynch / Wood",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:market data payload",
+   "doc": "dsh-ccxt",
+   "chunk_id": "a4cc47dc-12e5-4b15-9ba6-5edf7565bceb",
+   "grounded": true,
+   "quote": "| Provenance | — | — | exchange + fetched_at on every payload |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:market data payload",
+   "doc": "dsh-ccxt",
+   "chunk_id": "a5241405-bd85-4a12-9f68-e42e184aa884",
+   "grounded": false,
+   "quote": "Every payload carries its exchange and timestamp.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:market data payload",
+   "doc": "dsh-ccxt",
+   "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361",
+   "grounded": false,
+   "quote": "when the bridge's 15-candle payload didn't cover the requested 90d range, the findings said so",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:Munger",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:Munger",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239",
+   "grounded": true,
+   "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:Munger",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319",
+   "grounded": true,
+   "quote": "the four guest seats split three ways — Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:Munger",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09",
+   "grounded": true,
+   "quote": "Buffett / Munger / Lynch / Wood",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:NVIDIA auto-ontology",
+   "doc": "dsh-auto-ontology",
+   "chunk_id": "7e5a53c4-1b72-4001-bfc3-07935eb0cbc6",
+   "grounded": false,
+   "quote": "| | NVIDIA auto-ontology (upstream) | ontology viewers/bridges | **dsh-auto-ontology** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:OAR",
+   "doc": "dsh-evidence-plugin",
+   "chunk_id": "81cf02d8-27a7-45d8-b746-7fc1e8cf2580",
+   "grounded": false,
+   "quote": "- **OAR** (`src/adapters/oar.ts`) — [Open Agent Runtime](https://github.com/botiverse/oar):",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:ontologies/20261118-1441",
+   "doc": "dsh-auto-ontology",
+   "chunk_id": "acb6ab6f-e7ed-4a93-9901-3dd7f4b010c5",
+   "grounded": false,
+   "quote": "An earlier run with 4 organically detected type conflicts is kept as `ontologies/20261118-1441.*`.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:ontologies/20261125-1718",
+   "doc": "dsh-auto-ontology",
+   "chunk_id": "acb6ab6f-e7ed-4a93-9901-3dd7f4b010c5",
+   "grounded": false,
+   "quote": "The build judged 189 of them grounded ✓ and kept 86 flagged ⚠ — `ontologies/20261125-1718.*`.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:PASS @ 55",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "67d8fba4-5f02-4540-b167-86d13de749a6",
+   "grounded": true,
+   "quote": "**PASS @ 55** — \"Abstain rather than lean bullish or bearish… the bear's timing-mismatch argument ([R1][R2][R4]: revenue / gross margin / share all predate the price-cut signal [A7]) persuades me toward caution; [A8] undisclosed contract value and [A9] an unverifiable valuation basis are two hard gaps; the evidence does not support a ruling, so by discipline PASS — reopen when any [G8] re-review event lands.\"",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:PM",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:session/event",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:settled turn",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": true,
+   "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:trading guard",
+   "doc": "dsh-ccxt",
+   "chunk_id": "a5241405-bd85-4a12-9f68-e42e184aa884",
+   "grounded": true,
+   "quote": "Read-only market data flows freely; orders don't — a triple-armed guard with notional caps and a symbol whitelist, enforced in bridge code the LLM cannot bypass.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:trading guard",
+   "doc": "dsh-ccxt",
+   "chunk_id": "a4cc47dc-12e5-4b15-9ba6-5edf7565bceb",
+   "grounded": true,
+   "quote": "| Orders | nothing stops a fat finger | n/a | **fail-closed**: dry-run default, `--live` + env key + notional cap + whitelist |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:trading guard",
+   "doc": "dsh-ccxt",
+   "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361",
+   "grounded": false,
+   "quote": "实盘需 --live + CCXT_LIVE_TRADING=1 + 密钥三重解锁",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:trajectory",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "65607dff-3d5b-4dd7-9a26-7deeb0e518e7",
+   "grounded": false,
+   "quote": "With `trajectory: true`, every settled turn ALSO lands one JSONL line at\n`trajectories/YYYY-MM/DD-node.jsonl`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:TrustQuant",
+   "doc": "dsh-trustquant",
+   "chunk_id": "596a535d-6b08-45d8-b781-7dd76fe36053",
+   "grounded": false,
+   "quote": "TrustQuant is local, credential-free and network-free for computation — the only network step is an explicit, person-approved `trustquant provider install`.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:TrustQuant",
+   "doc": "dsh-trustquant",
+   "chunk_id": "2dbc252c-77ff-4488-b2ed-9bc20d5d4110",
+   "grounded": false,
+   "quote": "v0.1.0 — skill (three workflows + audit discipline) + CLI passthrough + doctor. TrustQuant itself: M2 complete (v0.2.0), 58 tests green, QuantLib-pinned options/rates, independent second oracle in CI.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:turn",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:turn",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a",
+   "grounded": false,
+   "quote": "Reasons you will *not* see as entries: `blocked` (retried as a new turn), `interrupted`/`forked`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:turn/end",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": true,
+   "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:vicfei dsh family",
+   "doc": "dsh-auto-ontology",
+   "chunk_id": "acb6ab6f-e7ed-4a93-9901-3dd7f4b010c5",
+   "grounded": false,
+   "quote": "A real run over the 19 public READMEs of the vicfei dsh family",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:Wood",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:Wood",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239",
+   "grounded": true,
+   "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:Wood",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319",
+   "grounded": true,
+   "quote": "the four guest seats split three ways — Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:Wood",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09",
+   "grounded": false,
+   "quote": "Buffett / Munger / Lynch / Wood",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:凯瑟琳·伍德",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3da58494-36a7-4705-be17-83e07a7d793c",
+   "grounded": false,
+   "quote": "| 凯瑟琳·伍德 | HOLD | 58 |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:彼得·林奇",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3da58494-36a7-4705-be17-83e07a7d793c",
+   "grounded": true,
+   "quote": "| 彼得·林奇 | HOLD | 55 |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:查理·芒格",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3da58494-36a7-4705-be17-83e07a7d793c",
+   "grounded": false,
+   "quote": "| 查理·芒格 | PASS | 72 |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:沃伦·巴菲特",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3da58494-36a7-4705-be17-83e07a7d793c",
+   "grounded": true,
+   "quote": "| 人格 | 立场 | 信念 |\n|---|---|---|\n| 沃伦·巴菲特 | PASS | 70 |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:沃伦·巴菲特",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "a864fcc5-db22-4ab2-a3f9-ab26c62e1d4b",
+   "grounded": false,
+   "quote": "| 沃伦·巴菲特 | PASS | 70 |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:agentdiary sibling_of dsh-super-agent",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": true,
+   "quote": "Sibling of the `agentdiary` CLI (personal agent diary across machines) and `dsh-super-agent` (admission control & trust ladder for any CLI agent).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:agentdiary subscribes_to session/event",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:agentdiary writes_entry diary entry",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:Buffett sibling_of Munger",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239",
+   "grounded": false,
+   "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:Buffett sibling_of Munger",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "65553854-e124-4e21-b039-ac4efcb39319",
+   "grounded": false,
+   "quote": "the four guest seats split three ways — Buffett/Munger PASS@72, Lynch HOLD@55, Wood BUY@62",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "relation:Buffett sibling_of dsh-ai-hedge-fund",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09",
+   "grounded": false,
+   "quote": "from sister repo dsh-ai-hedge-fund;",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:ccxt_bridge.py sibling_of ccxt_research.py",
+   "doc": "dsh-ccxt",
+   "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4",
+   "grounded": false,
+   "quote": "python3 scripts/ccxt_bridge.py --run market.fetch_ticker --params '{\"exchange\":\"binance\",\"symbol\":\"BTC/USDT\"}'\npython3 scripts/ccxt_research.py --question \"BTC 近 90 日量价结构？\" --save",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-ai-hedge-fund sibling_of dsh-TradingAgents",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "e525f22d-a132-4c26-8c37-88bc4db34aae",
+   "grounded": true,
+   "quote": "Sister project of [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)\n> (the bull/bear debate committee).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-auto-ontology sibling_of dsh-evoontology",
+   "doc": "dsh-evoontology",
+   "chunk_id": "599e1e08-391e-438d-85a6-af514c01ab00",
+   "grounded": true,
+   "quote": "**E2, the first adapter** — the family's own [dsh-auto-ontology](https://github.com/vicfei/dsh-auto-ontology)\nplugs in: its `ao-trajectory/0.1`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-ccxt sibling_of dsh-TradingAgents",
+   "doc": "dsh-ccxt",
+   "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193",
+   "grounded": true,
+   "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-ccxt sibling_of dsh-ai-hedge-fund",
+   "doc": "dsh-ccxt",
+   "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193",
+   "grounded": false,
+   "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-ccxt sibling_of dsh-Vibe-Trading",
+   "doc": "dsh-ccxt",
+   "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193",
+   "grounded": false,
+   "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-ccxt sibling_of dsh-Vibe-Trading",
+   "doc": "dsh-jesse",
+   "chunk_id": "516a6230-b74e-453b-a193-4ce0a8353756",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-ccxt sibling_of dsh-OpenBB",
+   "doc": "dsh-ccxt",
+   "chunk_id": "12709f97-1731-42e4-81f4-6089bfdba193",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-ccxt sibling_of dsh-OpenBB",
+   "doc": "dsh-ccxt",
+   "chunk_id": "0b07ecb3-3038-4f40-a21d-eaac0d068296",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-CCXT sibling_of dsh-nautilus_trader",
+   "doc": "dsh-quantstats",
+   "chunk_id": "2020e77a-329b-4501-9cbd-6b139eb3fd6c",
+   "grounded": false,
+   "quote": "[dsh-CCXT](https://github.com/vicfei/dsh-CCXT) · [dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "relation:dsh-freqtrade sibling_of dsh-TradingAgents",
+   "doc": "dsh-freqtrade",
+   "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2",
+   "grounded": true,
+   "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-freqtrade sibling_of dsh-OpenBB",
+   "doc": "dsh-freqtrade",
+   "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-freqtrade sibling_of dsh-CCXT",
+   "doc": "dsh-freqtrade",
+   "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-freqtrade sibling_of dsh-nautilus_trader",
+   "doc": "dsh-freqtrade",
+   "chunk_id": "8c253701-a549-4091-9069-a3b37bad72e2",
+   "grounded": false,
+   "quote": "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-hummingbot sibling_of dsh-TradingAgents",
+   "doc": "dsh-hummingbot",
+   "chunk_id": "22fb9b71-03eb-4b36-a042-86ea77f110b8",
+   "grounded": true,
+   "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-hummingbot sibling_of dsh-ai-hedge-fund",
+   "doc": "dsh-hummingbot",
+   "chunk_id": "22fb9b71-03eb-4b36-a042-86ea77f110b8",
+   "grounded": true,
+   "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·\n> [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-hummingbot sibling_of dsh-OpenBB",
+   "doc": "dsh-jesse",
+   "chunk_id": "516a6230-b74e-453b-a193-4ce0a8353756",
+   "grounded": false,
+   "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) (MM) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-hummingbot sibling_of dsh-Vibe-Trading",
+   "doc": "dsh-kronos",
+   "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907",
+   "grounded": false,
+   "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-hummingbot sibling_of dsh-jesse",
+   "doc": "dsh-quantstats",
+   "chunk_id": "2020e77a-329b-4501-9cbd-6b139eb3fd6c",
+   "grounded": false,
+   "quote": "[dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) · [dsh-jesse](https://github.com/vicfei/dsh-jesse).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-jesse sibling_of dsh-nautilus_trader",
+   "doc": "dsh-jesse",
+   "chunk_id": "416d4a23-f641-4146-bd0e-abd936a88c89",
+   "grounded": true,
+   "quote": "| | upstream jesse (complement) | dsh-nautilus_trader (sibling) | **dsh-jesse** |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-nautilus sibling_of dsh-TradingAgents",
+   "doc": "dsh-nautilus",
+   "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914",
+   "grounded": true,
+   "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-nautilus sibling_of dsh-ai-hedge-fund",
+   "doc": "dsh-nautilus",
+   "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914",
+   "grounded": false,
+   "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-nautilus sibling_of dsh-Vibe-Trading",
+   "doc": "dsh-nautilus",
+   "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914",
+   "grounded": false,
+   "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-nautilus sibling_of dsh-OpenBB",
+   "doc": "dsh-nautilus",
+   "chunk_id": "f04b4fe4-35af-4a6a-aaac-c8f693acf914",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-nautilus_trader sibling_of dsh-hummingbot",
+   "doc": "dsh-quantstats",
+   "chunk_id": "2020e77a-329b-4501-9cbd-6b139eb3fd6c",
+   "grounded": false,
+   "quote": "[dsh-nautilus_trader](https://github.com/vicfei/dsh-nautilus_trader) · [dsh-hummingbot](https://github.com/vicfei/dsh-hummingbot) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "relation:dsh-OpenBB sibling_of dsh-CCXT",
+   "doc": "dsh-jesse",
+   "chunk_id": "516a6230-b74e-453b-a193-4ce0a8353756",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) · [dsh-CCXT](https://github.com/vicfei/dsh-CCXT) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-QuantLib sibling_of dsh-quantstats",
+   "doc": "dsh-quantlib",
+   "chunk_id": "e399fc7c-4f0d-48dc-acdf-b03497192c93",
+   "grounded": false,
+   "quote": "[dsh-quantstats](https://github.com/vicfei/dsh-quantstats).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-quantstats sibling_of dsh-TradingAgents",
+   "doc": "dsh-quantstats",
+   "chunk_id": "3ef70155-7d10-4ac6-97d1-fa42d950622d",
+   "grounded": true,
+   "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-quantstats sibling_of dsh-ai-hedge-fund",
+   "doc": "dsh-quantstats",
+   "chunk_id": "3ef70155-7d10-4ac6-97d1-fa42d950622d",
+   "grounded": false,
+   "quote": "[dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-quantstats sibling_of dsh-Vibe-Trading",
+   "doc": "dsh-quantstats",
+   "chunk_id": "3ef70155-7d10-4ac6-97d1-fa42d950622d",
+   "grounded": false,
+   "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-quantstats sibling_of dsh-OpenBB",
+   "doc": "dsh-quantstats",
+   "chunk_id": "3ef70155-7d10-4ac6-97d1-fa42d950622d",
+   "grounded": false,
+   "quote": "[dsh-OpenBB](https://github.com/vicfei/dsh-OpenBB) ·",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-uigen sibling_of dsh-genui",
+   "doc": "dsh-uigen",
+   "chunk_id": "e3875939-45f0-436f-a129-f2b968d3f774",
+   "grounded": false,
+   "quote": "The missing layer atop two proven demands: describe→component (Magic/21st, 14k/wk — cloud-locked) and components-in-replies on DSH (dsh-genui, 9.9k/wk — render surface only).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "relation:dsh-Vibe-Trading sibling_of dsh-ai-hedge-fund",
+   "doc": "dsh-vibe-trading",
+   "chunk_id": "cdbe9d1d-7b24-4f27-8991-b70f3d6900d9",
+   "grounded": true,
+   "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)\n> (bull/bear committee) · [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) (persona fund).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-Vibe-Trading sibling_of dsh-ai-hedge-fund",
+   "doc": "dsh-kronos",
+   "chunk_id": "091a2683-f64b-48f8-aabf-b4ebf1a55907",
+   "grounded": false,
+   "quote": "[dsh-Vibe-Trading](https://github.com/vicfei/dsh-Vibe-Trading) ·\n> [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:dsh-vibe-trading sibling_of dsh-TradingAgents",
+   "doc": "dsh-vibe-trading",
+   "chunk_id": "cdbe9d1d-7b24-4f27-8991-b70f3d6900d9",
+   "grounded": true,
+   "quote": "Family: [dsh-TradingAgents](https://github.com/vicfei/dsh-TradingAgents)\n> (bull/bear committee) · [dsh-ai-hedge-fund](https://github.com/vicfei/dsh-ai-hedge-fund) (persona fund).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:evidence ledger for DeepSeek Harness sibling_of dsh-super-agent",
+   "doc": "dsh-evidence-plugin",
+   "chunk_id": "7f59d6d0-f3f6-4cb1-90b0-e84705526427",
+   "grounded": false,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin porting the v1.5 evidence ledger of [dsh-super-agent](https://github.com/vicfei/dsh-super-agent) into the official harness: trust is not a claim, it's a chain you can verify.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:evidence tag supports_claim IC-MEMO",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "每个主张带证据标签，输出可审计的 IC-MEMO。",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:exchange returns_payload market_data_payload",
+   "doc": "dsh-ccxt",
+   "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361",
+   "grounded": false,
+   "quote": "when the bridge's 15-candle payload didn't cover the requested 90d range, the findings said so",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "relation:guard guards_orders binance",
+   "doc": "dsh-ccxt",
+   "chunk_id": "3d96ed47-6023-41b8-b9a7-a8b390968ca4",
+   "grounded": false,
+   "quote": "trade.create_limit_order … → {\"guard\":\"BLOCKED\",\"reason\":\"DRY-RUN（默认）：订单未发送。\n实盘需 --live + CCXT_LIVE_TRADING=1 + 密钥三重解锁\"}",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:investment committee produces_memo IC-MEMO",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "fdaa952b-a35e-4d14-b18c-c991a4cbfd31",
+   "grounded": false,
+   "quote": "**A multi-agent investment committee that debates in your terminal — every claim tagged, every verdict auditable.**",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:Lynch sibling_of Wood",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3c914bb1-4e71-4ddf-a33b-bad115e8d239",
+   "grounded": false,
+   "quote": "Persona packs are config: value wing (Buffett/Munger) vs growth wing (Lynch/Wood)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:Lynch sibling_of dsh-ai-hedge-fund",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09",
+   "grounded": false,
+   "quote": "from sister repo dsh-ai-hedge-fund;",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:Munger sibling_of dsh-ai-hedge-fund",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09",
+   "grounded": false,
+   "quote": "from sister repo dsh-ai-hedge-fund;",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:OAR sibling_of Cordis",
+   "doc": "dsh-evidence-plugin",
+   "chunk_id": "81cf02d8-27a7-45d8-b746-7fc1e8cf2580",
+   "grounded": false,
+   "quote": "the mapping uses the same event vocabulary as the agentdiary OAR adapter, so both plugins speak identical event names across harnesses.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "relation:PM has_persona Buffett",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "relation:PM has_persona Munger",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "relation:PM has_persona Lynch",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "relation:PM has_persona Wood",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": true,
+   "quote": "**Buffett, Munger, Lynch and Wood value your ticker independently — the PM aggregates, names who moved the verdict, and records dissent.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "relation:PM produces_memo IC-MEMO",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "95c349bf-07e9-4cd1-97fc-afce24082a5d",
+   "grounded": false,
+   "quote": "每个主张带证据标签，输出可审计的 IC-MEMO。",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:settled turn settles_as turn/end",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": true,
+   "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:trading guard guards_orders exchange",
+   "doc": "dsh-ccxt",
+   "chunk_id": "a5241405-bd85-4a12-9f68-e42e184aa884",
+   "grounded": true,
+   "quote": "Read-only market data flows freely; orders don't — a triple-armed guard with notional caps and a symbol whitelist, enforced in bridge code the LLM cannot bypass.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": false
+   }
+  },
+  {
+   "where": "relation:trading guard guards_orders exchange",
+   "doc": "dsh-ccxt",
+   "chunk_id": "a4cc47dc-12e5-4b15-9ba6-5edf7565bceb",
+   "grounded": false,
+   "quote": "| Orders | nothing stops a fat finger | n/a | **fail-closed**: dry-run default, `--live` + env key + notional cap + whitelist |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:trading guard guards_orders exchange",
+   "doc": "dsh-ccxt",
+   "chunk_id": "03a130ba-bb8e-4167-bd21-906a53a23361",
+   "grounded": false,
+   "quote": "实盘需 --live + CCXT_LIVE_TRADING=1 + 密钥三重解锁",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:Wood sibling_of dsh-ai-hedge-fund",
+   "doc": "dsh-tradingagents",
+   "chunk_id": "1ad3c286-5a66-4485-b148-2d707d523e09",
+   "grounded": true,
+   "quote": "from sister repo dsh-ai-hedge-fund;",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:彼得·林奇 records_dissent 彼得·林奇",
+   "doc": "dsh-ai-hedge-fund",
+   "chunk_id": "3da58494-36a7-4705-be17-83e07a7d793c",
+   "grounded": true,
+   "quote": "而林奇与木头姐的\n异议被完整记录在案（\"可能错过 GARP 机会\"/\"低估飞轮期权价值\"）。",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   },
+   "sql": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  }
+ ]
+}

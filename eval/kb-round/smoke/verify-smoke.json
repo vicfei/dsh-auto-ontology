@@ -1,0 +1,495 @@
+{
+ "artifact": "/tmp/o5/e2/kb/smoke/20261125-1935.json",
+ "kb": {
+  "id": "035be669-f79c-458f-b119-f295d1e65859",
+  "limit": 12,
+  "skipped_documents": {},
+  "documents": 1,
+  "chunks": 12
+ },
+ "evidence_records": 30,
+ "distinct_chunk_ids": 7,
+ "failed": 0,
+ "findings": [
+  {
+   "where": "entity:aborted",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a",
+   "grounded": true,
+   "quote": "`max-tokens`, or `aborted`.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:agentdiary",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:agentdiary",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": false,
+   "quote": "Sibling of the `agentdiary` CLI (personal agent diary across machines) and `dsh-super-agent` (admission control & trust ladder for any CLI agent).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:agentdiary",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "8aaa9dbc-c9a2-4e9b-84e7-4252fe7266ca",
+   "grounded": false,
+   "quote": "agentdiary-dsh-plugin · chunk 8",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": false,
+    "strictly": false
+   }
+  },
+  {
+   "where": "entity:agentdiary",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "b958f2e7-a934-49d8-9a09-2fedada6f4c8",
+   "grounded": false,
+   "quote": "dsh plugin --profile web add dsh-agentdiary-plugin",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:blocked",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a",
+   "grounded": false,
+   "quote": "Reasons you will *not* see as entries: `blocked` (retried as a new turn), `interrupted`/`forked`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:completed",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": true,
+   "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:diary entry",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-super-agent",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": true,
+   "quote": "Sibling of the `agentdiary` CLI (personal agent diary across machines) and `dsh-super-agent` (admission control & trust ladder for any CLI agent).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:dsh-super-agent",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "8aaa9dbc-c9a2-4e9b-84e7-4252fe7266ca",
+   "grounded": false,
+   "quote": "Both entries activate clean in a headless boot.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:error",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": true,
+   "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:extraSensitivePatterns",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "2cf1368f-4530-4f5b-b908-5ecf72e870f5",
+   "grounded": false,
+   "quote": "| `extraSensitivePatterns` | extra regex patterns for the trajectory sensitive-scan | — |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:forked",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a",
+   "grounded": false,
+   "quote": "Reasons you will *not* see as entries: `blocked` (retried as a new turn), `interrupted`/`forked`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:interrupted",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a",
+   "grounded": false,
+   "quote": "Reasons you will *not* see as entries: `blocked` (retried as a new turn), `interrupted`/`forked`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:local git repository",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:local git repository",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "883a137c-b6ca-4c38-885b-407dc62539fe",
+   "grounded": true,
+   "quote": "| `repo` | absolute path to your diary git repo (created if missing) | — (plugin disabled when empty) |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:max-tokens",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "6376f542-591e-49da-9996-fbc6a52fc83a",
+   "grounded": true,
+   "quote": "`max-tokens`, or `aborted`.",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:node",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "883a137c-b6ca-4c38-885b-407dc62539fe",
+   "grounded": false,
+   "quote": "| `node` | this machine's short name in the diary | `dsh-host` |",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:session/disposed",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "8aaa9dbc-c9a2-4e9b-84e7-4252fe7266ca",
+   "grounded": false,
+   "quote": "0.1.0 keyed on `session/disposed` (store-detach only — see above)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:session/event",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:turn",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:turn",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "8aaa9dbc-c9a2-4e9b-84e7-4252fe7266ca",
+   "grounded": false,
+   "quote": "0.1.2 read `turn`/`reason` flat but the harness wraps them in `event.data`",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:turn N completed",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "8aaa9dbc-c9a2-4e9b-84e7-4252fe7266ca",
+   "grounded": true,
+   "quote": "the day file gains a `turn N completed` entry with the event mix",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "entity:turn/end",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": true,
+   "quote": "One entry per **settled turn** — when the harness emits `turn/end` with reason `completed`, `error`,",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:agentdiary sibling_of dsh-super-agent",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "d18ad1e1-c4f9-4e7b-9e73-f2ef8894f12d",
+   "grounded": true,
+   "quote": "Sibling of the `agentdiary` CLI (personal agent diary across machines) and `dsh-super-agent` (admission control & trust ladder for any CLI agent).",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:agentdiary subscribes_to session/event",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:agentdiary subscribes_to session/disposed",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "8aaa9dbc-c9a2-4e9b-84e7-4252fe7266ca",
+   "grounded": false,
+   "quote": "0.1.0 keyed on `session/disposed` (store-detach only — see above)",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:agentdiary writes_entry_for turn",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:agentdiary writes_entry_for turn",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "8aaa9dbc-c9a2-4e9b-84e7-4252fe7266ca",
+   "grounded": true,
+   "quote": "the day file gains a `turn N completed` entry with the event mix",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  },
+  {
+   "where": "relation:diary entry stored_in local git repository",
+   "doc": "agentdiary-dsh-plugin",
+   "chunk_id": "07ed635c-65fa-4eec-a59f-11aa0d42d8a4",
+   "grounded": true,
+   "quote": "A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that subscribes to the durable `session/event` stream and appends one diary entry per settled **turn** into a local git repository you own:",
+   "api": {
+    "in_kb": true,
+    "title_is_doc": true,
+    "text_chunk": true,
+    "enabled": true,
+    "deleted": false,
+    "contained": true,
+    "strictly": true
+   }
+  }
+ ]
+}

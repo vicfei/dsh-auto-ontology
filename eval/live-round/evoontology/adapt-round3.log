@@ -1,0 +1,43 @@
+2026-11-25 18:47:50 CST
+--- (a) the same stream again, not extended:
+gate     coverage 1.0 · cleanliness 1.0 · diversity 0.6 · endorsed 0.3627 → total 2.9627
+round1.ndjson is the stream run 20261125-184149 already ran on (running, 1/1 round(s) used) — an unchanged stream gets no second run on its own: evolve extend 20261125-184149 to try another round, or bring a changed stream
+exit: 1
+2026-11-25 18:48:03 CST
+--- (b) the explicit extension (agent:shanghai-window, on the owner's standing O5 delegation):
+usage: evoontology [-h] [--lang {en,zh}]
+                   {validate,record,seed,evolve,trigger,trajectory,adapt} ...
+evoontology: error: unrecognized arguments: 20261125-184149
+--- (c) round 2 of run 20261125-184149:
+import   /tmp/o5/e2/live/ao/round1.ndjson: +0 event(s) · 374 already present · 374 in the store
+project  Constraint 1 · Relation 177 · Term 128 — verdicts: None 1 · accept 1 · grounded 207 · ungrounded 97
+gate     coverage 1.0 · cleanliness 1.0 · diversity 0.6 · endorsed 0.3627 → total 2.9627
+round1.ndjson is the stream run 20261125-184149 already ran on (running, 1/1 round(s) used) — an unchanged stream gets no second run on its own: evolve extend 20261125-184149 to try another round, or bring a changed stream
+exit: 1
+2026-11-25 18:48:03 CST
+2026-11-25 18:48:11 CST
+--- (b') the explicit extension, correct flag (--run):
+extended to 2 rounds · status: running
+--- (c') round 2 of run 20261125-184149:
+import   /tmp/o5/e2/live/ao/round1.ndjson: +0 event(s) · 374 already present · 374 in the store
+project  Constraint 1 · Relation 177 · Term 128 — verdicts: None 1 · accept 1 · grounded 207 · ungrounded 97
+gate     coverage 1.0 · cleanliness 1.0 · diversity 0.6 · endorsed 0.3627 → total 2.9627
+run      20261125-184149 · 1/2 round(s) used before this one · proposer deepseek-chat · judge deepseek-reasoner (auto-ontology eval) · 47 ungrounded Term(s) to propose for
+propose  13 proposal(s) · 0 snapped to the term's own quote · 34 null · 0 malformed (dropped) · 47 call(s) · 48,535 in / 2,585 out tokens
+judge    1 grounded · 12 not grounded · 0 judge error(s) — deepseek-reasoner
+           ✓ OAR: dsh_plugin → upstream_project — "- **OAR** (`src/adapters/oar.ts`) — [Open Agent Runtime](https://githu" (Quote names OAR as Open Agent Runtime with GitHub link and a) — proposed: The quote identifies OAR as the external Open Agent Runtime project that the plugin adapts, making it an upstream project rather than a dsh plugin.
+           ✗ Claude Code: upstream_project → cli_agent — "how Claude Code (three tiers + PreCompact/function hooks) and Codex (s" (Quote only mentions Claude Code's compaction implementation;) — proposed: The quote describes Claude Code as a command-line coding agent implementing compaction tiers and hooks, matching the cli_agent definition.
+           ✗ Codex: upstream_project → cli_agent — "how Claude Code (three tiers + PreCompact/function hooks) and Codex (s" (Quote only mentions Codex's compaction tiers; no statement i) — proposed: The quote describes Codex as a command-line coding agent with its own compaction implementation, matching the cli_agent definition.
+           ✗ diary entry: diary_entry → harness_event — "One entry per **settled turn** — when the harness emits `turn/end` wit" (Quote says one entry per turn/end event, not that the diary ) — proposed: The quote states that a diary entry is written when the harness emits a turn/end event, which is a harness_event.
+           ✗ dsh-compaction-tool-result-pruner: dsh_plugin → harness_service — "DSH ships the *deterministic* pruner (`dsh-compaction-tool-result-prun" (Quote names it as a shipped pruner, not as an optional harne) — proposed: The quote describes the term as a deterministic pruner filling a service slot in the DeepSeek Harness, which matches the harness_service definition of a named optional service slot such as the tool-re
+           ✗ dsh-super-agent: dsh_plugin → cli_agent — "**Admission control, observe mode & tickets for any CLI coding agent.*" (Quote says the tool provides admission control for CLI codin) — proposed: The quote states that dsh-super-agent provides admission control, observe mode, and tickets for any CLI coding agent, describing it as a CLI coding agent.
+           ✗ format-anything: dsh_plugin → roundtrip_gate — "**format-anything returns a parser you can prove**: an agent studies y" (Quote says format-anything returns a parser and its engine r) — proposed: The quote states that format-anything performs the decode/re-encode/byte-compare verification step, which is the roundtrip_gate type.
+           ✗ keep/drop compaction engine: agent_role → dsh_plugin — "**V2 — keep/drop compaction engine**: replace the summarizer with per-" (Quote describes a planned V2 feature, not a repository or ds) — proposed: The quote names the keep/drop compaction engine as a component of the dsh-compaction-semantic plugin, which is a listed dsh_plugin.
+           ✗ keep/drop decision: compaction_decision → dsh_plugin — "**V2 — keep/drop compaction engine**: replace the summarizer with per-" (Quote describes a keep/drop compaction engine component, not) — proposed: The quote describes dsh-compaction-semantic as a plugin implementing the keep/drop compaction engine, stating the dsh_plugin type about the term.
+           … and 4 more
+round    candidate 2.9693 (endorsed 0.3693) vs incumbent 2.9627 (endorsed 0.3627)
+▲ WON    → published layer_v1 · the judge's input and rows: /tmp/o5/e2/live/evo/runs/20261125-184149.judge
+           proposals -> /tmp/o5/e2/live/evo/runs/20261125-184149.proposals.json
+           trip back: auto-ontology apply --proposals /tmp/o5/e2/live/evo/runs/20261125-184149.proposals.json --from <artifact.json> --actor agent:<name>
+exit: 0
+2026-11-25 18:48:24 CST

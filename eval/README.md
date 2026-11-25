@@ -9,6 +9,10 @@ kept.
 - `traps/` — a five-document end-to-end trap corpus and what the build makes of it
 - `before-after/` — the before/after that closes #35: frozen corpus, two
   artifacts, every judge row, a blind audit, pass-to-pass runs
+- `live-round/` — one evolution round across two repositories (O5.1): the
+  stream, the run, the trip back, and what was not right about it
+- `kb-round/` — a build from a real WeKnora knowledge base (O5.2): every
+  chunk id verified by the API and by SQL, and the same documents as files
 
 ## traps/ — end-to-end trap corpus
 
@@ -214,3 +218,36 @@ Every table above can be recomputed from the `.jsonl` rows: `supported` is
 the verdict, `flag` the build's ✓ (true) or ⚠ (false). Rebuilding the corpus
 is a fresh extraction: expect different counts, and verdicts within a few
 percent of the reports.
+
+## live-round/ — one evolution round across two repositories (O5.1)
+
+A certified 23-document build (128 entities / 177 relations) was exported with
+`export --trajectory` — 374 events — and read by dsh-EvoOntology's adapter. In
+the round that won, the proposer offered 13 re-typings for ungrounded Terms,
+the evolution judge (`deepseek-reasoner`) grounded 1, and the proposal came
+back through `apply --proposals` as a new certification and assertion: `OAR`,
+`dsh_plugin` → `upstream_project`, on the same quote the build had judged
+against the wrong type. Re-imported, the stream reads 2.9681 against 2.9627
+before.
+
+The qualifiers are part of the measurement and are listed in that README: the
+round took three attempts on one stream; the two seed certifications and the
+budget extension were issued by the agent that ran it; round 1's judge rows
+were overwritten; the won round's published layer scored 2.9693 where the trip
+back projects 2.9681. One stream, one corpus, one grounded proposal — the loop
+closes, and this is not a rate.
+
+## kb-round/ — building from a WeKnora knowledge base (O5.2)
+
+A base of 23 public READMEs in 369 chunks, read whole by `build --kb`: 72
+entities / 55 relations, 248 evidence records, every one carrying the `chunk_id`
+it was read from. Each id was resolved by the WeKnora API and by a direct query
+on the Postgres `chunks` table: 248 of 248 found in the base, under the
+document the evidence names, with the quote inside the chunk (247 verbatim, 1
+composed by the model and rejected by the verbatim gate — as designed). 0
+failed; the two readers agreed on every record.
+
+The ontology is another matter: the file build of the same 23 repositories has
+128 entities / 177 relations and 61% of its quotes grounded, the chunk build 30%.
+The chunk build drew a different TBox and read one chunk at a time; no run held
+the TBox fixed, so the comparison is a description, not a controlled one.

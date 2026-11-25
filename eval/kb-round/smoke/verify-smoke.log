@@ -1,0 +1,8 @@
+artifact: /tmp/o5/e2/kb/smoke/20261125-1935.json
+knowledge base: 035be669-f79c-458f-b119-f295d1e65859 — the build read 12 chunk(s) of 1 document(s); 7 distinct chunk id(s) are cited by 30 evidence record(s)
+evidence with a chunk_id: 30/30 · grounded 18 · ungrounded 12 · never judged 0
+api: chunk found 30/30 · in this knowledge base 30 · title is the evidence's doc 30 · text and enabled 30
+     quote contained (verbatim form) 29/30 · raw substring 29/30
+the build's verbatim gate rejected 1 quote(s) as not in their chunk — expected to be absent there
+FAILED evidence records: 0
+findings written to /tmp/o5/e2/kb/smoke/verify-smoke.json

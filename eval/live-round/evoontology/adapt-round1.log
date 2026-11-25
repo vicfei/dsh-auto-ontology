@@ -1,0 +1,19 @@
+2026-11-25 18:36:46 CST
+import   /tmp/o5/e2/live/ao/round1.ndjson: +374 event(s) · 0 already present · 374 in the store
+project  Constraint 1 · Relation 177 · Term 128 — verdicts: None 1 · accept 1 · grounded 207 · ungrounded 97
+gate     coverage 1.0 · cleanliness 1.0 · diversity 0.6 · endorsed 0.3627 → total 2.9627
+run      20261125-183646 opened · proposer deepseek-chat · judge deepseek-reasoner (auto-ontology eval) · 47 ungrounded Term(s) to propose for
+propose  8 proposal(s) · 0 null · 39 malformed (dropped) · 47 call(s) · 46,097 in / 3,423 out tokens
+Traceback (most recent call last):
+  File "/home/ubuntu/dsh-evoontology/scripts/evoontology.py", line 704, in <module>
+    main()
+  File "/home/ubuntu/dsh-evoontology/scripts/evoontology.py", line 685, in main
+    adapter_autoontology.run(args.frm, auto_ontology=args.auto_ontology, dry_run=args.dry_run,
+  File "/home/ubuntu/dsh-evoontology/scripts/adapter_autoontology.py", line 233, in run
+    _show("malformed:", malformed)
+  File "/home/ubuntu/dsh-evoontology/scripts/adapter_autoontology.py", line 180, in _show
+    print(f"           {title} {p['name']}: {p['from_type']} → {p['to_type']} — \"{p['quote'][:70]}\""
+                                             ~^^^^^^^^^^^^^
+KeyError: 'from_type'
+exit: 1
+2026-11-25 18:36:53 CST

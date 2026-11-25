@@ -1,0 +1,22 @@
+START 2026-11-25 19:36:51 CST
+corpus: 369 chunk(s) of 23 document(s) in knowledge base 035be669-f79c-458f-b119-f295d1e65859 · domain: the vicfei dsh plugin family: multi-agent investment committees, quant research plugins, semantic layers, ontology construction for DeepSeek Harness
+
+→ /tmp/o5/e2/kb/ontologies/20261125-1945.json / .svg / .md
+
+## Ontology build · the vicfei dsh plugin family: multi-agent investment committees, quant research plugins, semantic layers, ontology construction for DeepSeek Harness
+
+- source: WeKnora knowledge base 035be669-f79c-458f-b119-f295d1e65859 — 369 chunk(s) of 23 document(s), every evidence carrying its chunk_id
+- Entity types 15 · entities 72 · relations 55 · conflicts 0 · unknown types flagged 0
+- type grounding (judge deepseek-chat): entities 35 grounded · 37 ungrounded; relations 23 grounded · 32 ungrounded; 8 quote(s) re-grounded · 0 ungrounded type clash(es) kept out of conflicts
+- provenance: 751 calls · 735,632 in / 31,107 out tokens · 546s
+  - R: (agentdiary) -[sibling_of]-> (dsh-super-agent) | ev: Sibling of the `agentdiary` CLI (persona
+  - R: (agentdiary) -[subscribes_to]-> (session/event) | ev: A [DeepSeek Harness](https://github.com/
+  - R: (agentdiary) -[writes_entry]-> (diary entry) | ev: A [DeepSeek Harness](https://github.com/
+  - R: (Buffett) -[sibling_of]-> (Munger) | ev: Persona packs are config: value wing (Bu
+  - R: (Buffett) -[sibling_of]-> (dsh-ai-hedge-fund) | ev: from sister repo dsh-ai-hedge-fund;
+  - R: (ccxt_bridge.py) -[sibling_of]-> (ccxt_research.py) | ev: python3 scripts/ccxt_bridge.py --run mar
+  - R: (dsh-ai-hedge-fund) -[sibling_of]-> (dsh-TradingAgents) | ev: Sister project of [dsh-TradingAgents](ht
+  - R: (dsh-auto-ontology) -[sibling_of]-> (dsh-evoontology) | ev: **E2, the first adapter** — the family's
+  - R: (dsh-ccxt) -[sibling_of]-> (dsh-TradingAgents) | ev: Family: [dsh-TradingAgents](https://gith
+  - R: (dsh-ccxt) -[sibling_of]-> (dsh-ai-hedge-fund) | ev: [dsh-ai-hedge-fund](https://github.com/v
+EXIT 0 2026-11-25 19:45:57 CST

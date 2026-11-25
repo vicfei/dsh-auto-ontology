@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""validate_format — evidence-linked ontology v0.2 conformance (issue #16).
+"""validate_format — evidence-linked ontology v0.3 conformance (issue #16).
 
 Pure stdlib checks of the normative clauses in docs/FORMAT.md. Exit 1 with the
-violation list when any check fails; quiet success otherwise. v0.2 is
+violation list when any check fails; quiet success otherwise. v0.2 and v0.3 are
 backward-compatible: every addition is optional, so a v0.1 artifact validates.
 """
 import json, sys
 
-VERSION = "v0.2"
+VERSION = "v0.3"
 
 
 def _derived(evs):
@@ -19,11 +19,12 @@ def _derived(evs):
     return None
 
 
-def _v02(x, key, label):
-    """Optional v0.2 fields on one assertion: the flag, its evidences' verdicts,
-    and the consistency between the two. A flag on an assertion whose evidences
-    imply none (nothing judged, or judged and unjudged mixed without a grounded
-    quote) is a contradiction too."""
+def _opt(x, key, label):
+    """Optional fields on one assertion (v0.2, v0.3): the flag, its evidences' verdicts
+    and locators, and the consistency between them. A flag on an assertion whose
+    evidences imply none (nothing judged, or judged and unjudged mixed without a
+    grounded quote) is a contradiction too. A judge or a reason without a verdict,
+    and a reason on a grounded quote beside no judge, are contradictions as well."""
     v, flag = [], x.get(key)
     if key in x and not isinstance(flag, bool):
         v.append(f"{label}: {key} must be a boolean (clause 5)")
@@ -35,6 +36,13 @@ def _v02(x, key, label):
             v.append(f"{label}: evidence grounded must be a boolean (clause 4)")
         if "reason" in ev and not isinstance(ev["reason"], str):
             v.append(f"{label}: evidence reason must be a string (clause 4)")
+        for k in ("chunk_id", "judge"):
+            if k in ev and not (isinstance(ev[k], str) and ev[k]):
+                v.append(f"{label}: evidence {k} must be a non-empty string (clause 4)")
+        if ("judge" in ev or "reason" in ev) and "grounded" not in ev:
+            v.append(f"{label}: evidence judge / reason stand on a judged quote only (clause 4)")
+        if ev.get("grounded") is True and "reason" in ev and "judge" not in ev:
+            v.append(f"{label}: a grounded evidence carries a reason only beside the judge who gave it (clause 4)")
     if key in x and evs and flag != _derived(evs):
         v.append(f"{label}: {key}={str(flag).lower()} contradicts its evidences "
                  f"(they imply {str(_derived(evs)).lower()}) (clause 5)")
@@ -67,7 +75,7 @@ def validate(o):
         for x in evs:
             if not x.get("quote") or not x.get("doc"):
                 v.append(f"entity {n!r}: malformed evidence {x!r}")
-        v += _v02(e, "type_grounding", f"entity {n!r}")
+        v += _opt(e, "type_grounding", f"entity {n!r}")
     for r in rels:
         if not (r.get("subject") and r.get("predicate") and r.get("object")):
             v.append(f"relation missing endpoint/predicate: {r!r}")
@@ -76,7 +84,7 @@ def validate(o):
         evs = r.get("evidences") or []
         if not evs or not any(isinstance(x, dict) and x.get("quote") for x in evs):
             v.append(f"{label}: no evidence quote (clause 3)")
-        v += _v02(r, "grounding", label)
+        v += _opt(r, "grounding", label)
     for c in o.get("conflicts", []):
         if len(c.get("types", {})) < 2:
             v.append(f"conflict on {c.get('entity')!r} carries fewer than two typed sides (clause 7)")

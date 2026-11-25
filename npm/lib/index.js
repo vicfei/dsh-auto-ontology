@@ -1,9 +1,11 @@
 /**
- * dsh-auto-ontology host plugin (0.2.0, issue #11): the ontology engine as typed tools.
+ * dsh-auto-ontology host plugin (issue #11; `kb` since issue #56): the ontology engine as typed tools.
  *
  * Registers three agent tools on `ctx.tools` via @deepseek-ai/dsh-tools:
- *   ontology_build  — two-pass build over a document corpus (evidence on every
- *                     assertion, type guard, coref, append-only merge)
+ *   ontology_build  — two-pass build over a document corpus, or over the chunks of
+ *                     a WeKnora knowledge base (evidence on every assertion, type
+ *                     guard, coref, append-only merge; a kb build names each
+ *                     quote's chunk)
  *   ontology_query  — every assertion about a term, with its evidence spans
  *   ontology_export — the artifact as an ao-trajectory/0.1 event stream (the
  *                     record format dsh-EvoOntology's adapter consumes)
@@ -33,6 +35,7 @@ function run(args, timeoutMs = 600_000) {
 }
 
 const LANG = { type: "string", enum: ["en", "zh"], description: "Output language (default en)." };
+const KB_DEFAULT_LIMIT = 40;   // chunks a typed-tool build reads from a knowledge base unless told otherwise
 
 function newest() {   // the engine's own default: the newest artifact under ./ontologies/
   const dir = path.join(process.cwd(), "ontologies");
@@ -46,18 +49,23 @@ export async function apply(ctx) {
   ctx.tools.register(defineTool({
     name: "ontology_build",
     description:
-      "Build an ontology from a document corpus: a TBox schema from sampled docs, then per-document " +
-      "ABox assertions where EVERY entity and relation carries a verbatim evidence quote (no evidence, " +
-      "no assertion; unknown types are flagged, never silently dropped). Conservative coreference merges " +
-      "certain mentions (aliases recorded); append-only --merge folds new docs into an existing ontology " +
-      "without touching prior evidence; the same name under different types becomes a conflict entry " +
-      "holding both evidences. Artifacts: typed JSON (+ evidence), SVG cluster graph, markdown digest " +
-      "under ./ontologies/. Takes ~10s + ~2s per document.",
+      "Build an ontology from a document corpus, or from a WeKnora knowledge base: a TBox schema from " +
+      "sampled documents, then ABox assertions per document (per chunk for a knowledge base) where EVERY " +
+      "entity and relation carries a verbatim evidence quote (no evidence, no assertion; unknown types are " +
+      "flagged, never silently dropped). Conservative coreference merges certain mentions (aliases " +
+      "recorded); append-only merge folds new docs into an existing ontology without touching prior " +
+      "evidence; the same name under different types becomes a conflict entry holding both evidences. " +
+      "Pass `kb` (a knowledge-base id) to read the base's parsed chunks instead of files: each quote then " +
+      "carries the id of the chunk it was read from, so every assertion can be traced back into the base. " +
+      "Artifacts: typed JSON (+ evidence), SVG cluster graph, markdown digest under ./ontologies/. " +
+      "Takes about 10 seconds per document or chunk — the grounding judge is one call per quote.",
     parameters: {
-      docs: { type: "string", required: true, description: "Document directory or glob, e.g. 'docs/*.md'." },
+      docs: { type: "string", description: "Document directory or glob, e.g. 'docs/*.md'. Required unless kb is given." },
+      kb: { type: "string", description: "WeKnora knowledge-base id to build from instead of docs (its parsed text chunks, one chunk = one document). Needs WEKNORA_URL / WEKNORA_API_KEY in the environment." },
+      limit: { type: "number", description: "With kb: read at most this many chunks, in reading order (default 40). Raise it to read more of the base." },
       domain: { type: "string", required: true, description: "Corpus domain description for the schema pass." },
       merge: { type: "string", description: "Existing ontology JSON to fold into (append-only), e.g. ontologies/xxx.json." },
-      sample: { type: "number", description: "Docs sampled for the schema pass (default 4)." },
+      sample: { type: "number", description: "Documents sampled for the schema pass (default 4)." },
       max_calls: { type: "number", description: "Cost guard: abort beyond this many LLM calls." },
       lang: LANG,
     },
@@ -67,12 +75,18 @@ export async function apply(ctx) {
       render: (_args, value) => [{ type: "text", text: value.summary }],
     },
     execute(args) {
+      if (!args.docs && !args.kb) throw new Error("ontology_build needs docs (a document corpus) or kb (a WeKnora knowledge-base id)");
+      if (args.docs && args.kb) throw new Error("ontology_build takes docs or kb, not both: one source per build");
+      // the typed tool reads a bounded slice unless told otherwise; a whole base can run for an hour
+      const source = args.kb
+        ? ["--kb", args.kb, "--limit", String(args.limit ?? KB_DEFAULT_LIMIT)]
+        : ["--docs", args.docs];
       const extra = ["--save",
         ...(args.merge ? ["--merge", args.merge] : []),
         ...(args.sample ? ["--sample", String(args.sample)] : []),
         ...(args.max_calls ? ["--max-calls", String(args.max_calls)] : []),
         ...(args.lang ? ["--lang", args.lang] : [])];
-      return { summary: run(["--docs", args.docs, "--domain", args.domain, ...extra]) };
+      return { summary: run([...source, "--domain", args.domain, ...extra], args.kb ? 1_800_000 : 600_000) };
     },
   }));
 

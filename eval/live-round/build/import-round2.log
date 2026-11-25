@@ -1,0 +1,4 @@
+import   /tmp/o5/e2/live/ao/round2.ndjson: +2 event(s) · 373 already present · 376 in the store
+project  Constraint 2 · Relation 177 · Term 128 — verdicts: None 2 · accept 1 · grounded 208 · ungrounded 96
+gate     coverage 1.0 · cleanliness 1.0 · diversity 0.6 · endorsed 0.3681 → total 2.9681
+dry run  46 ungrounded Term(s) would go to the proposer (no model called, no run opened)

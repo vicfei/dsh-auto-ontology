@@ -138,9 +138,16 @@ stays gated on adoption.
       before/after on the same frozen corpus (19 public READMEs):
       25% → 67% (deepseek-chat), 9% → 50% (deepseek-reasoner), tables and
       rows in `eval/` (closes #35)
-- [ ] O5.1 `export --trajectory` (FORMAT.md contract) + one live two-repo
-      evolution round with dsh-evoontology E2
-- [ ] O5.2 chunk-level evidence on WeKnora KBs (queryable provenance)
+- [x] O5.1 `export --trajectory` (FORMAT.md contract) + one live two-repo
+      evolution round with dsh-evoontology E2 (2026-11-25) — one Term re-typed
+      (`OAR`, on the quote the build had judged against the wrong type); three
+      attempts on one stream, the seed certifications and the budget
+      extension issued by the agent that ran it — `eval/live-round/`
+- [x] O5.2 chunk-level evidence on WeKnora KBs (queryable provenance)
+      (2026-11-25) — `build --kb`, format v0.3: 248 of 248 evidence records
+      resolved to a real chunk, by the API and by SQL; the chunk build's
+      ontology is smaller and less grounded than the file build's (different
+      TBox, not controlled) — `eval/kb-round/`
 - [x] O5.3 adversarial set (2026-11-25) — `eval --adversarial`, 28 labelled
       cases (18 must-reject, 10 must-accept), gold checked in CI
 - [ ] O5.3 stretch: second-corpus eval (non-family)

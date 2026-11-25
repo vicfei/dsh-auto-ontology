@@ -4,7 +4,7 @@
 An artifact is a state: it says what is asserted now. An evolution kernel needs
 what HAPPENED — which claims were made, which quote came with each, what the
 judge said, what a human or an agent decided — as records it can count and
-replay. export_events turns any v0.1/v0.2 artifact into that stream:
+replay. export_events turns any v0.1/v0.2/v0.3 artifact into that stream:
 
   build             the run that wrote the artifact (provenance, stats, TBox)
   fold              one per merge_log entry: a --merge or a coreference pass
@@ -17,9 +17,11 @@ replay. export_events turns any v0.1/v0.2 artifact into that stream:
 Deterministic: the same artifact exports to the same events in the same order,
 and an event's id says what the event says — never its position or its file
 name — so replaying a stream into an append-only store adds nothing. The
-artifact does not record when a single quote was folded (at = null there) nor
-which judge model judged it (`by` = "judge"; the build event names its own
-judge). Nothing here calls a model. docs/FORMAT.md carries the contract.
+artifact does not record when a single quote was folded (at = null there) nor,
+for a build's own quotes, which judge model judged them (`by` = "judge"; the
+build event names its own judge). An evidence that names its judge (v0.3 — a
+quote the trip back paid with) exports `by` = "judge:<model>". Nothing here
+calls a model. docs/FORMAT.md carries the contract.
 """
 import hashlib, json, os, sys
 
@@ -63,7 +65,7 @@ def _assertion(kind, agent, claim, subject, ev):
 
 
 def export_events(o, source=None):
-    """Ontology v0.1/v0.2 JSON -> the event list (envelopes complete; `seq` is the list position)."""
+    """Ontology v0.1/v0.2/v0.3 JSON -> the event list (envelopes complete; `seq` is the list position)."""
     domain, prov, st = o.get("domain", "?"), o.get("provenance") or {}, o.get("stats") or {}
     agent = "dsh-auto-ontology/" + (prov.get("model") or "unknown-model")
     judged = prov.get("grounding_pass") is True and bool(prov.get("judge_model"))
@@ -102,7 +104,7 @@ def export_events(o, source=None):
         evs.append({"kind": "certification", "at": c.get("at"), "agent": actor,
                     "summary": f"[certification · {c.get('verdict')}] {claim} by {actor}" + (f" — {note}" if note else ""),
                     "claim": claim, "subject": {"name": c.get("name"), "type": c.get("type")},
-                    "evidence": _quote(c.get("evidence"), "grounded", "reason"), "verdict": c.get("verdict"),
+                    "evidence": _quote(c.get("evidence"), "grounded", "reason", "chunk_id"), "verdict": c.get("verdict"),
                     "by": actor, "note": note, "endorsed": c.get("verdict") == "accept",
                     **({"retyped_to": c["retyped_to"]} if c.get("retyped_to") else {}),
                     **({"also_rejects": c["also_rejects"]} if c.get("also_rejects") else {})})
@@ -110,20 +112,21 @@ def export_events(o, source=None):
         types = c.get("types") or {}
         evs.append({"kind": "conflict", "at": None, "agent": agent,
                     "summary": f"[conflict] {c.get('entity')} is typed {' and '.join(types)} — both evidences kept",
-                    "subject": {"name": c.get("entity"), "types": {t: _quote(v, "grounded") for t, v in types.items()}}})
+                    "subject": {"name": c.get("entity"), "types": {t: _quote(v, "grounded", "chunk_id") for t, v in types.items()}}})
     for f in o.get("flagged_unknown_types") or []:
         name, etype = f.get("name") or "?", f.get("type") or "?"
         evs.append({"kind": "unknown_type", "at": None, "agent": agent,
                     "summary": f"[unknown type] {name} typed {etype} — not in the TBox, kept out of the ABox ({f.get('doc', '?')})",
                     "claim": grounding.entity_claim(name, etype), "subject": {"name": name, "type": etype},
-                    "evidence": _quote({"quote": f.get("evidence", ""), "doc": f.get("doc", "?")})})
+                    "evidence": _quote({"quote": f.get("evidence", ""), "doc": f.get("doc", "?"),
+                                        **({"chunk_id": f["chunk_id"]} if f.get("chunk_id") else {})}, "chunk_id")})
     for f in o.get("flagged_ungrounded") or []:
         evs.append({"kind": "ungrounded_clash", "at": None, "agent": agent,
                     "summary": f"[ungrounded clash] {f.get('entity')} is typed {f.get('existing_type')}, challenged as "
                                f"{f.get('asserted_type')} with a quote that does not ground it — kept, not a conflict",
                     "subject": {"name": f.get("entity"), "existing_type": f.get("existing_type"),
                                 "asserted_type": f.get("asserted_type")},
-                    "evidence": _quote(f.get("evidence"))})
+                    "evidence": _quote(f.get("evidence"), "chunk_id")})
     out = []
     for i, e in enumerate(evs):
         full = {"schema": SCHEMA, "seq": i, **head, **e, "endorsed": e.get("endorsed")}
