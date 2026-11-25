@@ -124,3 +124,19 @@ issue → branch → PR (milestones O1–O4).
   silently rewritten;
 - Every run carries provenance (model / temperature / elapsed / calls / tokens — the
   tradingagents footer convention).
+
+## O5 · Quality vindication & the family pipeline (2026-11-25 → 12-15) — CURRENT
+
+→ full plan: [docs/plan-O5.md](docs/plan-O5.md). Driven by four post-O4 facts:
+adoption outran quality (999 dl/wk family #3 vs 10% type-assertion precision
+#35); the evoontology E2 bridge contract names our certifications as its
+trajectory source; the family channel works (uigen merged); spec-as-product
+stays gated on adoption.
+
+- [ ] O5.0 type-grounding quality — judge pass on every (name, type), flag
+      never drop, honest before/after on the same corpus (closes #35)
+- [ ] O5.1 `export --trajectory` (FORMAT.md contract) + one live two-repo
+      evolution round with dsh-evoontology E2
+- [ ] O5.2 chunk-level evidence on WeKnora KBs (queryable provenance)
+- [ ] O5.3 stretch: second-corpus eval + adversarial set
+- [ ] O5.4 release train 0.3.0 (owner terminal publish)
