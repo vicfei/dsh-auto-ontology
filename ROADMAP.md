@@ -153,5 +153,5 @@ stays gated on adoption.
 - [ ] O5.3 stretch: second-corpus eval (non-family)
 - [x] O5.4 release train 0.3.0 (2026-11-25) — CHANGELOG, tarball smoke from
       a fresh prefix (validate · export · apply · typed tools · `build --docs`
-      17 s · `build --kb --limit 2` 20/20 chunk ids), tag `v0.3.0`. The npm
-      publish itself is the owner's terminal act
+      17 s · `build --kb --limit 2` 20/20 chunk ids), tag `v0.3.0`; published
+      to npm the same day by the owner and registry-verified
