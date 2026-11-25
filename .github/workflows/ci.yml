@@ -45,6 +45,26 @@ jobs:
           merged, amap = M.apply_aliases(st, [("W", "dsh-W")])
           assert merged and M._key("dsh-W") not in st["entities"]
           assert any(r["predicate"] == "hosted_in" and r["subject"] == "W" for r in st["relations"].values())
+          # name key is script-agnostic (#44): CJK entities fold instead of being silently
+          # dropped, CJK relations keep distinct keys, ASCII keys are unchanged
+          stc = M.new_store("cjk")
+          M.fold_entity(stc, "腾讯", "company", "q1", "dA")
+          M.fold_entity(stc, "阿里", "company", "q2", "dB")
+          M.fold_entity(stc, "腾讯", "company", "q9", "dZ")
+          M.fold_relation(stc, "腾讯", "invests_in", "阿里", "q3", "dC")
+          M.fold_relation(stc, "阿里", "invests_in", "字节", "q4", "dD")
+          assert len(stc["entities"]) == 2 and len(stc["relations"]) == 2
+          assert len(stc["entities"][M._key("腾讯")]["evidences"]) == 2
+          oc = M.store_to_ontology(stc, {}, {"model": "m"})
+          assert len(M.query_ontology(oc, "腾讯")["relations"]) == 1
+          assert M._key("ABox assertions per doc") == "aboxassertionsperdoc" and M._key("W") == "w"
+          # a verdict keyed under the old ASCII-only scheme still lands on its entity
+          oold = {"tbox": {"entity_types": [{"name": "c", "desc": ""}], "relation_types": []},
+                  "abox": {"entities": [], "relations": []},
+                  "certifications": {"caf": {"name": "Café", "type": "c", "verdict": "reject", "at": "x", "note": ""}}}
+          sto = M.load_store(oold)
+          M.fold_entity(sto, "Café", "c", "q", "d")
+          assert sto["suppressed"] == 1 and not sto["entities"]
           # append-only across a v1 -> v2 merge + query
           v1 = {"domain": "x", "tbox": {"entity_types": [{"name": "tool", "desc": ""}], "relation_types": []},
                 "abox": {"entities": [{"name": "Old", "type": "tool", "evidence": "ev1", "doc": "d0"}], "relations": []}}
